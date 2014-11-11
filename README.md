@@ -1,7 +1,7 @@
 # Php Version Requirement Analyser
 
-This repository will in the feature contain a library and a console application to validate your php files' version requirements.
-The library makes havy use of [the PHP-Parser library](https://github.com/nikic/PHP-Parser)
+This repository will contain a library and a console application to validate your php files' version requirements.
+The library makes heavy use of [the PHP-Parser library](https://github.com/nikic/PHP-Parser)
 
 
 ## Installation and usage of the cli app
@@ -18,24 +18,24 @@ requires you to be able to run `<php> composer install --prefer-dist --no-dev` o
 Run `composer require <package-name>` in the root of your project and include the composer autoloader somewhere.
 
 ```php
-    <?php
+<?php
 
-    // autoloading is assumed
+// autoloading and namespace import is assumed
 
-    $req = new StringRequirementAnalyser('<?php trait abc {}');
-    
-    $req->attachRequirementAnalyser(new Analyse\LanguageFeature); // TODO: Refactor the actual code to look like this
+$req = new StringRequirementAnalyser('<?php trait abc {}');
+   
+$req->attachRequirementAnalyser(new Analyse\LanguageFeature); // TODO: Refactor the actual code to look like this
 
-    $result = $req->run();
+$result = $req->run();
 
-    echo $result->getRequiredVersion(); // 5.4.0
-    echo $result->getRequiredVersionReasoning()[0]; // Usage of the trait keyword requires php 5.4
+echo $result->getRequiredVersion(); // 5.4.0
+echo $result->getRequiredVersionReasoning()[0]; // Usage of the trait keyword requires php 5.4
 
 ```
 
 ## Building the phar
 
-Box is required to build the phar. Run `box build` in the repository root. Box requires the code to be inside a git
+[Box](http://box-project.org/) is required to build the phar. Run `box build` in the repository root. Box requires the code to be inside a git
 repository.
 
 ## Working so far
