@@ -1,0 +1,29 @@
+{
+  "chmod": "0755",
+  "directories": [
+    "src",
+    "data"
+  ],
+  "files": [
+    "LICENSE",
+    "README.md"
+  ],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": [
+        "tests",
+        "Tests",
+        "test",
+        "phpunit",
+        "doctrine",
+        "sebastian"
+      ],
+      "in": "vendor"
+    }
+  ],
+  "git-version": "package_version",
+  "main": "bin/pvra",
+  "output": "pvra.phar",
+  "stub": true
+}
