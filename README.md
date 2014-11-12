@@ -56,12 +56,14 @@ Run `composer require <package-name>` in the root of your project and include th
 // autoloading and namespace import is assumed
 
 $req = new StringRequirementAnalyser('<?php trait abc{}');
-$req->attachRequirementAnalyser(new LanguageFeatureAnalyser);
+
+$req->attachRequirementAnalyser(new Php54LanguageFeatureNodeWalker);
+$req->attachRequirementAnalyser(new Php55LanguageFeatureNodeWalker);
+$req->attachRequirementAnalyser(new Php56LanguageFeatureNodeWalker);
 
 $result = $req->run();
 
 echo $result->getRequiredVersion(); // 5.4.0
-echo $result->getRequiredVersionReasoning()[0]; // Usage of the trait keyword requires php 5.4
 
 ```
 
