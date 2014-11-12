@@ -11,6 +11,39 @@ The packed `pvra.phar` file is available as a download on the releases page (onc
 from the root of the repository. Make sure all dependencies are available (not required if you run from phar), this 
 requires you to be able to run `<php> composer install --prefer-dist --no-dev` on your machine.
 
+### Example
+
+```php
+<?php
+
+// data/test.php
+// code does not make sense, it's still a nice example
+
+trait Gamma
+{
+    public function test(callable $abc, ...$vars) {
+        return $this->test()['abc'];
+    }
+}
+```
+
+__CLI:__ 
+
+`php bin/pvra analyse:file -f data/test.php`
+
+__OUTPUT:__
+
+```
+Required version: 5.6.0
+Version 5.4.0
+        Reason: Usage of the trait keyword requires PHP 5.4 in .../data/test.php:3.
+        Reason: The callable typehint requires php 5.4 in .../data/test.php:5.
+        Reason: Function dereferencing requires php 5.4 in .../data/test.php:6.
+Version 5.6.0
+        Reason: Variadic arguments require php 5.6 in .../data/test.php:5.
+```
+
+
 
 
 ## Installation and usage of the library.
@@ -22,9 +55,8 @@ Run `composer require <package-name>` in the root of your project and include th
 
 // autoloading and namespace import is assumed
 
-$req = new StringRequirementAnalyser('<?php trait abc {}');
-   
-$req->attachRequirementAnalyser(new Analyse\LanguageFeature); // TODO: Refactor the actual code to look like this
+$req = new StringRequirementAnalyser('<?php trait abc{}');
+$req->attachRequirementAnalyser(new LanguageFeatureAnalyser);
 
 $result = $req->run();
 
@@ -47,9 +79,8 @@ repository.
 
 * More tests
 * Implement all language features (5.5+)
-* Ability to release cyclic dependencies between Result, Analyser and NodeWalker by hand. (Or not create them in the first place)
-Related to the task below.
-* Refactor most of the code in src/RequirementAnalysis
+* Missing 5.4: Detection of 0b001001101 style number, Class::{expr}(), $this in closure
+* Refactor most of the code in src/RequirementAnalysis and split Pvra\PhpParser\AnalysingNodeWalkers\LanguageFeatureAnalyser up.
 * Determine when functions were introduced (Bonus: Check for default parameter changes and additional parameter usage)
 * Output formatter and reworked console output
 * Colored output
