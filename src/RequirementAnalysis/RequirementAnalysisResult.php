@@ -50,7 +50,7 @@ class RequirementAnalysisResult
             throw new \RuntimeException('Impossible to write to already sealed result');
         }
 
-        $this->requirements[$version][] = [
+        $this->requirements[ $version ][] = [
             'location' => $location,
             'msg' => $msg,
             'category' => $category,
@@ -79,8 +79,8 @@ class RequirementAnalysisResult
      */
     public function getRequirementInfo($version)
     {
-        if (isset($this->requirements[$version])) {
-            return $this->requirements[$version];
+        if (isset($this->requirements[ $version ])) {
+            return $this->requirements[ $version ];
         }
 
         return [];
