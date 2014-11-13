@@ -5,6 +5,7 @@ namespace Pvra\RequirementAnalysis;
 
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
 use PhpParser\Parser;
 use Pvra\PhpParser\RequirementAnalyserAwareInterface;
@@ -16,7 +17,7 @@ abstract class RequirementAnalyser
      */
     private $parser;
     /**
-     * @var NodeTraverser
+     * @var NodeTraverserInterface
      */
     private $nodeTraverser;
 
@@ -26,17 +27,49 @@ abstract class RequirementAnalyser
     private $result;
 
     /**
-     *
+     * @param bool $registerNameResolver
      */
     public function __construct($registerNameResolver = true)
     {
-        $this->initBaseParser();
-        $this->initTraverser();
-
         if ($registerNameResolver === true) {
             $this->getNodeTraverser()->addVisitor(new NodeVisitor\NameResolver());
         }
+    }
 
+    /**
+     * @return NodeTraverserInterface
+     */
+    public function getNodeTraverser()
+    {
+        if (!$this->hasNodeTraverserAttached()) {
+            $this->initDefaultTraverser();
+        }
+
+        return $this->nodeTraverser;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNodeTraverserAttached()
+    {
+        return $this->nodeTraverser !== null;
+    }
+
+    /**
+     *
+     */
+    private function initDefaultTraverser()
+    {
+        $this->setTraverser(new NodeTraverser);
+    }
+
+    /**
+     * @param \PhpParser\NodeTraverser|\PhpParser\NodeTraverserInterface $nodeTraverser
+     */
+    protected function setTraverser(NodeTraverserInterface $nodeTraverser)
+    {
+        $this->nodeTraverser = $nodeTraverser;
     }
 
     /**
@@ -47,16 +80,6 @@ abstract class RequirementAnalyser
         $visitor->setOwningAnalyser($this);
         $this->getNodeTraverser()->addVisitor($visitor);
     }
-
-    /**
-     * @return \PhpParser\Node[]
-     */
-    protected abstract function parse();
-
-    /**
-     * @return string
-     */
-    protected abstract function createAnalysisTargetId();
 
     /**
      * @return RequirementAnalysisResult
@@ -99,37 +122,26 @@ abstract class RequirementAnalyser
     }
 
     /**
+     * @return \PhpParser\Node[]
+     */
+    protected abstract function parse();
+
+    /**
+     * @return string
+     */
+    protected abstract function createAnalysisTargetId();
+
+    /**
      * @return Parser
      */
     public function getParser()
     {
+        if (!$this->hasParserAttached()) {
+            $this->initDefaultParser();
+        }
         return $this->parser;
     }
-
-    /**
-     * @return bool
-     */
-    public function isParserInitiated()
-    {
-        return $this->parser instanceof Parser;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTraverserInitiated()
-    {
-        return $this->nodeTraverser instanceof NodeTraverser;
-    }
-
-    /**
-     * @return NodeTraverser
-     */
-    public function getNodeTraverser()
-    {
-        return $this->nodeTraverser;
-    }
-
+    
     /**
      * @param Parser $parser
      */
@@ -139,26 +151,18 @@ abstract class RequirementAnalyser
     }
 
     /**
-     * @param NodeTraverser $nodeTraverser
+     * @return bool
      */
-    protected function setTraverser(NodeTraverser $nodeTraverser)
+    public function hasParserAttached()
     {
-        $this->nodeTraverser = $nodeTraverser;
+        return $this->parser !== null;
     }
 
     /**
      *
      */
-    private function initBaseParser()
+    private function initDefaultParser()
     {
         $this->setParser(new Parser(new Emulative()));
-    }
-
-    /**
-     *
-     */
-    private function initTraverser()
-    {
-        $this->setTraverser(new NodeTraverser);
     }
 }
