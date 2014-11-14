@@ -1,6 +1,6 @@
 <?php
 
-namespace Pvra\tests\Requirementanalysis;
+namespace Pvra\tests\RequirementAnalysis;
 
 
 use PHPUnit_Framework_TestCase;
@@ -8,6 +8,28 @@ use Pvra\RequirementAnalysis\RequirementAnalysisResult;
 
 class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Impossible to write to already sealed result
+     */
+    public function testAddRequirementWhileSealedException()
+    {
+        $r = new RequirementAnalysisResult();
+
+        $r->seal();
+        $r->addRequirement('5.5.5');
+    }
+
+    public function testIsSealed()
+    {
+        $r = new RequirementAnalysisResult();
+
+        $this->assertFalse($r->isSealed());
+        $r->seal();
+        $this->assertTrue($r->isSealed());
+    }
+
     public function testGetRequiredVersion()
     {
         $r = new RequirementAnalysisResult();
@@ -56,5 +78,15 @@ class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
         $r->addRequirement('5');
 
         $a = $r->getRequiredVersionId();
+    }
+
+    public function testGetRequirementInfo()
+    {
+        $r = new RequirementAnalysisResult();
+        $this->assertEmpty($r->getRequirementInfo('5.0.0'));
+
+        $r->addRequirement('5.0.1');
+        $this->assertEmpty($r->getRequirementInfo('5.0.0'));
+        $this->assertCount(1, $r->getRequirementInfo('5.0.1'));
     }
 }

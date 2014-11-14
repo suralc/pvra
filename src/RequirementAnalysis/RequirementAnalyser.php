@@ -123,6 +123,20 @@ abstract class RequirementAnalyser
     }
 
     /**
+     * @param \Pvra\RequirementAnalysis\RequirementAnalysisResult $result
+     * @throws \Exception
+     */
+    public function setResultInstance(RequirementAnalysisResult $result)
+    {
+        if ($this->result !== null) {
+            throw new \Exception('A result instance was already set. Overriding it may lead to data loss.');
+        }
+
+        $this->result = $result;
+        $this->result->setAnalysisTargetId($this->createAnalysisTargetId());
+    }
+
+    /**
      * @return \PhpParser\Node[]
      */
     protected abstract function parse();

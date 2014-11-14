@@ -28,4 +28,13 @@
             <directory>tests/*</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/PhpParser</directory>
+            <directory suffix=".php">src/RequirementAnalysis</directory>
+            <exclude>
+                <file>src/RequirementAnalysis/Result/RequirementCategory.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
