@@ -18,7 +18,8 @@
         "phpunit",
         "doctrine",
         "sebastian",
-        "mockery"
+        "mockery",
+        "satooshi"
       ],
       "in": "vendor"
     }

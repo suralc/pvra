@@ -12,7 +12,14 @@ matrix:
 
 before_script:
   - composer selfupdate && composer --version
+  - composer require satooshi/php-coveralls --dev --prefer-dist
   - composer update --dev --prefer-dist
+
+script:
+  - phpunit --coverage-clover=clover.xml
+
+after_script:
+  - php vendor/bin/coveralls
 
 cache:
   directories:
