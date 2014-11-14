@@ -1,7 +1,10 @@
 # Php Version Requirement Analyser
 
-This repository will contain a library and a console application to validate your php files' version requirements.
+This repository contains a library and a console application to validate your php files' version requirements.
 The library makes heavy use of [the PHP-Parser library](https://github.com/nikic/PHP-Parser)
+
+[![Build Status](https://travis-ci.org/suralc/pvra.svg?branch=master)](https://travis-ci.org/suralc/pvra)
+[![Dependency Status](https://www.versioneye.com/user/projects/546643934de5ef5022000056#tab-collaborators/badge.svg?style=flat)](https://www.versioneye.com/user/projects/546643934de5ef5022000056#tab-collaborators)
 
 
 ## Installation and usage of the cli app

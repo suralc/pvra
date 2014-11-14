@@ -51,7 +51,7 @@ class DirCommand extends Command
             ->files()
             ->in($dir);
 
-        if ($input->getOption('recursive') == false) {
+        if ($input->getOption('recursive') === false) {
             $files->depth(0);
         }
 
