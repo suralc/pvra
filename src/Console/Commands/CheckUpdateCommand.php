@@ -40,7 +40,7 @@ class CheckUpdateCommand extends Command
                     'header' => "User-Agent: Php-Version-Requirement-Checker V{$version}\r\n" .
                         "Accept: application/vnd.github.v3+json\r\n",
                 ]
-            ]));
-
+            ])
+        );
     }
 }

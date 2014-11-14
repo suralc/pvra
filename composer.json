@@ -3,23 +3,19 @@
   "description": "Checks the required php version of a file",
   "minimum-stability": "stable",
   "license": "MIT",
-  "authors": [
-    {
-      "name": "suralc",
-      "email": "email@example.com"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "Pvra\\": "src"
     }
   },
   "require": {
+    "php": ">=5.4",
     "symfony/console": "~2.5",
     "symfony/finder": "~2.5",
     "nikic/php-parser": "~1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.3"
+    "phpunit/phpunit": "~4.3",
+    "mockery/mockery": "~0.9"
   }
 }

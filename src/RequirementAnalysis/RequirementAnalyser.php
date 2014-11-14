@@ -16,6 +16,7 @@ abstract class RequirementAnalyser
      * @var Parser
      */
     private $parser;
+
     /**
      * @var NodeTraverserInterface
      */
@@ -141,7 +142,7 @@ abstract class RequirementAnalyser
         }
         return $this->parser;
     }
-    
+
     /**
      * @param Parser $parser
      */
