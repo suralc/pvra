@@ -8,7 +8,6 @@ use Pvra\RequirementAnalysis\Result\RequirementCategory;
 
 class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
 {
-
     /**
      * @inheritdoc
      */
@@ -33,7 +32,72 @@ class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                     }
                 }
             }
+        } elseif ($node instanceof Node\Expr\FuncCall
+            || $node instanceof Node\Expr\MethodCall
+            || $node instanceof Node\Expr\StaticCall
+        ) {
+            if (!empty($node->args)) {
+                foreach ($node->args as $arg) {
+                    if ($arg->unpack === true) {
+                        $this->getOwningAnalyser()->getResult()->addRequirement(
+                            '5.6.0',
+                            [
+                                'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
+                                'line' => $arg->getLine()
+                            ],
+                            'Argument unpacking requires php 5.6',
+                            RequirementCategory::ARGUMENT_UNPACKING
+                        );
+                    }
+                }
+            }
+
+        } elseif ($node instanceof Node\Stmt\Const_) {
+            foreach ($node->consts as $const) {
+                if (!($const->value instanceof Node\Scalar)) {
+                    $this->getOwningAnalyser()->getResult()->addRequirement(
+                        '5.6.0',
+                        [
+                            'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
+                            'line' => $const->getLine(),
+                        ],
+                        'Constant scalar expressions require php 5.6',
+                        RequirementCategory::CONSTANT_SCALAR_EXPRESSION
+                    );
+                }
+            }
+        } elseif ($node instanceof Node\Expr\AssignOp\Pow || $node instanceof Node\Expr\BinaryOp\Pow) {
+            $this->getOwningAnalyser()->getResult()->addRequirement(
+                '5.6.0',
+                [
+                    'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
+                    'line' => $node->getLine()
+                ],
+                'The "pow" operator requires php 5.6',
+                RequirementCategory::POW_OPERATOR
+            );
+        } elseif ($node instanceof Node\Stmt\Use_) {
+            $msg = '';
+            $cat = null;
+            if ($node->type === Node\Stmt\Use_::TYPE_CONSTANT) {
+                $msg = 'Constant import via use requires php 5.6';
+                $cat = RequirementCategory::CONSTANT_IMPORT_USE;
+            } elseif ($node->type === Node\Stmt\Use_::TYPE_FUNCTION) {
+                $msg = 'Function import via use requires php 5.6';
+                $cat = RequirementCategory::FUNCTION_IMPORT_USE;
+            }
+
+            if ($cat !== null) {
+                $this->getOwningAnalyser()->getResult()->addRequirement(
+                    '5.6.0',
+                    [
+                        'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
+                        'line' => $node->getLine(),
+                    ],
+                    $msg,
+                    $cat
+                );
+            }
         }
     }
-
 }

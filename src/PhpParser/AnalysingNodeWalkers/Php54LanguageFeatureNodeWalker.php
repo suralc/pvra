@@ -28,6 +28,16 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                 'Usage of trait imports requires PHP 5.4',
                 RequirementCategory::TRAIT_USE
             );
+        } elseif ($node instanceof Node\Scalar\MagicConst\Trait_) {
+            $this->getOwningAnalyser()->getResult()->addRequirement(
+                '5.4.0',
+                [
+                    'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
+                    'line' => $node->getLine(),
+                ],
+                'Usage of the Trait magic constant requires php 5.4',
+                RequirementCategory::TRAIT_MAGIC_CONST
+            );
         } elseif ($node instanceof Node\Expr\ArrayDimFetch) {
             if ($node->var instanceof Node\Expr\FuncCall
                 || $node->var instanceof Node\Expr\MethodCall

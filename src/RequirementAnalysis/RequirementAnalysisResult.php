@@ -11,10 +11,12 @@ class RequirementAnalysisResult
      * @var bool
      */
     private $isSealed = false;
+
     /**
      * @var string Filename or hash of input string
      */
     private $analysisTargetId = 'unknown';
+
     /**
      * @var array
      */
@@ -36,6 +38,17 @@ class RequirementAnalysisResult
         }
 
         return '5.3.0';
+    }
+
+    public function getRequiredVersionInt()
+    {
+        $versionParts = explode('.', $this->getRequiredVersion());
+
+        foreach ($versionParts as &$versionPart) {
+            $versionPart = $versionPart * 10;
+        }
+
+        return intval(join('', $versionParts));
     }
 
     /**
