@@ -14,6 +14,13 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements Re
      */
     private $requirementAnalyser;
 
+    public function __construct(RequirementAnalyser $requirementAnalyser = null)
+    {
+        if ($requirementAnalyser !== null) {
+            $this->setOwningAnalyser($requirementAnalyser);
+        }
+    }
+
     /**
      * @param RequirementAnalyser $requirementAnalyser
      */
