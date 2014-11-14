@@ -22,15 +22,23 @@ class RequirementAnalysisResult
      */
     private $requirements = [];
 
-    public function getRequiredVersionInt()
+    /**
+     * @return int
+     * @throws \Exception
+     */
+    public function getRequiredVersionId()
     {
-        $versionParts = explode('.', $this->getRequiredVersion());
+        $version = explode('.', $this->getRequiredVersion());
 
-        foreach ($versionParts as &$versionPart) {
-            $versionPart = $versionPart * 10;
+        $c = count($version);
+        if ($c > 3 || $c < 2) {
+            throw new \Exception(sprintf('A version id has to be built from two or three segments. "%s" is not valid.',
+                    $this->getRequiredVersion()));
         }
 
-        return intval(join('', $versionParts));
+        $version += [2 => 0];
+
+        return $version[0] * 10000 + $version[1] * 100 + $version[2];
     }
 
     /**

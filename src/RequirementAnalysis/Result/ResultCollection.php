@@ -27,8 +27,8 @@ class ResultCollection implements \Countable, \IteratorAggregate
 
         if ($this->highestDemand === null
             || (isset($this->results[ $this->highestDemand ])
-                && $this->results[ $this->highestDemand ]->getRequiredVersionInt()
-                < $result->getRequiredVersionInt())
+                && $this->results[ $this->highestDemand ]->getRequiredVersionId()
+                < $result->getRequiredVersionId())
         ) {
             $this->highestDemand = $result->getAnalysisTargetId();
         }
