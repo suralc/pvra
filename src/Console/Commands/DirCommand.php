@@ -3,6 +3,11 @@
 namespace Pvra\Console\Commands;
 
 
+use Pvra\PhpParser\AnalysingNodeWalkers\Php54LanguageFeatureNodeWalker;
+use Pvra\PhpParser\AnalysingNodeWalkers\Php55LanguageFeatureNodeWalker;
+use Pvra\PhpParser\AnalysingNodeWalkers\Php56LanguageFeatureNodeWalker;
+use Pvra\RequirementAnalysis\FileRequirementAnalyser;
+use Pvra\RequirementAnalysis\Result\ResultCollection;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,7 +30,7 @@ class DirCommand extends Command
         $this
             ->addOption('dir', 'd', InputOption::VALUE_OPTIONAL, 'The directory to check', '.')
             ->addOption('recursive', 'r', InputOption::VALUE_NONE, 'Iterate recursive over directory')
-            ->addArgument('filter', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Filter', ['*.php']);
+            ->addArgument('filter', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Filter', ['name:*.php']);
     }
 
     /**
@@ -52,10 +57,39 @@ class DirCommand extends Command
 
         $this->applyIteratorFilterFromInput($input, $files);
 
+
+        $results = new ResultCollection();
+
         /** @var \SplFileInfo $file */
         foreach ($files as $file) {
             if ($file->isFile()) {
-                $output->writeln('File: ' . $file->getRealPath());
+                $req = new FileRequirementAnalyser($file->getPathname());
+
+                $req->attachRequirementAnalyser(new Php54LanguageFeatureNodeWalker);
+                $req->attachRequirementAnalyser(new Php55LanguageFeatureNodeWalker);
+                $req->attachRequirementAnalyser(new Php56LanguageFeatureNodeWalker);
+
+                $results->add($req->run());
+            }
+        }
+
+        $higestRequirement = $results->getHighestDemandingResult();
+
+        if ($higestRequirement === null) {
+            // todo better handling
+            $output->writeln('Unknown error');
+            return;
+        }
+
+        $output->writeln('Required version: ' . $higestRequirement->getRequiredVersion());
+        $output->writeln(sprintf('Required because %s uses following featrues:',
+            $higestRequirement->getAnalysisTargetId()));
+
+        foreach ($higestRequirement->getRequirements() as $version => $reasons) {
+            foreach ($reasons as $reason) {
+                $output->write("\t");
+                $output->write(sprintf('%s required on line %s: %s', $version, $reason['location']['line'],
+                    $reason['msg']), true);
             }
         }
 

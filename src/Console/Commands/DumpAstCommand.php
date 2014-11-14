@@ -23,7 +23,8 @@ class DumpAstCommand extends Command
 
         $this
             ->addOption('file', 'f', InputOption::VALUE_REQUIRED, 'File to dump')
-            ->addOption('outputFormat', null, InputOption::VALUE_OPTIONAL, 'Output format (not implemented)', 'stdout');
+            ->addOption('outputFormat', null, InputOption::VALUE_OPTIONAL, 'Output format (not implemented)', 'stdout')
+            ->addOption('extensive', 'x', InputOption::VALUE_NONE, 'Use more extensive output format (var_dump)');
 
     }
 
@@ -36,13 +37,17 @@ class DumpAstCommand extends Command
 
         if (!is_file($file) || !is_readable($file)) {
             $output->writeln(sprintf('<error>"%s" is not a valid file.</error>', $file));
-            return;
+            return 0x2;
         }
 
         $parser = new Parser(new Emulative);
 
         $stmts = $parser->parse(file_get_contents($file));
 
-        print_r($stmts);
+        if ($input->getOption('extensive')) {
+            var_dump($stmts);
+        } else {
+            print_r($stmts);
+        }
     }
 }
