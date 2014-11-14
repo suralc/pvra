@@ -3,7 +3,7 @@
 namespace Pvra\tests\PhpParser\AnalysingNodeWalkers;
 
 
-use Pvra\RequirementAnalysis\Result\RequirementCategory;
+use Pvra\RequirementAnalysis\Result\RequirementCategory as R;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
 class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
@@ -21,7 +21,7 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
         $match = 0;
         foreach ($res->getRequirementInfo('5.5.0') as $req) {
             $this->assertSame($lines[ $match ], $req['location']['line']);
-            $this->assertSame(RequirementCategory::GENERATOR_DEFINITION, $req['category']);
+            $this->assertSame(R::GENERATOR_DEFINITION, $req['category']);
             $match++;
         }
     }
@@ -38,13 +38,33 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
         $this->assertSame(19, $res->getRequirementInfo('5.5.0')[1]['location']['line']);
         $this->assertSame(25, $res->getRequirementInfo('5.5.0')[2]['location']['line']);
 
-        $this->assertSame(RequirementCategory::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[0]['category']);
-        $this->assertSame(RequirementCategory::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[1]['category']);
-        $this->assertSame(RequirementCategory::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[2]['category']);
+        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[0]['category']);
+        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[1]['category']);
+        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[2]['category']);
     }
 
     public function testMixedDetection()
     {
         $res = $this->runInstanceFromScratch('all55');
+
+        $this->assertSame('5.5.0', $res->getRequiredVersion());
+        $this->assertCount(8, $res->getRequirementInfo('5.5.0'));
+        $this->assertCount(1, $res->getRequirements());
+        $expectations = [
+            [10, R::TRY_CATCH_FINALLY],
+            [11, R::LIST_IN_FOREACH],
+            [12, R::EXPR_IN_EMPTY],
+            [13, R::GENERATOR_DEFINITION],
+            [13, R::ARRAY_STRING_DEREFERENCING],
+            [15, R::GENERATOR_DEFINITION],
+            [15, R::ARRAY_STRING_DEREFERENCING],
+            [21, R::CLASS_NAME_RESOLUTION],
+        ];
+
+        foreach($expectations as $num => $expectation) {
+            $this->assertSame($expectation[0], $res->getRequirementInfo('5.5.0')[$num]['location']['line']);
+            $this->assertSame($expectation[1], $res->getRequirementInfo('5.5.0')[$num]['category']);
+        }
+
     }
 }
