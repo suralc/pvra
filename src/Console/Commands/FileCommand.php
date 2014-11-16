@@ -44,7 +44,7 @@ class FileCommand extends Command
                 $output->write("\t");
                 $output->write('Reason: ');
                 $output->write($reason['msg']);
-                $output->write(sprintf(' in %s.', $reason['location']['file'] . ':' . $reason['location']['line']),
+                $output->write(sprintf(' in %s.', $result->getAnalysisTargetId() . ':' . $reason['line']),
                     true);
             }
         }

@@ -36,4 +36,12 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements Re
     {
         return $this->requirementAnalyser;
     }
+
+    /**
+     * @return \Pvra\RequirementAnalysis\RequirementAnalysisResult
+     */
+    protected function getResult()
+    {
+        return $this->getOwningAnalyser()->getResult();
+    }
 }

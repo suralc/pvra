@@ -18,15 +18,15 @@ class Php56LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
         $this->assertSame('5.6.0', $res->getRequiredVersion());
         $this->assertCount(1, $res->getRequirements());
         $this->assertCount(5, $res->getRequirementInfo('5.6.0'));
-        $this->assertSame(4, $res->getRequirementInfo('5.6.0')[0]['location']['line']);
-        $this->assertSame(8, $res->getRequirementInfo('5.6.0')[1]['location']['line']);
-        $this->assertSame(13, $res->getRequirementInfo('5.6.0')[2]['location']['line']);
-        $this->assertSame(15, $res->getRequirementInfo('5.6.0')[3]['location']['line']);
-        $this->assertSame(20, $res->getRequirementInfo('5.6.0')[4]['location']['line']);
-        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[0]['category']);
-        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[1]['category']);
-        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[2]['category']);
-        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[3]['category']);
-        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[4]['category']);
+        $this->assertSame(4, $res->getRequirementInfo('5.6.0')[0]['line']);
+        $this->assertSame(8, $res->getRequirementInfo('5.6.0')[1]['line']);
+        $this->assertSame(13, $res->getRequirementInfo('5.6.0')[2]['line']);
+        $this->assertSame(15, $res->getRequirementInfo('5.6.0')[3]['line']);
+        $this->assertSame(20, $res->getRequirementInfo('5.6.0')[4]['line']);
+        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[0]['reason']);
+        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[1]['reason']);
+        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[2]['reason']);
+        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[3]['reason']);
+        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[4]['reason']);
     }
 }

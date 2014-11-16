@@ -3,7 +3,7 @@
 namespace Pvra\RequirementAnalysis;
 
 
-use Pvra\RequirementAnalysis\Result\RequirementCategory;
+use Pvra\RequirementAnalysis\Result\RequirementReason;
 
 class RequirementAnalysisResult
 {
@@ -33,7 +33,7 @@ class RequirementAnalysisResult
         $c = count($version);
         if ($c > 3 || $c < 2) {
             throw new \Exception(sprintf('A version id has to be built from two or three segments. "%s" is not valid.',
-                    $this->getRequiredVersion()));
+                $this->getRequiredVersion()));
         }
 
         $version += [2 => 0];
@@ -61,20 +61,45 @@ class RequirementAnalysisResult
 
     /**
      * @param string $version
-     * @param array $location
+     * @param int $line
      * @param string $msg
-     * @param int $category
+     * @param int $reason
      */
-    public function addRequirement($version, $location = [], $msg = '', $category = RequirementCategory::UNKNOWN)
+    public function addArbitraryRequirement($version, $line = 0, $msg = null, $reason = RequirementReason::UNKNOWN)
     {
         if ($this->isSealed()) {
             throw new \RuntimeException('Impossible to write to already sealed result');
         }
 
         $this->requirements[ $version ][] = [
-            'location' => $location,
+            'line' => $line,
             'msg' => $msg,
-            'category' => $category,
+            'reason' => $reason,
+        ];
+    }
+
+    /**
+     * @param int $reason
+     * @param int $line
+     * @param string $msg
+     */
+    public function addRequirement($reason, $line = 0, $msg = null)
+    {
+        if ($this->isSealed()) {
+            throw new \RuntimeException('Impossible to write to already sealed result');
+        }
+
+        $version = RequirementReason::getRequiredVersionForReason($reason);
+
+        if ($version === false) {
+            throw new \LogicException(sprintf('%s::%s requires a reason a version can be associated to. Use %s::addArbitraryRequirement() to add any version with any reasoning to the result.',
+                    __CLASS__, __METHOD__, __CLASS__));
+        }
+
+        $this->requirements[ $version ][] = [
+            'line' => $line,
+            'msg' => $msg,
+            'reason' => $reason,
         ];
     }
 

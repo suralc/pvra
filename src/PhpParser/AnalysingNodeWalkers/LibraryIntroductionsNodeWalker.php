@@ -5,6 +5,7 @@ namespace Pvra\PhpParser\AnalysingNodeWalkers;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use Pvra\PhpParser\RequirementAnalyserAwareInterface;
+use Pvra\RequirementAnalysis\Result\RequirementReason;
 
 class LibraryIntroductionsNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
 {
@@ -30,14 +31,12 @@ class LibraryIntroductionsNodeWalker extends LanguageFeatureAnalyser implements 
         if ($node instanceof Node\Expr\New_ || $node instanceof Node\Expr\StaticCall) {
             if (count($node->class->parts) === 1) {
                 if ($this->hasClassVersionRequirement($node->class->parts[0])) {
-                    $this->getOwningAnalyser()->getResult()->addRequirement(
+                    $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
                         $this->getClassVersionRequirement($node->class->parts[0]),
-                        [
-                            'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
-                            'line' => $node->getLine()
-                        ],
+                        $node->getLine(),
                         sprintf('The "%s" class was introduced in php %s', $node->class->parts[0],
-                            $this->data['classes-added'][ $node->class->parts[0] ])
+                            $this->data['classes-added'][ $node->class->parts[0] ]),
+                        RequirementReason::CLASS_PRESENCE_CHANGE
                     );
                 }
             }
@@ -50,14 +49,12 @@ class LibraryIntroductionsNodeWalker extends LanguageFeatureAnalyser implements 
                     if (count($param->type->parts) === 1
                         && $this->hasClassVersionRequirement($param->type->parts[0])
                     ) {
-                        $this->getOwningAnalyser()->getResult()->addRequirement(
+                        $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
                             $this->getClassVersionRequirement($param->type->parts[0]),
-                            [
-                                'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
-                                'line' => $param->getLine()
-                            ],
+                            $param->getLine(),
                             sprintf('The "%s" class was introduced in php %s', $param->type->parts[0],
-                                $this->data['classes-added'][ $param->type->parts[0] ])
+                                $this->data['classes-added'][ $param->type->parts[0] ]),
+                            RequirementReason::CLASS_PRESENCE_CHANGE
                         );
                     }
                 }
@@ -78,14 +75,12 @@ class LibraryIntroductionsNodeWalker extends LanguageFeatureAnalyser implements 
             foreach ($names as $name) {
                 if (count($name->parts) === 1) {
                     if ($this->hasClassVersionRequirement($name->parts[0])) {
-                        $this->getOwningAnalyser()->getResult()->addRequirement(
+                        $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
                             $this->getClassVersionRequirement($name->parts[0]),
-                            [
-                                'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
-                                'line' => $node->getLine()
-                            ],
+                            $node->getLine(),
                             sprintf('The "%s" class was introduced in php %s', $name->parts[0],
-                                $this->data['classes-added'][ $name->parts[0] ])
+                                $this->data['classes-added'][ $name->parts[0] ]),
+                            RequirementReason::CLASS_PRESENCE_CHANGE
                         );
                     }
                 }

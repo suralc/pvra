@@ -20,14 +20,10 @@ class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
             if (!empty($node->params)) {
                 foreach ($node->params as $param) {
                     if ($param->variadic) {
-                        $this->getOwningAnalyser()->getResult()->addRequirement(
-                            '5.6.0',
-                            [
-                                'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
-                                'line' => $param->getLine()
-                            ],
-                            'Variadic arguments require php 5.6',
-                            RequirementReason::VARIADIC_ARGUMENT
+                        $this->getResult()->addRequirement(
+                            RequirementReason::VARIADIC_ARGUMENT,
+                            $param->getLine(),
+                            'Variadic arguments require php 5.6'
                         );
                     }
                 }
@@ -39,14 +35,10 @@ class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
             if (!empty($node->args)) {
                 foreach ($node->args as $arg) {
                     if ($arg->unpack === true) {
-                        $this->getOwningAnalyser()->getResult()->addRequirement(
-                            '5.6.0',
-                            [
-                                'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
-                                'line' => $arg->getLine()
-                            ],
-                            'Argument unpacking requires php 5.6',
-                            RequirementReason::ARGUMENT_UNPACKING
+                        $this->getResult()->addRequirement(
+                            RequirementReason::ARGUMENT_UNPACKING,
+                            $arg->getLine(),
+                            'Argument unpacking requires php 5.6'
                         );
                     }
                 }
@@ -55,26 +47,18 @@ class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
         } elseif ($node instanceof Node\Stmt\Const_) {
             foreach ($node->consts as $const) {
                 if (!($const->value instanceof Node\Scalar)) {
-                    $this->getOwningAnalyser()->getResult()->addRequirement(
-                        '5.6.0',
-                        [
-                            'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
-                            'line' => $const->getLine(),
-                        ],
-                        'Constant scalar expressions require php 5.6',
-                        RequirementReason::CONSTANT_SCALAR_EXPRESSION
+                    $this->getResult()->addRequirement(
+                        RequirementReason::CONSTANT_SCALAR_EXPRESSION,
+                        $const->getLine(),
+                        'Constant scalar expressions require php 5.6'
                     );
                 }
             }
         } elseif ($node instanceof Node\Expr\AssignOp\Pow || $node instanceof Node\Expr\BinaryOp\Pow) {
-            $this->getOwningAnalyser()->getResult()->addRequirement(
-                '5.6.0',
-                [
-                    'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
-                    'line' => $node->getLine()
-                ],
-                'The "pow" operator requires php 5.6',
-                RequirementReason::POW_OPERATOR
+            $this->getResult()->addRequirement(
+                RequirementReason::POW_OPERATOR,
+                $node->getLine(),
+                'The "pow" operator requires php 5.6'
             );
         } elseif ($node instanceof Node\Stmt\Use_) {
             $msg = '';
@@ -88,15 +72,7 @@ class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
             }
 
             if ($cat !== null) {
-                $this->getOwningAnalyser()->getResult()->addRequirement(
-                    '5.6.0',
-                    [
-                        'file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(),
-                        'line' => $node->getLine(),
-                    ],
-                    $msg,
-                    $cat
-                );
+                $this->getResult()->addRequirement($cat, $node->getLine(), $msg);
             }
         }
     }

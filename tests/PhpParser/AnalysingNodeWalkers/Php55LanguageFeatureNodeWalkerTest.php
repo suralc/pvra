@@ -20,8 +20,8 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
         $lines = [6, 7, 8, 10, 11, 13, 14, 17];
         $match = 0;
         foreach ($res->getRequirementInfo('5.5.0') as $req) {
-            $this->assertSame($lines[ $match ], $req['location']['line']);
-            $this->assertSame(R::GENERATOR_DEFINITION, $req['category']);
+            $this->assertSame($lines[ $match ], $req['line']);
+            $this->assertSame(R::GENERATOR_DEFINITION, $req['reason']);
             $match++;
         }
     }
@@ -34,13 +34,13 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
         $this->assertCount(1, $res->getRequirements());
         $this->assertCount(3, $res->getRequirementInfo('5.5.0'));
 
-        $this->assertSame(9, $res->getRequirementInfo('5.5.0')[0]['location']['line']);
-        $this->assertSame(19, $res->getRequirementInfo('5.5.0')[1]['location']['line']);
-        $this->assertSame(25, $res->getRequirementInfo('5.5.0')[2]['location']['line']);
+        $this->assertSame(9, $res->getRequirementInfo('5.5.0')[0]['line']);
+        $this->assertSame(19, $res->getRequirementInfo('5.5.0')[1]['line']);
+        $this->assertSame(25, $res->getRequirementInfo('5.5.0')[2]['line']);
 
-        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[0]['category']);
-        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[1]['category']);
-        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[2]['category']);
+        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[0]['reason']);
+        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[1]['reason']);
+        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[2]['reason']);
     }
 
     public function testMixedDetection()
@@ -61,9 +61,9 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [21, R::CLASS_NAME_RESOLUTION],
         ];
 
-        foreach($expectations as $num => $expectation) {
-            $this->assertSame($expectation[0], $res->getRequirementInfo('5.5.0')[$num]['location']['line']);
-            $this->assertSame($expectation[1], $res->getRequirementInfo('5.5.0')[$num]['category']);
+        foreach ($expectations as $num => $expectation) {
+            $this->assertSame($expectation[0], $res->getRequirementInfo('5.5.0')[ $num ]['line']);
+            $this->assertSame($expectation[1], $res->getRequirementInfo('5.5.0')[ $num ]['reason']);
         }
 
     }
