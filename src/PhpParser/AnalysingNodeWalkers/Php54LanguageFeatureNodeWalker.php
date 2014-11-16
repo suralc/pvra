@@ -5,7 +5,7 @@ namespace Pvra\PhpParser\AnalysingNodeWalkers;
 
 use PhpParser\Node;
 use Pvra\PhpParser\RequirementAnalyserAwareInterface;
-use Pvra\RequirementAnalysis\Result\RequirementCategory;
+use Pvra\RequirementAnalysis\Result\RequirementReason;
 
 class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
 {
@@ -19,14 +19,14 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                 '5.4.0',
                 ['file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(), 'line' => $node->getLine()],
                 'Usage of the trait keyword requires PHP 5.4',
-                RequirementCategory::TRAIT_USE
+                RequirementReason::TRAIT_DEFINITION
             );
         } elseif ($node instanceof Node\Stmt\TraitUse) {
             $this->getOwningAnalyser()->getResult()->addRequirement(
                 '5.4.0',
                 ['file' => $this->getOwningAnalyser()->getResult()->getAnalysisTargetId(), 'line' => $node->getLine()],
                 'Usage of trait imports requires PHP 5.4',
-                RequirementCategory::TRAIT_USE
+                RequirementReason::TRAIT_USE
             );
         } elseif ($node instanceof Node\Scalar\MagicConst\Trait_) {
             $this->getOwningAnalyser()->getResult()->addRequirement(
@@ -36,7 +36,7 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                     'line' => $node->getLine(),
                 ],
                 'Usage of the Trait magic constant requires php 5.4',
-                RequirementCategory::TRAIT_MAGIC_CONST
+                RequirementReason::TRAIT_MAGIC_CONST
             );
         } elseif ($node instanceof Node\Expr\ArrayDimFetch) {
             if ($node->var instanceof Node\Expr\FuncCall
@@ -50,7 +50,7 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                         'line' => $node->getLine()
                     ],
                     'Function dereferencing requires php 5.4',
-                    RequirementCategory::ARRAY_FUNCTION_DEREFERENCING
+                    RequirementReason::ARRAY_FUNCTION_DEREFERENCING
                 );
             }
         }
@@ -68,7 +68,7 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                                 'line' => $param->getLine()
                             ],
                             'The callable typehint requires php 5.4',
-                            RequirementCategory::TYPEHINT_CALLABLE
+                            RequirementReason::TYPEHINT_CALLABLE
                         );
                     }
                 }
@@ -84,7 +84,7 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                         'line' => $node->getLine()
                     ],
                     'Instant class member access requires php 5.4',
-                    RequirementCategory::INSTANT_CLASS_MEMBER_ACCESS
+                    RequirementReason::INSTANT_CLASS_MEMBER_ACCESS
                 );
             }
         }
@@ -99,7 +99,7 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                                 'line' => $node->getLine()
                             ],
                             'Usage of $this in closures requires php 5.4',
-                            RequirementCategory::THIS_IN_CLOSURE
+                            RequirementReason::THIS_IN_CLOSURE
                         );
                     }
                 }

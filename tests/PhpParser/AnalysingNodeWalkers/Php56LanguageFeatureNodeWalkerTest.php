@@ -3,7 +3,7 @@
 namespace Pvra\tests\PhpParser\AnalysingNodeWalkers;
 
 
-use Pvra\RequirementAnalysis\Result\RequirementCategory;
+use Pvra\RequirementAnalysis\Result\RequirementReason;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
 
@@ -23,10 +23,10 @@ class Php56LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
         $this->assertSame(13, $res->getRequirementInfo('5.6.0')[2]['location']['line']);
         $this->assertSame(15, $res->getRequirementInfo('5.6.0')[3]['location']['line']);
         $this->assertSame(20, $res->getRequirementInfo('5.6.0')[4]['location']['line']);
-        $this->assertSame(RequirementCategory::FUNCTION_VARIADIC, $res->getRequirementInfo('5.6.0')[0]['category']);
-        $this->assertSame(RequirementCategory::FUNCTION_VARIADIC, $res->getRequirementInfo('5.6.0')[1]['category']);
-        $this->assertSame(RequirementCategory::FUNCTION_VARIADIC, $res->getRequirementInfo('5.6.0')[2]['category']);
-        $this->assertSame(RequirementCategory::FUNCTION_VARIADIC, $res->getRequirementInfo('5.6.0')[3]['category']);
-        $this->assertSame(RequirementCategory::FUNCTION_VARIADIC, $res->getRequirementInfo('5.6.0')[4]['category']);
+        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[0]['category']);
+        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[1]['category']);
+        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[2]['category']);
+        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[3]['category']);
+        $this->assertSame(RequirementReason::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[4]['category']);
     }
 }

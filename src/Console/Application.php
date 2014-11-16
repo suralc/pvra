@@ -14,7 +14,7 @@ class Application extends BaseApplication
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
-        if ($version === '@package_version') {
+        if ($version === '@package_version@') {
             $version = static::APPLICATION_DEFAULT_VERSION;
         }
 

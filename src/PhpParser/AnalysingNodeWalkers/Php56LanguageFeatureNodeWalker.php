@@ -4,7 +4,7 @@ namespace Pvra\PhpParser\AnalysingNodeWalkers;
 
 use PhpParser\Node;
 use Pvra\PhpParser\RequirementAnalyserAwareInterface;
-use Pvra\RequirementAnalysis\Result\RequirementCategory;
+use Pvra\RequirementAnalysis\Result\RequirementReason;
 
 class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
 {
@@ -27,7 +27,7 @@ class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                                 'line' => $param->getLine()
                             ],
                             'Variadic arguments require php 5.6',
-                            RequirementCategory::FUNCTION_VARIADIC
+                            RequirementReason::VARIADIC_ARGUMENT
                         );
                     }
                 }
@@ -46,7 +46,7 @@ class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                                 'line' => $arg->getLine()
                             ],
                             'Argument unpacking requires php 5.6',
-                            RequirementCategory::ARGUMENT_UNPACKING
+                            RequirementReason::ARGUMENT_UNPACKING
                         );
                     }
                 }
@@ -62,7 +62,7 @@ class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                             'line' => $const->getLine(),
                         ],
                         'Constant scalar expressions require php 5.6',
-                        RequirementCategory::CONSTANT_SCALAR_EXPRESSION
+                        RequirementReason::CONSTANT_SCALAR_EXPRESSION
                     );
                 }
             }
@@ -74,17 +74,17 @@ class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                     'line' => $node->getLine()
                 ],
                 'The "pow" operator requires php 5.6',
-                RequirementCategory::POW_OPERATOR
+                RequirementReason::POW_OPERATOR
             );
         } elseif ($node instanceof Node\Stmt\Use_) {
             $msg = '';
             $cat = null;
             if ($node->type === Node\Stmt\Use_::TYPE_CONSTANT) {
                 $msg = 'Constant import via use requires php 5.6';
-                $cat = RequirementCategory::CONSTANT_IMPORT_USE;
+                $cat = RequirementReason::CONSTANT_IMPORT_USE;
             } elseif ($node->type === Node\Stmt\Use_::TYPE_FUNCTION) {
                 $msg = 'Function import via use requires php 5.6';
-                $cat = RequirementCategory::FUNCTION_IMPORT_USE;
+                $cat = RequirementReason::FUNCTION_IMPORT_USE;
             }
 
             if ($cat !== null) {

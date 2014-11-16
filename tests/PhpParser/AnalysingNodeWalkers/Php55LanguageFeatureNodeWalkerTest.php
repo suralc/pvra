@@ -3,7 +3,7 @@
 namespace Pvra\tests\PhpParser\AnalysingNodeWalkers;
 
 
-use Pvra\RequirementAnalysis\Result\RequirementCategory as R;
+use Pvra\RequirementAnalysis\Result\RequirementReason as R;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
 class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
@@ -55,9 +55,9 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [11, R::LIST_IN_FOREACH],
             [12, R::EXPR_IN_EMPTY],
             [13, R::GENERATOR_DEFINITION],
-            [13, R::ARRAY_STRING_DEREFERENCING],
+            [13, R::ARRAY_OR_STRING_DEREFERENCING],
             [15, R::GENERATOR_DEFINITION],
-            [15, R::ARRAY_STRING_DEREFERENCING],
+            [15, R::ARRAY_OR_STRING_DEREFERENCING],
             [21, R::CLASS_NAME_RESOLUTION],
         ];
 
