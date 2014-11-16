@@ -9,6 +9,8 @@ use Pvra\RequirementAnalysis\Result\RequirementReason;
 
 class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
 {
+    private $inClosureLevel = 0;
+
     /**
      * @inheritdoc
      */
@@ -42,9 +44,11 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                     $node->getLine(),
                     'Function dereferencing requires php 5.4'
                 );
+            } elseif ($this->inClosureLevel > 0 && $node->var instanceof Node\Expr\Variable && $node->var->name === 'this') {
+                // ArrayAccess
+                $this->_addThisInClosure($node->var);
             }
-        }
-        if ($node instanceof Node\Stmt\Function_
+        } elseif ($node instanceof Node\Stmt\Function_
             || $node instanceof Node\Stmt\ClassMethod
             || $node instanceof Node\Expr\Closure
         ) {
@@ -59,29 +63,46 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                     }
                 }
             }
-
-        }
-        if ($node instanceof Node\Expr\MethodCall) {
+        } elseif ($node instanceof Node\Expr\MethodCall) {
             if ($node->var instanceof Node\Expr\New_) {
                 $this->getResult()->addRequirement(
                     RequirementReason::INSTANT_CLASS_MEMBER_ACCESS,
                     $node->getLine(),
                     'Instant class member access requires php 5.4'
                 );
+            } elseif ($this->inClosureLevel > 0
+                && $node->var instanceof Node\Expr\Variable && $node->var->name === 'this'
+            ) {
+                $this->_addThisInClosure($node->var);
             }
+        } elseif ($this->inClosureLevel > 0 && $node instanceof Node\Expr\PropertyFetch
+            && $node->var instanceof Node\Expr\Variable && $node->var->name === 'this'
+        ) {
+            $this->_addThisInClosure($node->var);
+        } elseif ($this->inClosureLevel > 0 && $node instanceof Node\Expr\FuncCall
+            && $node->name instanceof Node\Expr\Variable && $node->name->name === 'this'
+        ) {
+            $this->_addThisInClosure($node->name);
         }
+
         if ($node instanceof Node\Expr\Closure) {
-            if (!empty($node->stmts)) {
-                foreach ($node->stmts as $stmt) {
-                    if ($stmt->hasAttribute('var') && $stmt->getAttribute('var')->name === 'this') {
-                        $this->getResult()->addRequirement(
-                            RequirementReason::THIS_IN_CLOSURE,
-                            $node->getLine(),
-                            'Usage of $this in closures requires php 5.4'
-                        );
-                    }
-                }
-            }
+            $this->inClosureLevel++;
         }
+    }
+
+    public function leaveNode(Node $node)
+    {
+        if ($node instanceof Node\Expr\Closure) {
+            $this->inClosureLevel--;
+        }
+    }
+
+    private function _addThisInClosure(Node $node)
+    {
+        $this->getResult()->addRequirement(
+            RequirementReason::THIS_IN_CLOSURE,
+            $node->getLine(),
+            'Usage of $this in closures requires php 5.4'
+        );
     }
 }
