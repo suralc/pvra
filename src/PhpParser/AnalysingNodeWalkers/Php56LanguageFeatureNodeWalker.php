@@ -44,7 +44,7 @@ class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                 }
             }
 
-        } elseif ($node instanceof Node\Stmt\Const_) {
+        } elseif ($node instanceof Node\Stmt\Const_ || $node instanceof Node\Stmt\ClassConst) {
             foreach ($node->consts as $const) {
                 if (!($const->value instanceof Node\Scalar)) {
                     $this->getResult()->addRequirement(

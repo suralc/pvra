@@ -40,7 +40,8 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
             return [new $className($analyserMock), $result];
         }
 
-        $this->fail(sprintf('Could not build test instance of %s', $this->classToTest));
+        $this->fail(sprintf('Could not build test instance of %s',
+                $this->classToTest !== null ? $this->classToTest : '?. $classToTest was not set.'));
 
         return [];
     }

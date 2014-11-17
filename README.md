@@ -84,8 +84,7 @@ repository.
 
 * More tests
 * Implement all language features (5.5+)
-* Missing 5.4: Detection of 0b001001101 style number, Class::{expr}(), $this in closure
-* Refactor most of the code in src/RequirementAnalysis and split Pvra\PhpParser\AnalysingNodeWalkers\LanguageFeatureAnalyser up.
+* Missing 5.4: Detection of 0b001001101 style number, Class::{expr}()
 * Determine when functions were introduced (Bonus: Check for default parameter changes and additional parameter usage)
 * Output formatter and reworked console output
 * Colored output

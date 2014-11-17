@@ -5,9 +5,22 @@ namespace Pvra\tests\RequirementAnalysis;
 
 use PHPUnit_Framework_TestCase;
 use Pvra\RequirementAnalysis\RequirementAnalysisResult;
+use Pvra\RequirementAnalysis\Result\RequirementReason as R;
 
 class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Impossible to write to already sealed result
+     */
+    public function testAddArbRequirementWhileSealedException()
+    {
+        $r = new RequirementAnalysisResult();
+
+        $r->seal();
+        $r->addArbitraryRequirement('5.5.5');
+    }
 
     /**
      * @expectedException \RuntimeException
@@ -18,7 +31,23 @@ class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
         $r = new RequirementAnalysisResult();
 
         $r->seal();
-        $r->addArbitraryRequirement('5.5.5');
+        $r->addRequirement('5.5.5');
+    }
+
+    public function testAddRequirementUnreasonedException()
+    {
+        try {
+            $r = new RequirementAnalysisResult();
+
+            $r->addRequirement(R::CLASS_PRESENCE_CHANGE);
+            $this->fail('Unreachable statement reached. Exception not triggered');
+        } catch (\LogicException $ex) {
+            $this->assertStringMatchesFormat('%s::%s requires a reason a version can be associated to.'
+                . ' Use %s::addArbitraryRequirement() to add any version with any reasoning to the result.',
+                $ex->getMessage());
+        } catch (\Exception $ex) {
+            $this->fail('Wrong exceptiontype received');
+        }
     }
 
     public function testIsSealed()
@@ -41,6 +70,40 @@ class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
         $this->assertSame('5.5.5', $r->getRequiredVersion());
         $r->addArbitraryRequirement('5.6.0', [__FILE__ . ':' . __LINE__], 'Some msg');
         $this->assertSame('5.6.0', $r->getRequiredVersion());
+    }
+
+    public function testGetRequiredVersionWithReasonedRequirements()
+    {
+        $r = new RequirementAnalysisResult();
+        $r->addRequirement(R::ARRAY_FUNCTION_DEREFERENCING);
+        $this->assertSame('5.4.0', $r->getRequiredVersion());
+        $r->addRequirement(R::ARGUMENT_UNPACKING);
+        $this->assertSame('5.6.0', $r->getRequiredVersion());
+        $r->addRequirement(R::EXPR_IN_EMPTY);
+        $this->assertSame('5.6.0', $r->getRequiredVersion());
+        $this->assertCount(3, $r->getRequirements());
+        $this->assertCount(1, $r->getRequirementInfo('5.4.0'));
+        $this->assertCount(1, $r->getRequirementInfo('5.5.0'));
+        $this->assertCount(1, $r->getRequirementInfo('5.6.0'));
+    }
+
+    public function testGetRequiredVersionWithMixedRequirementDefinition()
+    {
+        $r = new RequirementAnalysisResult();
+        $r->addRequirement(R::EXPR_IN_EMPTY);
+        $this->assertSame(R::getRequiredVersionForReason(R::EXPR_IN_EMPTY), $r->getRequiredVersion());
+        $r->addArbitraryRequirement('5.5.1');
+        $this->assertSame('5.5.1', $r->getRequiredVersion());
+        $r->addRequirement(R::VARIADIC_ARGUMENT);
+        $this->assertSame('5.6.0', $r->getRequiredVersion());
+        $r->addArbitraryRequirement('7.0.1', 544, 'Some msg', R::CLASS_PRESENCE_CHANGE);
+        $this->assertSame('7.0.1', $r->getRequiredVersion());
+        $this->assertSame(544, $r->getRequirementInfo('7.0.1')[0]['line']);
+        $this->assertSame('Some msg', $r->getRequirementInfo('7.0.1')[0]['msg']);
+        $this->assertSame(R::CLASS_PRESENCE_CHANGE, $r->getRequirementInfo('7.0.1')[0]['reason']);
+        $r->addArbitraryRequirement('4.3.0');
+        $r->addRequirement(R::ARGUMENT_UNPACKING);
+        $this->assertSame('7.0.1', $r->getRequiredVersion());
     }
 
     public function testGetRequiredVersionId()
