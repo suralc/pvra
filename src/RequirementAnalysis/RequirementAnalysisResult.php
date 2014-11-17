@@ -23,6 +23,11 @@ class RequirementAnalysisResult
     private $requirements = [];
 
     /**
+     * @var string|null
+     */
+    private $cachedRequiredVersion;
+
+    /**
      * @return int
      * @throws \Exception
      */
@@ -46,6 +51,10 @@ class RequirementAnalysisResult
      */
     public function getRequiredVersion()
     {
+        if ($this->cachedRequiredVersion !== null) {
+            return $this->cachedRequiredVersion;
+        }
+
         $keys = array_keys($this->requirements);
 
         if (!empty($keys)) {
@@ -53,7 +62,7 @@ class RequirementAnalysisResult
                 return version_compare($b, $a);
             });
 
-            return $keys[0];
+            return $this->cachedRequiredVersion = $keys[0];
         }
 
         return '5.3.0';
@@ -70,6 +79,8 @@ class RequirementAnalysisResult
         if ($this->isSealed()) {
             throw new \RuntimeException('Impossible to write to already sealed result');
         }
+
+        $this->cachedRequiredVersion = null;
 
         $this->requirements[ $version ][] = [
             'line' => $line,
@@ -93,8 +104,10 @@ class RequirementAnalysisResult
 
         if ($version === false) {
             throw new \LogicException(sprintf('%s::%s requires a reason a version can be associated to. Use %s::addArbitraryRequirement() to add any version with any reasoning to the result.',
-                    __CLASS__, __METHOD__, __CLASS__));
+                __CLASS__, __METHOD__, __CLASS__));
         }
+
+        $this->cachedRequiredVersion = null;
 
         $this->requirements[ $version ][] = [
             'line' => $line,
