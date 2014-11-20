@@ -3,6 +3,7 @@
 namespace Pvra\Console\Commands;
 
 
+use Pvra\PhpParser\AnalysingNodeWalkers\LibraryAdditionsNodeWalker;
 use Pvra\PhpParser\AnalysingNodeWalkers\Php54LanguageFeatureNodeWalker;
 use Pvra\PhpParser\AnalysingNodeWalkers\Php55LanguageFeatureNodeWalker;
 use Pvra\PhpParser\AnalysingNodeWalkers\Php56LanguageFeatureNodeWalker;
@@ -33,12 +34,13 @@ class FileCommand extends Command
         $req->attachRequirementAnalyser(new Php54LanguageFeatureNodeWalker);
         $req->attachRequirementAnalyser(new Php55LanguageFeatureNodeWalker);
         $req->attachRequirementAnalyser(new Php56LanguageFeatureNodeWalker);
+        $req->attachRequirementAnalyser(new LibraryAdditionsNodeWalker);
 
         $result = $req->run();
 
         $output->writeln(sprintf('<info>Required version: %s</info>', $result->getRequiredVersion()));
 
-        foreach ($result->getRequirements() as $version => $reasons) {
+        foreach (array_reverse($result->getRequirements()) as $version => $reasons) {
             $output->writeln('Version ' . $version);
             foreach ($reasons as $reason) {
                 $output->write("\t");
