@@ -5,7 +5,7 @@ namespace Pvra\RequirementAnalysis;
 
 use Pvra\RequirementAnalysis\Result\RequirementReason;
 
-class RequirementAnalysisResult
+class RequirementAnalysisResult implements \IteratorAggregate, \Countable
 {
     /**
      * @var bool
@@ -26,6 +26,10 @@ class RequirementAnalysisResult
      * @var string|null
      */
     private $cachedRequiredVersion;
+    /**
+     * @var int
+     */
+    private $count = 0;
 
     /**
      * @return int
@@ -87,6 +91,7 @@ class RequirementAnalysisResult
             'msg' => $msg,
             'reason' => $reason,
         ];
+        $this->count++;
     }
 
     /**
@@ -114,6 +119,7 @@ class RequirementAnalysisResult
             'msg' => $msg,
             'reason' => $reason,
         ];
+        $this->count++;
     }
 
     /**
@@ -124,12 +130,14 @@ class RequirementAnalysisResult
         return $this->isSealed;
     }
 
+
     /**
      * @return array
      */
     public function getRequirements()
     {
         return $this->requirements;
+
     }
 
     /**
@@ -169,4 +177,24 @@ class RequirementAnalysisResult
         $this->isSealed = true;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getIterator()
+    {
+        $ar = new \ArrayIterator();
+        foreach ($this->getRequirements() as $version => $reqList) {
+            foreach ($reqList as $requirement) {
+                $requirement += ['version' => $version];
+                $ar->append($requirement);
+            }
+        }
+
+        return $ar;
+    }
+
+    public function count()
+    {
+        return $this->count;
+    }
 }

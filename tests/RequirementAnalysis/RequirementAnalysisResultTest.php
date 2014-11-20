@@ -152,4 +152,51 @@ class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
         $this->assertEmpty($r->getRequirementInfo('5.0.0'));
         $this->assertCount(1, $r->getRequirementInfo('5.0.1'));
     }
+
+    public function testCount()
+    {
+        $r = new RequirementAnalysisResult();
+        $this->assertSame(0, $r->count());
+        $this->assertCount(0, $r);
+        $this->assertTrue(count($r) === 0);
+        $r->addArbitraryRequirement('5.9.3');
+        $this->assertCount(1, $r);
+        $r->addArbitraryRequirement('2.3.4');
+        $this->assertCount(2, $r);
+        $r->addRequirement(R::VARIADIC_ARGUMENT);
+        $this->assertCount(3, $r);
+    }
+
+    public function testGetIterator()
+    {
+        $r = new RequirementAnalysisResult();
+
+        $this->assertInstanceOf('\Traversable', $r);
+        $this->assertInstanceOf('\Iterator', $it = $r->getIterator());
+
+        $this->assertSame(0, $it->count());
+        $this->assertSame($r->count(), $it->count());
+
+        $r->addArbitraryRequirement('5.2.3');
+        $this->assertSame(1, $r->getIterator()->count());
+        $arr = $r->getIterator()->current();
+        $this->assertArrayHasKey('version', $arr);
+        $this->assertArrayHasKey('msg', $arr);
+        $this->assertArrayHasKey('reason', $arr);
+
+        $r = new RequirementAnalysisResult();
+        $r->addArbitraryRequirement('5.5.0');
+        $r->addArbitraryRequirement('5.5.0');
+        $r->addArbitraryRequirement('5.5.0');
+        $r->addArbitraryRequirement('5.4.0');
+
+        $this->assertSame($r->count(), $r->getIterator()->count());
+        $this->assertCount(4, $r->getIterator());
+        foreach ($r as $item) {
+            $this->assertArrayHasKey('version', $item);
+            $this->assertArrayHasKey('msg', $item);
+            $this->assertArrayHasKey('reason', $item);
+            $this->assertTrue($item['version'] === '5.5.0' || $item['version'] === '5.4.0');
+        }
+    }
 }
