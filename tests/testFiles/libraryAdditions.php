@@ -1,7 +1,7 @@
 <?php
 
 $s = session_status();
-$s2 = trait_exists('abc') . hash_equals('a', 'b');
+$s2 = trait_exists('abc') . hash_equals('a', 'b') . substr('abc', 1);
 
 foreach (get_declared_traits() as $trait) {
     $a3 = new RecursiveCallbackFilterIterator(new RecursiveDirectoryIterator('a'),
@@ -23,6 +23,6 @@ interface MySessionHandler extends SessionHandlerInterface
 {
 }
 
-interface MySecondSessionHandler extends SessionHandlerInterface, JsonSerializable, MySessionHandler
+interface MySecondSessionHandler extends SessionHandlerInterface, JsonSerializable, MySessionHandler, Countable
 {
 }
