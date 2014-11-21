@@ -3,6 +3,7 @@
   "description": "Checks the required php version of a file",
   "minimum-stability": "stable",
   "license": "MIT",
+  "bin": ["bin/pvra"],
   "autoload": {
     "psr-4": {
       "Pvra\\": "src"

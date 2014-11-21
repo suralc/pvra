@@ -1,12 +1,12 @@
 {
   "chmod": "0755",
   "directories": [
-    "src",
-    "data"
+    "src"
   ],
   "files": [
     "LICENSE",
-    "README.md"
+    "README.md",
+    "data/changes.php"
   ],
   "finder": [
     {

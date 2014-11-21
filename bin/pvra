@@ -1,10 +1,21 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+function includeIfExists($file)
+{
+    if (file_exists($file)) {
+        return include $file;
+    }
+}
+
+if ((!$loader = includeIfExists(__DIR__ . '/../vendor/autoload.php'))
+    && (!$loader = includeIfExists(__DIR__ . '/../../../autoload.php'))) {
+    die('Pvra needs to be able to locate composers autoload.php');
+}
 
 
 use Pvra\Console\Application;
+use Pvra\Console\Commands\CheckUpdateCommand;
 use Pvra\Console\Commands\DirCommand;
 use Pvra\Console\Commands\DumpAstCommand;
 use Pvra\Console\Commands\FileCommand;
@@ -12,6 +23,6 @@ use Pvra\Console\Commands\FileCommand;
 $application = new Application('Php Version Requirement Analyser', '@package_version@');
 $application->add(new FileCommand());
 $application->add(new DirCommand());
-// $application->add(new CheckUpdateCommand());
+$application->add(new CheckUpdateCommand());
 $application->add(new DumpAstCommand());
 $application->run();
