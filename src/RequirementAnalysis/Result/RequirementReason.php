@@ -35,8 +35,16 @@ abstract class RequirementReason
     private static $constantsCache;
 
     /**
+     * Get the required version for a reason.
+     *
+     * This static method may be used to get the required version of a reason constant defined in RequirementReason.
+     * If no matching version for a constant can be found an InvalidArgumentException will be thrown.
+     *
+     * This method may return a falseable string or bool(false). Use !== false to check for a valid returned version.
+     * If false is returned refer to the corresponding method on the class that returned the constant.
+     *
      * @param int $reason One of the constants defined in RequirementReason
-     * @return string
+     * @return string|bool The required version or bool(false)
      */
     public static function getRequiredVersionForReason($reason)
     {
@@ -55,8 +63,10 @@ abstract class RequirementReason
     }
 
     /**
+     * Get the constant name from constant value
+     *
      * @param int $value
-     * @return string
+     * @return string The name of the constant or 'UNKNOWN'
      */
     public static function getReasonNameFromValue($value)
     {
@@ -70,14 +80,19 @@ abstract class RequirementReason
         return 'UNKNOWN';
     }
 
+    /**
+     * Get a list of defined constants and their values.
+     *
+     * @return array
+     */
     public static function getReasonNames()
     {
         if (self::$constantsCache !== null) {
             return self::$constantsCache;
         }
 
-        $class = get_called_class();
-        $constants = (new \ReflectionClass($class))->getConstants();
+        $constants = (new \ReflectionClass(get_called_class()))
+            ->getConstants();
 
         foreach ($constants as $name => $value) {
             self::$constantsCache[ $name ] = $value;
@@ -86,7 +101,11 @@ abstract class RequirementReason
         return self::$constantsCache;
     }
 
-
+    /**
+     * Clears the cached constant lists.
+     *
+     * May be useful to save memory or to force regeneration of the list in tests.
+     */
     public static function clear()
     {
         static::$reasonToRequirement = null;
@@ -122,6 +141,9 @@ abstract class RequirementReason
         ];
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     private function __construct()
     {
     }

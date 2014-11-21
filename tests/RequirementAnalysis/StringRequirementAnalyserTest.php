@@ -47,7 +47,7 @@ class StringRequirementAnalyserTest extends \PHPUnit_Framework_TestCase
         $m->expects($this->once())->
             method('setOwningAnalyser')->with($this->equalTo($a));
 
-        $a->attachRequirementAnalyser($m);
+        $a->attachRequirementVisitor($m);
     }
 
     /**
@@ -68,7 +68,8 @@ class StringRequirementAnalyserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $a->getResult());
         $result->seal();
         $this->assertTrue($a->isAnalyserRun());
-
+        $this->assertSame($result, $a->run());
+        $this->assertSame($result, $a->getResult());
     }
 
     public function testSetResultInstance()
@@ -78,6 +79,16 @@ class StringRequirementAnalyserTest extends \PHPUnit_Framework_TestCase
 
         $a = new StringRequirementAnalyser(self::DEFAULT_PLACEHOLDER_INPUT);
         $a->setResultInstance($result);
+    }
+
+    public function testHasNodeTraverser()
+    {
+        $a = new StringRequirementAnalyser(self::DEFAULT_PLACEHOLDER_INPUT, false);
+        $this->assertFalse($a->hasNodeTraverserAttached());
+        $this->assertInstanceOf('PhpParser\NodeTraverserInterface',$a->getNodeTraverser());
+        $this->assertTrue($a->hasNodeTraverserAttached());
+        $a = new StringRequirementAnalyser(self::DEFAULT_PLACEHOLDER_INPUT);
+        $this->assertTrue($a->hasNodeTraverserAttached());
     }
 
     /**

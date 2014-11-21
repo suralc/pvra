@@ -31,10 +31,10 @@ class FileCommand extends Command
     {
         $req = new FileRequirementAnalyser($input->getOption('file'));
 
-        $req->attachRequirementAnalyser(new Php54LanguageFeatureNodeWalker);
-        $req->attachRequirementAnalyser(new Php55LanguageFeatureNodeWalker);
-        $req->attachRequirementAnalyser(new Php56LanguageFeatureNodeWalker);
-        $req->attachRequirementAnalyser(new LibraryAdditionsNodeWalker);
+        $req->attachRequirementVisitor(new Php54LanguageFeatureNodeWalker);
+        $req->attachRequirementVisitor(new Php55LanguageFeatureNodeWalker);
+        $req->attachRequirementVisitor(new Php56LanguageFeatureNodeWalker);
+        $req->attachRequirementVisitor(new LibraryAdditionsNodeWalker);
 
         $result = $req->run();
 

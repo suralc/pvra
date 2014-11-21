@@ -16,40 +16,37 @@ class FileRequirementAnalyser extends RequirementAnalyser
      */
     public function __construct($file, $registerNameResolver = true)
     {
+        if (!$this->isFileValid($file)) {
+            throw new \RuntimeException(sprintf('The file "%s" could not be found or accessed.', $file));
+        }
+
         $this->filePath = realpath($file);
         parent::__construct($registerNameResolver);
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     protected function createAnalysisTargetId()
     {
-        if ($this->isFileValid()) {
-            return realpath($this->filePath);
-        } else {
-            return 'invalid file descriptor'; // todo handle this better, merge with parse or something
-        }
+        return $this->filePath;
     }
 
     /**
-     * @return bool
+     * @param string $file Path to the file
+     * @return bool Returns true if $file is a file and is readable. Returns fails otherwise.
      */
-    private function isFileValid()
+    private function isFileValid($file)
     {
-        return is_file($this->filePath) && is_readable($this->filePath);
+        return is_file($file) && is_readable($file);
     }
 
 
     /**
-     * @return \PhpParser\Node[]
+     * @inheritdoc
      */
     protected function parse()
     {
-        if (!$this->isFileValid()) {
-            throw new \RuntimeException(sprintf('The file "%s" could not be found or accessed', $this->filePath));
-        }
-
         return $this->getParser()->parse(file_get_contents($this->filePath));
     }
 }

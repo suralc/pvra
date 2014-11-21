@@ -38,6 +38,8 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements Re
     }
 
     /**
+     * Get the result instance of the currently attached Analyser.
+     *
      * @return \Pvra\RequirementAnalysis\RequirementAnalysisResult
      */
     protected function getResult()

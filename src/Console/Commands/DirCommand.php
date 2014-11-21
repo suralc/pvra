@@ -65,9 +65,9 @@ class DirCommand extends Command
             if ($file->isFile()) {
                 $req = new FileRequirementAnalyser($file->getPathname());
 
-                $req->attachRequirementAnalyser(new Php54LanguageFeatureNodeWalker);
-                $req->attachRequirementAnalyser(new Php55LanguageFeatureNodeWalker);
-                $req->attachRequirementAnalyser(new Php56LanguageFeatureNodeWalker);
+                $req->attachRequirementVisitor(new Php54LanguageFeatureNodeWalker);
+                $req->attachRequirementVisitor(new Php55LanguageFeatureNodeWalker);
+                $req->attachRequirementVisitor(new Php56LanguageFeatureNodeWalker);
 
                 $results->add($req->run());
             }

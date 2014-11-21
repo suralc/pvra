@@ -28,7 +28,8 @@ abstract class RequirementAnalyser
     private $result;
 
     /**
-     * @param bool $registerNameResolver
+     * @param bool $registerNameResolver If set to true `PhpParser\NodeVisitor\NameResolver` will be added as the first
+     *     visitor. This may negatively affect performance, some Visitors depend on resolved names, however.
      */
     public function __construct($registerNameResolver = true)
     {
@@ -38,7 +39,14 @@ abstract class RequirementAnalyser
     }
 
     /**
-     * @return NodeTraverserInterface
+     * Gets the associated NodeTraverser
+     *
+     * This method returns the associated NodeTraverser. If no NodeTraverser has been attached a default one will be
+     * created.
+     *
+     * @see RequirementAnalyser::initDefaultTraverser
+     *
+     * @return NodeTraverserInterface The NodeTraverser associated to this instance.
      */
     public function getNodeTraverser()
     {
@@ -50,7 +58,9 @@ abstract class RequirementAnalyser
     }
 
     /**
-     * @return bool
+     * Check whether a NodeTraverser has been attached to the current Analyser
+     *
+     * @return bool Returns true when RequirementAnalyser::$nodeTraverser has been initialized.
      */
     public function hasNodeTraverserAttached()
     {
@@ -74,29 +84,44 @@ abstract class RequirementAnalyser
     }
 
     /**
+     * Attaches a RequirementVisitor.
+     *
+     * This method should be used to attach an instance of `Pvra\PhpParser\RequirementAnalyserAwareInterface` to the
+     * current analyser. This method makes sure that RequirementAnalyserAwareInterface::setOwningAnalyser is
+     * called using the correct parameters.
+     *
      * @param NodeVisitor|RequirementAnalyserAwareInterface $visitor
+     * @return $this Returns the current instance to allow chained calls.
      */
-    public function attachRequirementAnalyser(RequirementAnalyserAwareInterface $visitor)
+    public function attachRequirementVisitor(RequirementAnalyserAwareInterface $visitor)
     {
         $visitor->setOwningAnalyser($this);
         $this->getNodeTraverser()->addVisitor($visitor);
+
+        return $this;
     }
 
     /**
-     * @return RequirementAnalysisResult
+     * Execute the current Analysis
+     *
+     * Parses the given code and runs the currently attached visitors. If run has already been called the previously
+     * generated result will be returned. The result instance returned by this method is sealed.
+     * Visitors that are attached **after** run is called are ignored on subsequent calls.
+     *
+     * @see RequirementAnalysisResult::seal
+     *
+     * @return RequirementAnalysisResult The sealed result.
      */
     public function run()
     {
-        if ($this->isAnalyserRun()) {
-            return $this->getResult();
+        if (!$this->isAnalyserRun()) {
+            $stmts = $this->parse();
+
+            // RequirementAnalyserAwareInterface visitors will call getResult on this instance.
+            $this->nodeTraverser->traverse($stmts);
+
+            $this->getResult()->seal();
         }
-
-        $stmts = $this->parse();
-
-        // RequirementAnalyserAwareInterface visitors will call getResult on this instance.
-        $this->nodeTraverser->traverse($stmts);
-
-        $this->getResult()->seal();
 
         return $this->getResult();
     }
@@ -137,11 +162,21 @@ abstract class RequirementAnalyser
     }
 
     /**
+     * Parse the given code.
+     *
+     * Implementations of this method should parse the given code and return a list of `Node` instances.
+     * The simplest implementation may directly return `return $this->getParser()->getParse($this->getCode());`.
+     *
      * @return \PhpParser\Node[]
      */
     protected abstract function parse();
 
     /**
+     * Create an identifier for the parsed content.
+     *
+     * Implementations of this method should return a string that can be used to identify a given source.
+     * This may be achieved by hashing a given string or returning an absolute path.
+     *
      * @return string
      */
     protected abstract function createAnalysisTargetId();
