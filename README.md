@@ -1,4 +1,4 @@
-____If you are looking for a battle-tested library with a cleaner architecture and more functionality you should head over to [llaville/php-compat-info](https://github.com/llaville/php-compat-info).____
+____If you are looking for a battle-tested library with a cleaner architecture and more functionality you may find your library of choice at [llaville/php-compat-info](https://github.com/llaville/php-compat-info) for now.____
 
 
 # Php Version Requirement Analyser
@@ -85,9 +85,4 @@ repository.
 
 ## Todo
 
-* Fix for 5.4: Detection of 0b001001101 style number, Class::{expr}()
-* Properly implement ResultCollection for directories
-* Detection of function parameter changes between php versions
-* Output formatter and reworked console output
-* Custom exceptions (?) & better error handling
-* Symfony components(Finder and Console) are only used in the cli component, maybe split them up.
+[See here](https://github.com/suralc/pvra/labels/todo)
