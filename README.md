@@ -1,3 +1,6 @@
+____If you are looking for a battle-tested library with a cleaner architecture and more functionality you should head over to [llaville/php-compat-info](https://github.com/llaville/php-compat-info).____
+
+
 # Php Version Requirement Analyser
 
 This repository contains a library and a console application to validate your php files' version requirements.
@@ -61,14 +64,18 @@ Run `composer require <package-name>` in the root of your project and include th
 
 $req = new StringRequirementAnalyser('<?php trait abc{}');
 
-$req->attachRequirementAnalyser(new Php54LanguageFeatureNodeWalker);
-$req->attachRequirementAnalyser(new Php55LanguageFeatureNodeWalker);
-$req->attachRequirementAnalyser(new Php56LanguageFeatureNodeWalker);
+$req->attachRequirementVisitor(new Php54LanguageFeatureNodeWalker);
+$req->attachRequirementVisitor(new Php55LanguageFeatureNodeWalker);
+$req->attachRequirementVisitor(new Php56LanguageFeatureNodeWalker);
+$req->attachRequirementVisitor(new LibraryAdditionsNodeWalker);
 
 $result = $req->run();
 
-echo $result->getRequiredVersion(); // 5.4.0
+echo $result->getRequiredVersion(), PHP_EOL; // 5.4.0
 
+foreach($result as $r) {
+    echo $r['msg'], 'on line ', $r['line'], PHP_EOL; 
+}
 ```
 
 ## Building the phar
@@ -76,18 +83,11 @@ echo $result->getRequiredVersion(); // 5.4.0
 [Box](http://box-project.org/) is required to build the phar. Run `box build` in the repository root. Box requires the code to be inside a git
 repository.
 
-## Working so far
+## Todo
 
-* Everything that is not listed below
-
-
-## Todo (more or less in order of importance)
-
-* More tests
-* Implement all language features (5.5+)
-* Missing 5.4: Detection of 0b001001101 style number, Class::{expr}()
-* Determine when functions were introduced (Bonus: Check for default parameter changes and additional parameter usage)
+* Fix for 5.4: Detection of 0b001001101 style number, Class::{expr}()
+* Properly implement ResultCollection for directories
+* Detection of function parameter changes between php versions
 * Output formatter and reworked console output
-* Colored output
-* Verbosity levels
 * Custom exceptions (?) & better error handling
+* Symfony components(Finder and Console) are only used in the cli component, maybe split them up.
