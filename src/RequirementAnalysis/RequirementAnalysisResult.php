@@ -84,7 +84,7 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
             throw new \RuntimeException('Impossible to write to already sealed result');
         }
 
-        $this->cachedRequiredVersion = null;
+        $this->clearInstanceCaches();
 
         $this->requirements[ $version ][] = [
             'line' => $line,
@@ -112,7 +112,7 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
                 __CLASS__, __METHOD__, __CLASS__));
         }
 
-        $this->cachedRequiredVersion = null;
+        $this->clearInstanceCaches();
 
         $this->requirements[ $version ][] = [
             'line' => $line,
@@ -196,5 +196,10 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
     public function count()
     {
         return $this->count;
+    }
+
+    private function clearInstanceCaches()
+    {
+        $this->cachedRequiredVersion = null;
     }
 }
