@@ -9,6 +9,7 @@ use Pvra\tests\BaseNodeWalkerTestCase;
 class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
 {
     protected $classToTest = 'Pvra\\PhpParser\\AnalysingNodeWalkers\\LibraryAdditionsNodeWalker';
+    protected $expandNames = true;
 
     public function testMixedDetection()
     {
@@ -23,13 +24,13 @@ class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
             [12, RequirementReason::CLASS_PRESENCE_CHANGE],
             [12, RequirementReason::CLASS_PRESENCE_CHANGE],
             [12, RequirementReason::CLASS_PRESENCE_CHANGE],
-            [20, RequirementReason::CLASS_PRESENCE_CHANGE],
-            [22, RequirementReason::CLASS_PRESENCE_CHANGE],
-            [26, RequirementReason::CLASS_PRESENCE_CHANGE],
-            [26, RequirementReason::CLASS_PRESENCE_CHANGE],
+            [19, RequirementReason::CLASS_PRESENCE_CHANGE],
+            [21, RequirementReason::CLASS_PRESENCE_CHANGE],
+            [25, RequirementReason::CLASS_PRESENCE_CHANGE],
+            [25, RequirementReason::CLASS_PRESENCE_CHANGE],
         ];
 
-        $this->assertCount(12 + /* 5.6 below the foreach */
+        $this->assertCount(count($expected) + /* 5.6 below the foreach */
             1, $res);
 
         foreach ($expected as $pos => $req) {

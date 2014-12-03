@@ -6,6 +6,7 @@ namespace Pvra\tests;
 use Mockery as m;
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use Pvra\PhpParser\RequirementAnalyserAwareInterface;
 use Pvra\RequirementAnalysis\RequirementAnalysisResult;
@@ -24,6 +25,7 @@ use Pvra\RequirementAnalysis\RequirementAnalysisResult;
 class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
 {
     protected $classToTest;
+    protected $expandNames = false;
 
     /**
      * @return array
@@ -57,7 +59,15 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
 
         $parser = new Parser(new Emulative());
 
-        return $parser->parse(file_get_contents($file));
+        $stmts =  $parser->parse(file_get_contents($file));
+
+        if($this->expandNames) {
+            $trav = new NodeTraverser();
+            $trav->addVisitor(new NameResolver());
+            $stmts = $trav->traverse($stmts);
+        }
+
+        return $stmts;
     }
 
     protected function traverseInstanceOverStmts($stmts, RequirementAnalyserAwareInterface $walker)

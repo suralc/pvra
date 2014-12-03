@@ -47,7 +47,6 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
             } elseif ($this->inClosureLevel > 0
                 && $node->var instanceof Node\Expr\Variable && $node->var->name === 'this'
             ) {
-                // ArrayAccess
                 $this->_addThisInClosure($node->var);
             }
         } elseif ($node instanceof Node\Stmt\Function_
@@ -56,7 +55,7 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
         ) {
             if (!empty($node->params)) {
                 foreach ($node->params as $param) {
-                    if ($param->type === 'callable') {
+                    if ((string)$param->type === 'callable') {
                         $this->getResult()->addRequirement(
                             RequirementReason::TYPEHINT_CALLABLE,
                             $param->getLine(),
