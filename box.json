@@ -6,7 +6,8 @@
   "files": [
     "LICENSE",
     "README.md",
-    "data/changes.php"
+    "data/changes.php",
+    "data/default_messages.php"
   ],
   "finder": [
     {
