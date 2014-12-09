@@ -54,7 +54,7 @@ class ResultMessageFormatter
                 throw new \Exception(sprintf('Could not find message for id: "%s"', $msgId));
             }
             $msg = 'Could not find message template for "' .
-                ($r = RequirementReason::getReasonNameFromValue($msgId)) !== 'UNKNOWN' ? $r : $msgId . '"';
+            ($r = RequirementReason::getReasonNameFromValue($msgId)) !== 'UNKNOWN' ? $r : $msgId . '"';
         }
 
         return $msg;

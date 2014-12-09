@@ -3,7 +3,7 @@
 namespace Pvra\RequirementAnalysis\Result;
 
 
-class ResultMessageLocator
+class ResultMessageLocator implements \ArrayAccess
 {
     const CALLBACK_POSITION_PREPEND = 1,
         CALLBACK_POSITION_APPEND = 2;
@@ -282,5 +282,56 @@ class ResultMessageLocator
         }
 
         $this->terminateCallbackChain = true;
+    }
+
+    /**
+     * OffsetExists
+     * Whether a message with the given id can be found without invoking missing
+     * message handlers
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @param string|int $id message id
+     * @return boolean true on success or false on failure.
+     */
+    public function offsetExists($id)
+    {
+        return $this->messageExists($id);
+    }
+
+    /**
+     * OffsetGet
+     * This method proxies ::getMessage($offset)
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @param string|int $id the id to retrieve
+     * @return string the message template
+     */
+    public function offsetGet($id)
+    {
+        return $this->getMessage($id);
+    }
+
+    /**
+     * Appends a new message searcher
+     * Only the following syntax is valid: `$locator[] = function($id, $locator) {};
+     * @param null $offset
+     * @param callable $value
+     * @throws \InvalidArgumentException Exception is thrown if an offset is specified
+     * or the value is not callable
+     */
+    public function offsetSet($offset, $value)
+    {
+        if ($offset === null && is_callable($value)) {
+            $this->addMessageSearcher($value);
+        } else {
+            throw new \InvalidArgumentException('This is  an obscure syntax that might be removed later.');
+        }
+    }
+
+    /**
+     * @param mixed $offset
+     * @throws \RuntimeException Is always thrown as this operation is not supported
+     */
+    public function offsetUnset($offset)
+    {
+        throw new \RuntimeException('This operation is  unsupported.');
     }
 }

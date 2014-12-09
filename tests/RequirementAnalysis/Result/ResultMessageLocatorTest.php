@@ -18,7 +18,66 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertStringEndsNotWith('msg', $locator->getMessage('my_id'));
     }
 
-    public function addPrefixTransformer()
+    public function testArrayAccessOffsetExists()
+    {
+        $l = new ResultMessageLocator(false);
+        $this->assertFalse(isset($l['abc']));
+        $l->addMessageSearcher(function ($id) {
+            if ($id === 12) {
+                return 'a msg';
+            }
+            return false;
+        });
+        $this->assertTrue(isset($l[12]));
+        $this->assertFalse(isset($l[15]));
+    }
+
+    public function testArrayAccessOffsetGet()
+    {
+        $l = new ResultMessageLocator(false);
+        $l->addMessageSearcher(function ($id) {
+            if ($id === 12) {
+                return 'a msg';
+            }
+            return false;
+        });
+        $l->addMissingMessageHandler(function ($id) {
+            return 'missing';
+        });
+        $this->assertSame('a msg', $l[12]);
+        $this->assertSame('missing', $l['abc']);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage This operation is  unsupported.
+     */
+    public function testArrayAccessOffsetUnset()
+    {
+        $l = new ResultMessageLocator(false);
+        unset($l['abc']);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testArrayAccessOffsetSetException()
+    {
+        $l = new ResultMessageLocator();
+        $l[12] = 'abc';
+    }
+
+    public function testArrayAccessOffsetSet()
+    {
+        $l = new ResultMessageLocator(false);
+        $this->assertNull($l->getMessage(12));
+        $l[] = function ($id) {
+            return 'my_msg';
+        };
+        $this->assertSame('my_msg', $l->getMessage(12));
+    }
+
+    public function testAddTransformerPrepend()
     {
         $locator = new ResultMessageLocator(false);
         $locator->addMessageSearcher(function () {
@@ -38,16 +97,16 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $l = new ResultMessageLocator(false);
         $this->assertFalse($l->messageExists('my_msg'));
-        $l->addMissingMessageHandler(function($id) {
-            if($id === 1) {
+        $l->addMissingMessageHandler(function ($id) {
+            if ($id === 1) {
                 return 'a msg';
             }
 
             return false;
         });
         $this->assertSame('a msg', $l->getMessage(1));
-        $l->addMissingMessageHandler(function($id, ResultMessageLocator $locator) {
-            if($id === 1) {
+        $l->addMissingMessageHandler(function ($id, ResultMessageLocator $locator) {
+            if ($id === 1) {
                 $locator->terminateCallbackChain();
                 return 'new';
             }
