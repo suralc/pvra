@@ -49,8 +49,8 @@ class ResultCollection implements \Countable, \IteratorAggregate
         } elseif ($result instanceof RequirementAnalysisResult) {
             return isset($this->results[ $result->getAnalysisTargetId() ]);
         } else {
-            throw new \InvalidArgumentException(sprintf('"%s" of type is not a valid key in a ResultCollection',
-                $result, gettype($result)));
+            throw new \InvalidArgumentException(sprintf('"%s" is not a valid keytype in a ResultCollection',
+                gettype($result)));
         }
     }
 
@@ -70,8 +70,7 @@ class ResultCollection implements \Countable, \IteratorAggregate
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Retrieve an external iterator
      * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
-     * @return Traversable An instance of an object implementing <b>Iterator</b> or
-     * <b>Traversable</b>
+     * @return Traversable|RequirementAnalysisResult[]
      */
     public function getIterator()
     {
