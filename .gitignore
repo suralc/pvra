@@ -1,6 +1,8 @@
 /.idea
-/composer.lock
-/composer.phar
 /vendor
-pvra.phar
 /build
+/docs
+pvra.phar
+composer.lock
+composer.phar
+phpDocumentor.phar

@@ -199,4 +199,27 @@ class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
             $this->assertTrue($item['version'] === '5.5.0' || $item['version'] === '5.4.0');
         }
     }
+
+    public function testSetAnalysisTargetId()
+    {
+        $r = new RequirementAnalysisResult();
+        $this->assertSame('unknown', $r->getAnalysisTargetId());
+        $r->setAnalysisTargetId('abc');
+        $this->assertSame('abc', $r->getAnalysisTargetId());
+        $r->setAnalysisTargetId('def');
+        $this->assertSame('def', $r->getAnalysisTargetId());
+        $r->setAnalysisTargetId('g')->setAnalysisTargetId('f');
+        $this->assertSame('g', $r->getAnalysisTargetId());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage You cannot modify an already sealed result.
+     */
+    public function testSetAnalysisTargetIdSealedException()
+    {
+        $r = new RequirementAnalysisResult();
+        $r->seal();
+        $r->setAnalysisTargetId('new id');
+    }
 }

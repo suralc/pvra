@@ -163,10 +163,17 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
 
     /**
      * @param string $analysisTargetId
+     * @return $this
      */
     public function setAnalysisTargetId($analysisTargetId)
     {
+        if($this->isSealed()) {
+            throw new \RuntimeException('You cannot modify an already sealed result.');
+        }
+
         $this->analysisTargetId = $analysisTargetId;
+
+        return $this;
     }
 
     /**
