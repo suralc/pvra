@@ -7,6 +7,66 @@ use Pvra\RequirementAnalysis\Result\ResultMessageLocator;
 
 class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
 {
+    public function testDefaultSuffixAppend()
+    {
+        $locator = new ResultMessageLocator(true);
+        $locator->addMessageSearcher($f = function ($id) {
+            return 'my_msg';
+        });
+        $this->assertTrue($locator->messageExists('my_id'));
+        $this->assertNotEquals($f('my_id'), $locator->getMessage('my_id'));
+        $this->assertStringEndsNotWith('msg', $locator->getMessage('my_id'));
+    }
+
+    public function addPrefixTransformer()
+    {
+        $locator = new ResultMessageLocator(false);
+        $locator->addMessageSearcher(function () {
+            return 'msg';
+        });
+        $locator->addTransformer(function ($id, $format) {
+            return $format . 'trans1';
+        });
+        $this->assertStringEndsWith('trans1', $locator->getMessage('my_id'));
+        $locator->addTransformer(function ($id, $format) {
+            return $format . 'trans2';
+        }, ResultMessageLocator::CALLBACK_POSITION_PREPEND);
+        $this->assertStringEndsWith('trans2trans1', $locator->getMessage('my_id'));
+    }
+
+    public function testMissingMethodHandlers()
+    {
+        $l = new ResultMessageLocator(false);
+        $this->assertFalse($l->messageExists('my_msg'));
+        $l->addMissingMessageHandler(function($id) {
+            if($id === 1) {
+                return 'a msg';
+            }
+
+            return false;
+        });
+        $this->assertSame('a msg', $l->getMessage(1));
+        $l->addMissingMessageHandler(function($id, ResultMessageLocator $locator) {
+            if($id === 1) {
+                $locator->terminateCallbackChain();
+                return 'new';
+            }
+
+            return false;
+        }, ResultMessageLocator::CALLBACK_POSITION_PREPEND);
+        $this->assertSame('new', $l->getMessage(1));
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage A callback chain can only be terminated from within a callback.
+     */
+    public function testExceptionOnUnexpectedCallbackChainTerminated()
+    {
+        $l = new ResultMessageLocator();
+        $l->terminateCallbackChain();
+    }
+
     public function testMessageExists()
     {
         $locator = new ResultMessageLocator(false);
@@ -21,6 +81,7 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
             }
         });
         $this->assertTrue($locator->messageExists(12));
+        $this->assertInternalType('string', $locator->getMessage(12));
         $this->assertTrue($locator->messageExists(12)); // go into first if branch
         $this->assertFalse($locator->messageExists('some other'));
         $locator->addMessageSearcher(function ($msgId) {
@@ -79,14 +140,14 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($locator->getMessage('some'));
 
         $locator = new ResultMessageLocator(false);
-        $locator->addTransformer(function($id, $format, ResultMessageLocator $locator) {
+        $locator->addTransformer(function ($id, $format, ResultMessageLocator $locator) {
             $locator->terminateCallbackChain();
             return $format . $id . 'end';
         });
-        $locator->addTransformer(function() {
+        $locator->addTransformer(function () {
             return 'begin';
         });
-        $locator->addMessageSearcher(function() {
+        $locator->addMessageSearcher(function () {
             return 'MyString';
         });
         $this->assertTrue($locator->messageExists('msg'));

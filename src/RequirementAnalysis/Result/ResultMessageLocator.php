@@ -3,8 +3,6 @@
 namespace Pvra\RequirementAnalysis\Result;
 
 
-use Pvra\RequirementAnalysis\Result\Exceptions\MessageLocationNeedsToBeTerminatedException;
-
 class ResultMessageLocator
 {
     const CALLBACK_POSITION_PREPEND = 1,
@@ -24,6 +22,7 @@ class ResultMessageLocator
      */
     private $transformers = [];
     private $terminateCallbackChain = false;
+    private $inCallbackChain = false;
     private $fetchedMessages = [];
 
     /**
@@ -72,6 +71,7 @@ class ResultMessageLocator
      * </code>
      * @param callable $locator
      * @param int $position
+     * @return $this
      */
     public function addMissingMessageHandler(callable $locator, $position = self::CALLBACK_POSITION_APPEND)
     {
@@ -80,6 +80,8 @@ class ResultMessageLocator
         } else {
             array_push($this->missingMessageHandlers, $locator);
         }
+
+        return $this;
     }
 
     /**
@@ -89,20 +91,24 @@ class ResultMessageLocator
      */
     public function messageExists($messageId)
     {
-        if (!$this->isValidMessageId($messageId)) {
+        if (!self::validateMessageId($messageId)) {
             throw new \InvalidArgumentException('Only valid non-empty offset types are acceptable as message ids.');
         }
 
-        if (isset($this->fetchedMessages[ $messageId ]) && !empty($this->fetchedMessages[ $messageId ])) {
+        if (!empty($this->fetchedMessages[ $messageId ])) {
             return true;
         }
 
         $msgInfo = $this->fetchMessage($messageId, false);
 
-        return $msgInfo != false && !empty($msgInfo['content']);
+        return $msgInfo !== null && $msgInfo !== false && !empty($msgInfo['content']);
     }
 
-    private function isValidMessageId($mId)
+    /**
+     * @param string|int $mId
+     * @return bool
+     */
+    private static function validateMessageId($mId)
     {
         return is_scalar($mId) && !empty($mId);
     }
@@ -121,42 +127,48 @@ class ResultMessageLocator
             'fallbackHandler' => false,
         ];
 
-        try {
-            reset($this->messageSearchers);
-            /** @var callable $searchCallback */
-            foreach ($this->messageSearchers as $searchCallback) {
-                if ($this->isCallbackChainToBeTerminated()) {
-                    break;
-                }
-                $value = $searchCallback($messageId, $this);
-                if (!empty($value) && is_string($value)) {
-                    $messageInfo['id'] = $messageId;
-                    $messageInfo['content'] = $value;
-                    break;
-                }
-            }
-            $this->markCallbackChainTerminated();
-        } catch (MessageLocationNeedsToBeTerminatedException $ex) {
-            return false;
-        } catch (\Exception $e) {
-            throw $e;
-        }
 
-        if (empty($messageInfo) && $runMissingMessageHandlers) {
-            /** @var callable $handler */
+        reset($this->messageSearchers);
+        $this->inCallbackChain(true);
+        /** @var callable $searchCallback */
+        foreach ($this->messageSearchers as $searchCallback) {
+            if ($this->isCallbackChainToBeTerminated()) {
+                break;
+            }
+            $value = $searchCallback($messageId, $this);
+            if (!empty($value) && is_string($value)) {
+                $messageInfo['id'] = $messageId;
+                $messageInfo['content'] = $value;
+                break;
+            }
+        }
+        $this->markCallbackChainTerminated();
+
+        if (empty($messageInfo['content']) && $runMissingMessageHandlers) {
+            $this->inCallbackChain(true);
             reset($this->missingMessageHandlers);
-            $messageInfo['fallbackHandler'] = true;
+            /** @var callable $handler */
             foreach ($this->missingMessageHandlers as $handler) {
                 if ($this->isCallbackChainToBeTerminated()) {
                     break;
                 }
                 $value = $handler($messageId, $this);
-                // todo impelemtatnon
+                if (!empty($value) && is_string($value)) {
+                    $messageInfo['id'] = $messageId;
+                    $messageInfo['content'] = $value;
+                    $messageInfo['fallbackHandler'] = true;
+                    break;
+                }
             }
             $this->markCallbackChainTerminated();
         }
 
-        return !empty($messageInfo) ? $messageInfo : false;
+        return !empty($messageInfo) ? $messageInfo : null;
+    }
+
+    private function inCallbackChain($areWeInCallbackChain)
+    {
+        $this->inCallbackChain = $areWeInCallbackChain;
     }
 
     private function isCallbackChainToBeTerminated()
@@ -166,6 +178,7 @@ class ResultMessageLocator
 
     private function markCallbackChainTerminated()
     {
+        $this->inCallbackChain(false);
         $this->terminateCallbackChain = false;
     }
 
@@ -188,12 +201,13 @@ class ResultMessageLocator
 
         if ($msgInfo === false) {
             // exception, might need rework
-            return $msgInfo;
+            return false;
         } elseif (empty($msgInfo['content'])) {
             return null;
         } else {
             if ($msgInfo['fallbackHandler'] === false || $runTransformersOnFallbackHandler) {
                 reset($this->transformers);
+                $this->inCallbackChain(true);
                 /** @var callable $transformer */
                 foreach ($this->transformers as $transformer) {
                     if ($this->isCallbackChainToBeTerminated()) {
@@ -236,7 +250,6 @@ class ResultMessageLocator
     }
 
     /**
-     *
      * Let the callback throw a MessageLocationNeedsToBeTerminatedException if search needs to be terminated
      * for whatever reason
      * @param callable $searcher
@@ -254,9 +267,6 @@ class ResultMessageLocator
         return $this;
     }
 
-    /**
-     *
-     */
     public function clearInstanceCache()
     {
         $this->fetchedMessages = [];
@@ -267,6 +277,10 @@ class ResultMessageLocator
      */
     public function terminateCallbackChain()
     {
+        if (!$this->inCallbackChain) {
+            throw new \LogicException('A callback chain can only be terminated from within a callback.');
+        }
+
         $this->terminateCallbackChain = true;
     }
 }
