@@ -140,7 +140,7 @@ class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
         $r = new RequirementAnalysisResult();
         $r->addArbitraryRequirement('5');
 
-        $a = $r->getRequiredVersionId();
+        $r->getRequiredVersionId();
     }
 
     public function testGetRequirementInfo()
@@ -209,7 +209,7 @@ class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
         $r->setAnalysisTargetId('def');
         $this->assertSame('def', $r->getAnalysisTargetId());
         $r->setAnalysisTargetId('g')->setAnalysisTargetId('f');
-        $this->assertSame('g', $r->getAnalysisTargetId());
+        $this->assertSame('f', $r->getAnalysisTargetId());
     }
 
     /**
