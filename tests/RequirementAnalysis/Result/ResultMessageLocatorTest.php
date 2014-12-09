@@ -7,20 +7,9 @@ use Pvra\RequirementAnalysis\Result\ResultMessageLocator;
 
 class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testDefaultSuffixAppend()
-    {
-        $locator = new ResultMessageLocator(true);
-        $locator->addMessageSearcher($f = function ($id) {
-            return 'my_msg';
-        });
-        $this->assertTrue($locator->messageExists('my_id'));
-        $this->assertNotEquals($f('my_id'), $locator->getMessage('my_id'));
-        $this->assertStringEndsNotWith('msg', $locator->getMessage('my_id'));
-    }
-
     public function testArrayAccessOffsetExists()
     {
-        $l = new ResultMessageLocator(false);
+        $l = new ResultMessageLocator();
         $this->assertFalse(isset($l['abc']));
         $l->addMessageSearcher(function ($id) {
             if ($id === 12) {
@@ -34,7 +23,7 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayAccessOffsetGet()
     {
-        $l = new ResultMessageLocator(false);
+        $l = new ResultMessageLocator();
         $l->addMessageSearcher(function ($id) {
             if ($id === 12) {
                 return 'a msg';
@@ -54,7 +43,7 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayAccessOffsetUnset()
     {
-        $l = new ResultMessageLocator(false);
+        $l = new ResultMessageLocator();
         unset($l['abc']);
     }
 
@@ -77,25 +66,10 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('my_msg', $l->getMessage(12));
     }
 
-    public function testAddTransformerPrepend()
-    {
-        $locator = new ResultMessageLocator(false);
-        $locator->addMessageSearcher(function () {
-            return 'msg';
-        });
-        $locator->addTransformer(function ($id, $format) {
-            return $format . 'trans1';
-        });
-        $this->assertStringEndsWith('trans1', $locator->getMessage('my_id'));
-        $locator->addTransformer(function ($id, $format) {
-            return $format . 'trans2';
-        }, ResultMessageLocator::CALLBACK_POSITION_PREPEND);
-        $this->assertStringEndsWith('trans2trans1', $locator->getMessage('my_id'));
-    }
 
     public function testMissingMethodHandlers()
     {
-        $l = new ResultMessageLocator(false);
+        $l = new ResultMessageLocator();
         $this->assertFalse($l->messageExists('my_msg'));
         $l->addMissingMessageHandler(function ($id) {
             if ($id === 1) {
@@ -128,7 +102,7 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testMessageExists()
     {
-        $locator = new ResultMessageLocator(false);
+        $locator = new ResultMessageLocator();
 
         $this->assertFalse($locator->messageExists(298));
         $this->assertFalse($locator->messageExists('243'));
@@ -187,7 +161,7 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testCallbackChainTermination()
     {
-        $locator = new ResultMessageLocator(false);
+        $locator = new ResultMessageLocator();
 
         $locator->addMessageSearcher(function ($id, ResultMessageLocator $locator) {
             $locator->terminateCallbackChain();
@@ -197,21 +171,5 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
         });
         $this->assertFalse($locator->messageExists('some'));
         $this->assertNull($locator->getMessage('some'));
-
-        $locator = new ResultMessageLocator(false);
-        $locator->addTransformer(function ($id, $format, ResultMessageLocator $locator) {
-            $locator->terminateCallbackChain();
-            return $format . $id . 'end';
-        });
-        $locator->addTransformer(function () {
-            return 'begin';
-        });
-        $locator->addMessageSearcher(function () {
-            return 'MyString';
-        });
-        $this->assertTrue($locator->messageExists('msg'));
-        $this->assertStringEndsNotWith('begin', $locator->getMessage('msg'));
-        $this->assertStringEndsWith('end', $locator->getMessage('msg'));
-        $this->assertTrue(substr_count($locator->getMessage('msg'), 'end') === 1);
     }
 }

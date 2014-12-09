@@ -5,10 +5,10 @@ namespace Pvra\RequirementAnalysis\Result;
 
 class ResultMessageLocator implements \ArrayAccess
 {
+    use CallbackChainHelperTrait;
+
     const CALLBACK_POSITION_PREPEND = 1,
         CALLBACK_POSITION_APPEND = 2;
-
-    private $defaultSuffix = ' in :targetId:::line:';
     /**
      * @var callable[]
      */
@@ -18,41 +18,17 @@ class ResultMessageLocator implements \ArrayAccess
      */
     private $missingMessageHandlers = [];
     /**
-     * @var callable[]
+     * @var array
      */
-    private $transformers = [];
-    private $terminateCallbackChain = false;
-    private $inCallbackChain = false;
     private $fetchedMessages = [];
 
     /**
-     * @param bool $addDefaultSuffix
+     *
      */
-    public function __construct($addDefaultSuffix = true)
+    public function __construct()
     {
-        if ($addDefaultSuffix) {
-            $this->addTransformer(function ($id, $format) {
-                $format .= $this->defaultSuffix;
-                return $format;
-            });
-        }
     }
 
-    /**
-     * @param callable $transformer function($messageId, $messageFormat, ResultMessageLocator $loc) : array($newFormat)
-     * @param int $position
-     * @return $this
-     */
-    public function addTransformer(callable $transformer, $position = self::CALLBACK_POSITION_APPEND)
-    {
-        if ($position === self::CALLBACK_POSITION_PREPEND) {
-            array_unshift($this->transformers, $transformer);
-        } else {
-            array_push($this->transformers, $transformer);
-        }
-
-        return $this;
-    }
 
     /**
      * Append a function to handle missing messages.
@@ -166,30 +142,14 @@ class ResultMessageLocator implements \ArrayAccess
         return !empty($messageInfo) ? $messageInfo : null;
     }
 
-    private function inCallbackChain($areWeInCallbackChain)
-    {
-        $this->inCallbackChain = $areWeInCallbackChain;
-    }
-
-    private function isCallbackChainToBeTerminated()
-    {
-        return $this->terminateCallbackChain;
-    }
-
-    private function markCallbackChainTerminated()
-    {
-        $this->inCallbackChain(false);
-        $this->terminateCallbackChain = false;
-    }
 
     /**
      * @param int|string $messageId
-     * @param bool $runTransformersOnFallbackHandler
      * @param bool $ignoreCachedEntries
      * @return array|bool|null
      * @throws \Exception
      */
-    public function getMessage($messageId, $runTransformersOnFallbackHandler = true, $ignoreCachedEntries = false)
+    public function getMessage($messageId, $ignoreCachedEntries = false)
     {
         if ($ignoreCachedEntries !== true
             && !empty($this->fetchedMessages[ $messageId ])
@@ -205,19 +165,6 @@ class ResultMessageLocator implements \ArrayAccess
         } elseif (empty($msgInfo['content'])) {
             return null;
         } else {
-            if ($msgInfo['fallbackHandler'] === false || $runTransformersOnFallbackHandler) {
-                reset($this->transformers);
-                $this->inCallbackChain(true);
-                /** @var callable $transformer */
-                foreach ($this->transformers as $transformer) {
-                    if ($this->isCallbackChainToBeTerminated()) {
-                        break;
-                    }
-                    $msgInfo['content'] = $transformer($messageId, $msgInfo['content'], $this);
-                }
-                $this->markCallbackChainTerminated();
-            }
-
             return $msgInfo['content'];
         }
     }
@@ -272,17 +219,6 @@ class ResultMessageLocator implements \ArrayAccess
         $this->fetchedMessages = [];
     }
 
-    /**
-     *
-     */
-    public function terminateCallbackChain()
-    {
-        if (!$this->inCallbackChain) {
-            throw new \LogicException('A callback chain can only be terminated from within a callback.');
-        }
-
-        $this->terminateCallbackChain = true;
-    }
 
     /**
      * OffsetExists
