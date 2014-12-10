@@ -23,7 +23,7 @@ class PvraBaseCommand extends Command
         $this
             ->addOption('outputFormat', null, InputOption::VALUE_OPTIONAL, 'Output format (not implemented)', 'stdout')
             ->addOption('extensive', 'x', InputOption::VALUE_NONE, 'Use more extensive output format (var_dump)')
-            ->addOption('preventNameExpansions', InputOption::VALUE_NONE, 'Prevent name expansion.');
+            ->addOption('preventNameExpansions', 'p' ,InputOption::VALUE_NONE, 'Prevent name expansion.');
     }
 
 }

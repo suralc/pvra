@@ -3,6 +3,7 @@
 namespace Pvra\tests\RequirementAnalysis;
 
 
+use PhpParser\Node\Scalar\String;
 use Pvra\RequirementAnalysis\RequirementAnalysisResult;
 use Pvra\RequirementAnalysis\StringRequirementAnalyser;
 use \Mockery as m;
@@ -100,5 +101,17 @@ class StringRequirementAnalyserTest extends \PHPUnit_Framework_TestCase
         $a = new StringRequirementAnalyser(self::DEFAULT_PLACEHOLDER_INPUT);
         $a->run();
         $a->setResultInstance(new RequirementAnalysisResult());
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage The attached Result instance is already sealed.
+     */
+    public function testSetResultInstanceAlreadySealedException()
+    {
+        $a = new StringRequirementAnalyser(self::DEFAULT_PLACEHOLDER_INPUT);
+        $res = new RequirementAnalysisResult();
+        $res->seal();
+        $a->setResultInstance($res);
     }
 }

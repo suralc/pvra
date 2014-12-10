@@ -50,9 +50,9 @@ class LibraryAdditionsNodeWalker extends LanguageFeatureAnalyser implements Requ
                     $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
                         $this->getClassVersionRequirement($node->class->parts[0]),
                         $node->getLine(),
-                        sprintf('The "%s" class was introduced in php %s', $node->class->parts[0],
-                            $this->data['classes-added'][ $node->class->parts[0] ]),
-                        RequirementReason::CLASS_PRESENCE_CHANGE
+                        null,
+                        RequirementReason::CLASS_PRESENCE_CHANGE,
+                        ['className' => $node->class->parts[0]]
                     );
                 }
             }
@@ -69,9 +69,9 @@ class LibraryAdditionsNodeWalker extends LanguageFeatureAnalyser implements Requ
                         $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
                             $this->getClassVersionRequirement($param->type->getLast()),
                             $param->getLine(),
-                            sprintf('The "%s" class was introduced in php %s', $param->type->parts[0],
-                                $this->data['classes-added'][ $param->type->getLast() ]),
-                            RequirementReason::CLASS_PRESENCE_CHANGE
+                            null,
+                            RequirementReason::CLASS_PRESENCE_CHANGE,
+                            ['className' => $param->type->parts[0]]
                         );
                     }
                 }
@@ -96,9 +96,9 @@ class LibraryAdditionsNodeWalker extends LanguageFeatureAnalyser implements Requ
                     $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
                         $this->getClassVersionRequirement($name->getLast()),
                         $node->getLine(),
-                        sprintf('The "%s" class was introduced in php %s', $name->getLast(),
-                            $this->data['classes-added'][ $name->getLast() ]),
-                        RequirementReason::CLASS_PRESENCE_CHANGE
+                        null,
+                        RequirementReason::CLASS_PRESENCE_CHANGE,
+                        ['className' => $name->getLast()]
                     );
                 }
             }
@@ -108,9 +108,9 @@ class LibraryAdditionsNodeWalker extends LanguageFeatureAnalyser implements Requ
                 $this->getResult()->addArbitraryRequirement(
                     $this->getFunctionVersionRequirement($node->name->getLast()),
                     $node->getLine(),
-                    sprintf('The "%s" function was introduced in php %s', $node->name->getLast(),
-                        $this->getFunctionVersionRequirement($node->name->getLast())),
-                    RequirementReason::FUNCTION_PRESENCE_CHANGE
+                    null,
+                    RequirementReason::FUNCTION_PRESENCE_CHANGE,
+                    ['functionName' => $node->name->getLast()]
                 );
             }
         }

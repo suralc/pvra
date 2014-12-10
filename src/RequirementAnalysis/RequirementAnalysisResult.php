@@ -4,6 +4,8 @@ namespace Pvra\RequirementAnalysis;
 
 
 use Pvra\RequirementAnalysis\Result\RequirementReason;
+use Pvra\RequirementAnalysis\Result\RequirementReasoning;
+use Pvra\RequirementAnalysis\Result\ResultMessageFormatter;
 
 class RequirementAnalysisResult implements \IteratorAggregate, \Countable
 {
@@ -18,7 +20,7 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
     private $analysisTargetId = 'unknown';
 
     /**
-     * @var array
+     * @var array|RequirementReasoning[]
      */
     private $requirements = [];
 
@@ -30,6 +32,10 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
      * @var int
      */
     private $count = 0;
+    /**
+     *
+     */
+    private $msgFormatter;
 
     /**
      * @return int
@@ -48,6 +54,29 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
         $version += [2 => 0];
 
         return $version[0] * 10000 + $version[1] * 100 + $version[2];
+    }
+
+    /**
+     * @return \Pvra\RequirementAnalysis\Result\ResultMessageFormatter
+     */
+    public function getMsgFormatter()
+    {
+        if ($this->msgFormatter === null) {
+            $this->msgFormatter = new ResultMessageFormatter();
+        }
+
+        return $this->msgFormatter;
+    }
+
+    /**
+     * @param \Pvra\RequirementAnalysis\Result\ResultMessageFormatter $formatter
+     * @return $this
+     */
+    public function setMsgFormatter(ResultMessageFormatter $formatter)
+    {
+        $this->msgFormatter = $formatter;
+
+        return $this;
     }
 
     /**
@@ -77,20 +106,22 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
      * @param int $line
      * @param string $msg
      * @param int $reason
+     * @param array $data
      */
-    public function addArbitraryRequirement($version, $line = 0, $msg = null, $reason = RequirementReason::UNKNOWN)
-    {
+    public function addArbitraryRequirement(
+        $version,
+        $line = 0,
+        $msg = null,
+        $reason = RequirementReason::UNKNOWN,
+        array $data = []
+    ) {
         if ($this->isSealed()) {
             throw new \RuntimeException('Impossible to write to already sealed result');
         }
 
         $this->clearInstanceCaches();
 
-        $this->requirements[ $version ][] = [
-            'line' => $line,
-            'msg' => $msg,
-            'reason' => $reason,
-        ];
+        $this->requirements[ $version ][] = new RequirementReasoning($reason, $line, $version, $this, $msg, $data);
         $this->count++;
     }
 
@@ -98,8 +129,9 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
      * @param int $reason
      * @param int $line
      * @param string $msg
+     * @param array $data
      */
-    public function addRequirement($reason, $line = 0, $msg = null)
+    public function addRequirement($reason, $line = 0, $msg = null, array $data = [])
     {
         if ($this->isSealed()) {
             throw new \RuntimeException('Impossible to write to already sealed result');
@@ -114,11 +146,7 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
 
         $this->clearInstanceCaches();
 
-        $this->requirements[ $version ][] = [
-            'line' => $line,
-            'msg' => $msg,
-            'reason' => $reason,
-        ];
+        $this->requirements[ $version ][] = new RequirementReasoning($reason, $line, $version, $this, $msg, $data);
         $this->count++;
     }
 
@@ -167,7 +195,7 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
      */
     public function setAnalysisTargetId($analysisTargetId)
     {
-        if($this->isSealed()) {
+        if ($this->isSealed()) {
             throw new \RuntimeException('You cannot modify an already sealed result.');
         }
 
@@ -189,15 +217,14 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
-        $ar = new \ArrayIterator();
-        foreach ($this->getRequirements() as $version => $reqList) {
-            foreach ($reqList as $requirement) {
-                $requirement += ['version' => $version];
-                $ar->append($requirement);
+        $it = new \ArrayIterator();
+        foreach ($this->getRequirements() as $requirementVersion => $values) {
+            foreach ($values as $value) {
+                $it->append($value);
             }
         }
 
-        return $ar;
+        return $it;
     }
 
     public function count()

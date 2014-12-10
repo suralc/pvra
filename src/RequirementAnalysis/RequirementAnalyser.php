@@ -155,6 +155,8 @@ abstract class RequirementAnalyser
     {
         if ($this->result !== null) {
             throw new \Exception('A result instance was already set. Overriding it may lead to data loss.');
+        } elseif ($result->isSealed()) {
+            throw new \LogicException('The attached Result instance is already sealed.');
         }
 
         $this->result = $result;

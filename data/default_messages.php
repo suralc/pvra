@@ -6,12 +6,12 @@ use Pvra\RequirementAnalysis\Result\RequirementReason as R;
 
 return [
     R::UNKNOWN => 0x0,
-    R::CLASS_PRESENCE_CHANGE => 'The :className: class was introduced in PHP :version:',
-    R::FUNCTION_PRESENCE_CHANGE => 'The :functionName: function was introduced in PHP :version:',
+    R::CLASS_PRESENCE_CHANGE => 'The ":className:" class was introduced in PHP :version:',
+    R::FUNCTION_PRESENCE_CHANGE => 'The ":functionName:" function was introduced in PHP :version:',
     // 5.4
     R::TRAIT_DEFINITION => 'Usage of the trait keyword requires PHP :version:',
     R::TRAIT_USE => 'Usage of trait imports requires PHP :version:',
-    R::TRAIT_MAGIC_CONST => 'Usage of the Trait magic constant requires PHP :version:',
+    R::TRAIT_MAGIC_CONST => 'Usage of the trait magic constant requires PHP :version:',
     R::ARRAY_FUNCTION_DEREFERENCING => 'Function dereferencing requires PHP :version:',
     R::THIS_IN_CLOSURE => 'Usage of $this in closures requires PHP :version:',
     R::TYPEHINT_CALLABLE => 'The callable typehint requires PHP :version:',

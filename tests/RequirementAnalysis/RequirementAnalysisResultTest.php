@@ -6,6 +6,7 @@ namespace Pvra\tests\RequirementAnalysis;
 use PHPUnit_Framework_TestCase;
 use Pvra\RequirementAnalysis\RequirementAnalysisResult;
 use Pvra\RequirementAnalysis\Result\RequirementReason as R;
+use Pvra\RequirementAnalysis\Result\ResultMessageFormatter;
 
 class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
 {
@@ -180,7 +181,7 @@ class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
         $r->addArbitraryRequirement('5.2.3');
         $this->assertSame(1, $r->getIterator()->count());
         $arr = $r->getIterator()->current();
-        $this->assertArrayHasKey('version', $arr);
+        $this->assertTrue($arr['version'] === '5.2.3');
         $this->assertArrayHasKey('msg', $arr);
         $this->assertArrayHasKey('reason', $arr);
 
@@ -210,6 +211,19 @@ class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
         $this->assertSame('def', $r->getAnalysisTargetId());
         $r->setAnalysisTargetId('g')->setAnalysisTargetId('f');
         $this->assertSame('f', $r->getAnalysisTargetId());
+    }
+
+    public function testGetMessageFormatter()
+    {
+        $res = new RequirementAnalysisResult();
+        $this->assertInstanceOf('\Pvra\RequirementAnalysis\Result\ResultMessageFormatter', $res->getMsgFormatter());
+    }
+
+    public function testSetMessageFormatter()
+    {
+        $res = new RequirementAnalysisResult();
+        $this->assertSame($res, $res->setMsgFormatter($f = new ResultMessageFormatter()));
+        $this->assertSame($f, $res->getMsgFormatter());
     }
 
     /**
