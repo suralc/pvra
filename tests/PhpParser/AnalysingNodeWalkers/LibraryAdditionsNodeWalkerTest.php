@@ -42,6 +42,12 @@ class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
         $this->assertSame(RequirementReason::FUNCTION_PRESENCE_CHANGE, $res->getRequirementInfo('5.6.0')[0]['reason']);
     }
 
+    public function testPropertyOfNonObjectOnCountNamePartsInParameterTypeHint()
+    {
+        // this triggered a notice before the fix in this commit
+        $result = $this->runInstanceFromScratch('libAdditionsPropOnNonObjInParamHint');
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */

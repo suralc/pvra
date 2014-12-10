@@ -62,7 +62,8 @@ class LibraryAdditionsNodeWalker extends LanguageFeatureAnalyser implements Requ
         ) {
             if (!empty($node->params)) {
                 foreach ($node->params as $param) {
-                    if (isset($param->type) && count($param->type->parts) === 1
+                    if (isset($param->type) && !is_string($param->type)
+                        && count($param->type->parts) === 1
                         && $this->hasClassVersionRequirement($param->type->getLast())
                     ) {
                         $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
