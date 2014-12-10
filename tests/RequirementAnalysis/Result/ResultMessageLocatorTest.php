@@ -126,6 +126,8 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
         });
         $this->assertTrue($locator->messageExists(12));
         $this->assertTrue($locator->messageExists('a string'));
+        $locator->getMessage('a string'); // fetch the message
+        $this->assertTrue($locator->messageExists('a string')); // make sure it still exists
     }
 
     public function testFromArray()

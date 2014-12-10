@@ -120,26 +120,30 @@ class ResultMessageLocator implements \ArrayAccess
         }
         $this->markCallbackChainTerminated();
 
-        if (empty($messageInfo['content']) && $runMissingMessageHandlers) {
-            $this->inCallbackChain(true);
-            reset($this->missingMessageHandlers);
-            /** @var callable $handler */
-            foreach ($this->missingMessageHandlers as $handler) {
-                if ($this->isCallbackChainToBeTerminated()) {
-                    break;
+        if (empty($messageInfo['content'])) {
+            if ($runMissingMessageHandlers) {
+                $this->inCallbackChain(true);
+                reset($this->missingMessageHandlers);
+                /** @var callable $handler */
+                foreach ($this->missingMessageHandlers as $handler) {
+                    if ($this->isCallbackChainToBeTerminated()) {
+                        break;
+                    }
+                    $value = $handler($messageId, $this);
+                    if (!empty($value) && is_string($value)) {
+                        $messageInfo['id'] = $messageId;
+                        $messageInfo['content'] = $value;
+                        $messageInfo['fallbackHandler'] = true;
+                        break;
+                    }
                 }
-                $value = $handler($messageId, $this);
-                if (!empty($value) && is_string($value)) {
-                    $messageInfo['id'] = $messageId;
-                    $messageInfo['content'] = $value;
-                    $messageInfo['fallbackHandler'] = true;
-                    break;
-                }
+                $this->markCallbackChainTerminated();
             }
-            $this->markCallbackChainTerminated();
+        } else {
+            $this->fetchedMessages[ $messageId ] = $messageInfo;
         }
 
-        return !empty($messageInfo) ? $messageInfo : null;
+        return $messageInfo;
     }
 
 
@@ -151,22 +155,24 @@ class ResultMessageLocator implements \ArrayAccess
      */
     public function getMessage($messageId, $ignoreCachedEntries = false)
     {
+        $info = $this->getMessageWithInfo($messageId, $ignoreCachedEntries);
+        return is_array($info) && array_key_exists('content', $info) ? $info['content'] : $info;
+    }
+
+    /**
+     * @param int|string $messageId
+     * @param bool $ignoreCachedEntries
+     * @return array
+     */
+    public function getMessageWithInfo($messageId, $ignoreCachedEntries = false)
+    {
         if ($ignoreCachedEntries !== true
             && !empty($this->fetchedMessages[ $messageId ])
         ) {
             return $this->fetchedMessages[ $messageId ];
         }
 
-        $msgInfo = $this->fetchMessage($messageId);
-
-        if ($msgInfo === false) {
-            // exception, might need rework
-            return false;
-        } elseif (empty($msgInfo['content'])) {
-            return null;
-        } else {
-            return $msgInfo['content'];
-        }
+        return $this->fetchMessage($messageId);
     }
 
     /**
@@ -214,6 +220,9 @@ class ResultMessageLocator implements \ArrayAccess
         return $this;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function clearInstanceCache()
     {
         $this->fetchedMessages = [];
