@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Php Requirement Analyser : Basic php version requirement analyser">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Php Requirement Analyser</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/suralc/pvra">View on GitHub</a>
+
+          <h1 id="project_title">Php Requirement Analyser</h1>
+          <h2 id="project_tagline">Basic php version requirement analyser</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/suralc/pvra/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/suralc/pvra/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p><em>If you are looking for a battle-tested library with a cleaner architecture and more functionality you may find your library of choice at <a href="https://github.com/llaville/php-compat-info">llaville/php-compat-info</a> for now.</em></p>
+
+<h1>
+<a id="php-version-requirement-analyser" class="anchor" href="#php-version-requirement-analyser" aria-hidden="true"><span class="octicon octicon-link"></span></a>Php Version Requirement Analyser</h1>
+
+<p>This repository contains a library and a console application to validate your php files' version requirements.
+The library makes heavy use of <a href="https://github.com/nikic/PHP-Parser">the PHP-Parser library</a></p>
+
+<p><a href="https://travis-ci.org/suralc/pvra"><img src="https://travis-ci.org/suralc/pvra.svg?branch=master" alt="Build Status"></a>
+<a href="https://www.versioneye.com/user/projects/546643934de5ef5022000056"><img src="https://www.versioneye.com/user/projects/546643934de5ef5022000056/badge.svg?style=flat" alt="Dependency Status"></a>
+<a href="https://coveralls.io/r/suralc/pvra?branch=master"><img src="https://img.shields.io/coveralls/suralc/pvra.svg" alt="Coverage Status"></a></p>
+
+<h2>
+<a id="installation-and-usage-of-the-cli-app" class="anchor" href="#installation-and-usage-of-the-cli-app" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation and usage of the cli app</h2>
+
+<p>The packed <code>pvra.phar</code> file is available as a download on the releases page (once there is a release). Run
+<code>php pvra.phar</code> to see a list of available commands. If you downloaded or cloned the repository itself run <code>php bin/pvra</code>
+from the root of the repository. Make sure all dependencies are available (not required if you run from phar), this 
+requires you to be able to run <code>&lt;php&gt; composer install --prefer-dist --no-dev</code> on your machine.</p>
+
+<h3>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<div class="highlight highlight-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s2"></span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// data/test.php</span></span>
+<span class="pl-s2"><span class="pl-c">// code does not make sense, it's still a nice example</span></span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-st">trait</span> <span class="pl-en">Gamma</span></span>
+<span class="pl-s2">{</span>
+<span class="pl-s2">    <span class="pl-s">public</span> <span class="pl-st">function</span> <span class="pl-en">test</span>(<span class="pl-s3">callable</span> <span class="pl-vo">$abc</span>, ...<span class="pl-vo">$vars</span>) {</span>
+<span class="pl-s2">        <span class="pl-k">return</span> <span class="pl-vo">$this</span><span class="pl-k">-&gt;</span>test()[<span class="pl-s1"><span class="pl-pds">'</span>abc<span class="pl-pds">'</span></span>];</span>
+<span class="pl-s2">    }</span>
+<span class="pl-s2">}</span></pre></div>
+
+<p><strong>CLI:</strong> </p>
+
+<p><code>php bin/pvra analyse:file -f data/test.php</code></p>
+
+<p><strong>OUTPUT:</strong></p>
+
+<pre><code>Required version: 5.6.0
+Version 5.4.0
+        Reason: Usage of the trait keyword requires PHP 5.4 in .../data/test.php:3.
+        Reason: The callable typehint requires php 5.4 in .../data/test.php:5.
+        Reason: Function dereferencing requires php 5.4 in .../data/test.php:6.
+Version 5.6.0
+        Reason: Variadic arguments require php 5.6 in .../data/test.php:5.
+</code></pre>
+
+<h2>
+<a id="installation-and-usage-of-the-library" class="anchor" href="#installation-and-usage-of-the-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation and usage of the library.</h2>
+
+<p>Run <code>composer require &lt;package-name&gt;</code> in the root of your project and include the composer autoloader somewhere.</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s2"></span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// autoloading and namespace import is assumed</span></span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$req</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">StringRequirementAnalyser</span>(<span class="pl-s1"><span class="pl-pds">'</span>&lt;?php trait abc{}<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$req</span><span class="pl-k">-&gt;</span>attachRequirementVisitor(<span class="pl-k">new</span> <span class="pl-s3">Php54LanguageFeatureNodeWalker</span>);</span>
+<span class="pl-s2"><span class="pl-vo">$req</span><span class="pl-k">-&gt;</span>attachRequirementVisitor(<span class="pl-k">new</span> <span class="pl-s3">Php55LanguageFeatureNodeWalker</span>);</span>
+<span class="pl-s2"><span class="pl-vo">$req</span><span class="pl-k">-&gt;</span>attachRequirementVisitor(<span class="pl-k">new</span> <span class="pl-s3">Php56LanguageFeatureNodeWalker</span>);</span>
+<span class="pl-s2"><span class="pl-vo">$req</span><span class="pl-k">-&gt;</span>attachRequirementVisitor(<span class="pl-k">new</span> <span class="pl-s3">LibraryAdditionsNodeWalker</span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$result</span> <span class="pl-k">=</span> <span class="pl-vo">$req</span><span class="pl-k">-&gt;</span>run();</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-s3">echo</span> <span class="pl-vo">$result</span><span class="pl-k">-&gt;</span>getRequiredVersion(), <span class="pl-sc">PHP_EOL</span>; <span class="pl-c">// 5.4.0</span></span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-k">foreach</span>(<span class="pl-vo">$result</span> <span class="pl-k">as</span> <span class="pl-vo">$r</span>) {</span>
+<span class="pl-s2">    <span class="pl-s3">echo</span> <span class="pl-vo">$r</span>[<span class="pl-s1"><span class="pl-pds">'</span>msg<span class="pl-pds">'</span></span>], <span class="pl-s1"><span class="pl-pds">'</span>on line <span class="pl-pds">'</span></span>, <span class="pl-vo">$r</span>[<span class="pl-s1"><span class="pl-pds">'</span>line<span class="pl-pds">'</span></span>], <span class="pl-sc">PHP_EOL</span>; </span>
+<span class="pl-s2">}</span></pre></div>
+
+<h2>
+<a id="building-the-phar" class="anchor" href="#building-the-phar" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building the phar</h2>
+
+<p><a href="http://box-project.org/">Box</a> is required to build the phar. Run <code>box build</code> in the repository root. Box requires the code to be inside a git
+repository.</p>
+
+<h2>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Todo</h2>
+
+<p><a href="https://github.com/suralc/pvra/labels/todo">See here</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Php Requirement Analyser maintained by <a href="https://github.com/suralc">suralc</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
