@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/Pvra.html">\Pvra</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">240</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">18</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1644424189"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-1644424189" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-254489831"></a>
+                                <a href="../namespaces/Pvra.html" style="margin-left: 30px; padding-left: 0">Pvra</a>
+            </div>
+            <div id="namespace-254489831" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-301081776"></a>
+                                <a href="../namespaces/Pvra.Console.html" style="margin-left: 30px; padding-left: 0">Console</a>
+            </div>
+            <div id="namespace-301081776" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-431861981"></a>
+                                <a href="../namespaces/Pvra.Console.Commands.html" style="margin-left: 30px; padding-left: 0">Commands</a>
+            </div>
+            <div id="namespace-431861981" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.CheckUpdateCommand.html">CheckUpdateCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.DirCommand.html">DirCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.DumpAstCommand.html">DumpAstCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.FileCommand.html">FileCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.PvraBaseCommand.html">PvraBaseCommand</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Console.Application.html">Application</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-347939350"></a>
+                                <a href="../namespaces/Pvra.PhpParser.html" style="margin-left: 30px; padding-left: 0">PhpParser</a>
+            </div>
+            <div id="namespace-347939350" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-49423777"></a>
+                                <a href="../namespaces/Pvra.PhpParser.AnalysingNodeWalkers.html" style="margin-left: 30px; padding-left: 0">AnalysingNodeWalkers</a>
+            </div>
+            <div id="namespace-49423777" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.PhpParser.AnalysingNodeWalkers.LanguageFeatureAnalyser.html">LanguageFeatureAnalyser</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.PhpParser.AnalysingNodeWalkers.LibraryAdditionsNodeWalker.html">LibraryAdditionsNodeWalker</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.PhpParser.AnalysingNodeWalkers.Php54LanguageFeatureNodeWalker.html">Php54LanguageFeatureNodeWalker</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.PhpParser.AnalysingNodeWalkers.Php55LanguageFeatureNodeWalker.html">Php55LanguageFeatureNodeWalker</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.PhpParser.AnalysingNodeWalkers.Php56LanguageFeatureNodeWalker.html">Php56LanguageFeatureNodeWalker</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Pvra.PhpParser.RequirementAnalyserAwareInterface.html">RequirementAnalyserAwareInterface</a></li>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-146100868"></a>
+                                <a href="../namespaces/Pvra.RequirementAnalysis.html" style="margin-left: 30px; padding-left: 0">RequirementAnalysis</a>
+            </div>
+            <div id="namespace-146100868" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2017688944"></a>
+                                <a href="../namespaces/Pvra.RequirementAnalysis.Result.html" style="margin-left: 30px; padding-left: 0">Result</a>
+            </div>
+            <div id="namespace-2017688944" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2104440626"></a>
+                                <a href="../namespaces/Pvra.RequirementAnalysis.Result.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-2104440626" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.RequirementAnalysis.Result.Exceptions.MessageLocationNeedsToBeTerminatedException.html">MessageLocationNeedsToBeTerminatedException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/Pvra.RequirementAnalysis.Result.CallbackChainHelperTrait.html">CallbackChainHelperTrait</a></li>
+                                                                            <li class="class"><a href="../classes/Pvra.RequirementAnalysis.Result.RequirementReason.html">RequirementReason</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.RequirementAnalysis.Result.RequirementReasoning.html">RequirementReasoning</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.RequirementAnalysis.Result.ResultCollection.html">ResultCollection</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.RequirementAnalysis.Result.ResultMessageFormatter.html">ResultMessageFormatter</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.RequirementAnalysis.Result.ResultMessageLocator.html">ResultMessageLocator</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.RequirementAnalysis.FileRequirementAnalyser.html">FileRequirementAnalyser</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html">RequirementAnalyser</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.RequirementAnalysis.RequirementAnalysisResult.html">RequirementAnalysisResult</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.RequirementAnalysis.StringRequirementAnalyser.html">StringRequirementAnalyser</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/Pvra.RequirementAnalysis.html">\Pvra\RequirementAnalysis</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\Pvra\RequirementAnalysis</small>RequirementAnalyser</h1>
+                    <p><em></em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_getNodeTraverser" class="">getNodeTraverser()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_hasNodeTraverserAttached" class="">hasNodeTraverserAttached()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_attachRequirementVisitor" class="">attachRequirementVisitor()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_run" class="">run()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_isAnalyserRun" class="">isAnalyserRun()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_getResult" class="">getResult()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_setResultInstance" class="">setResultInstance()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_getParser" class="">getParser()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_hasParserAttached" class="">hasParserAttached()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_setTraverser" class="">setTraverser()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_parse" class="">parse()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_createAnalysisTargetId" class="">createAnalysisTargetId()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_setParser" class="">setParser()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_initDefaultTraverser" class="">initDefaultTraverser()</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#method_initDefaultParser" class="">initDefaultParser()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#property_parser" class="">$parser</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#property_nodeTraverser" class="">$nodeTraverser</a><br />
+                                                                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalyser.html#property_result" class="">$result</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                            <span class="label label-info">abstract</span>
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/RequirementAnalysis.RequirementAnalyser.html"><div class="path-wrapper">RequirementAnalysis\RequirementAnalyser.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\Pvra\RequirementAnalysis\RequirementAnalyser</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_parser" name="property_parser" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$parser</h3>
+                <pre class="signature">$parser : \PhpParser\Parser</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                \PhpParser\Parser
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_nodeTraverser" name="property_nodeTraverser" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$nodeTraverser</h3>
+                <pre class="signature">$nodeTraverser : \PhpParser\NodeTraverserInterface</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                \PhpParser\NodeTraverserInterface
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_result" name="property_result" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$result</h3>
+                <pre class="signature">$result : \Pvra\RequirementAnalysis\RequirementAnalysisResult</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalysisResult.html">\Pvra\RequirementAnalysis\RequirementAnalysisResult</a>
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(boolean  <span class="argument">$registerNameResolver = true</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$registerNameResolver </td>
+                                <td><p>If set to true <code>PhpParser\NodeVisitor\NameResolver</code> will be added as the first</p>
+<pre><code>visitor. This may negatively affect performance, some Visitors depend on resolved names, however.</code></pre></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getNodeTraverser" name="method_getNodeTraverser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getNodeTraverser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getNodeTraverser() : \PhpParser\NodeTraverserInterface</pre>
+                <p><em>Gets the associated NodeTraverser</em></p>
+                <p>This method returns the associated NodeTraverser. If no NodeTraverser has been attached a default one will be
+created.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    \PhpParser\NodeTraverserInterface
+                                            &mdash; <p>The NodeTraverser associated to this instance.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper"></span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_hasNodeTraverserAttached" name="method_hasNodeTraverserAttached" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">hasNodeTraverserAttached()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">hasNodeTraverserAttached() : boolean</pre>
+                <p><em>Check whether a NodeTraverser has been attached to the current Analyser</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>Returns true when RequirementAnalyser::$nodeTraverser has been initialized.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_attachRequirementVisitor" name="method_attachRequirementVisitor" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">attachRequirementVisitor()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">attachRequirementVisitor(\PhpParser\NodeVisitor|\Pvra\PhpParser\RequirementAnalyserAwareInterface  <span class="argument">$visitor</span>) : $this</pre>
+                <p><em>Attaches a RequirementVisitor.</em></p>
+                <p>This method should be used to attach an instance of <code>Pvra\PhpParser\RequirementAnalyserAwareInterface</code> to the
+current analyser. This method makes sure that RequirementAnalyserAwareInterface::setOwningAnalyser is
+called using the correct parameters.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\NodeVisitor|<a href="../classes/Pvra.PhpParser.RequirementAnalyserAwareInterface.html">\Pvra\PhpParser\RequirementAnalyserAwareInterface</a></td>
+                                <td>$visitor </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                            &mdash; <p>Returns the current instance to allow chained calls.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_run" name="method_run" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">run()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">run() : \Pvra\RequirementAnalysis\RequirementAnalysisResult</pre>
+                <p><em>Execute the current Analysis</em></p>
+                <p>Parses the given code and runs the currently attached visitors. If run has already been called the previously
+generated result will be returned. The result instance returned by this method is sealed.
+Visitors that are attached <strong>after</strong> run is called are ignored on subsequent calls.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalysisResult.html">\Pvra\RequirementAnalysis\RequirementAnalysisResult</a>
+                                            &mdash; <p>The sealed result.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper"></span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isAnalyserRun" name="method_isAnalyserRun" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">isAnalyserRun()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isAnalyserRun() : boolean</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getResult" name="method_getResult" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getResult()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getResult() : \Pvra\RequirementAnalysis\RequirementAnalysisResult</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Pvra.RequirementAnalysis.RequirementAnalysisResult.html">\Pvra\RequirementAnalysis\RequirementAnalysisResult</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setResultInstance" name="method_setResultInstance" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setResultInstance()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setResultInstance(\Pvra\RequirementAnalysis\RequirementAnalysisResult  <span class="argument">$result</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/Pvra.RequirementAnalysis.RequirementAnalysisResult.html">\Pvra\RequirementAnalysis\RequirementAnalysisResult</a></td>
+                                <td>$result </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Exception</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getParser" name="method_getParser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getParser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getParser() : \PhpParser\Parser</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \PhpParser\Parser
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_hasParserAttached" name="method_hasParserAttached" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">hasParserAttached()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">hasParserAttached() : boolean</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setTraverser" name="method_setTraverser" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">setTraverser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setTraverser(\PhpParser\NodeTraverser|\PhpParser\NodeTraverserInterface  <span class="argument">$nodeTraverser</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\NodeTraverser|\PhpParser\NodeTraverserInterface</td>
+                                <td>$nodeTraverser </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_parse" name="method_parse" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">parse()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">parse() : array&lt;mixed,\PhpParser\Node&gt;</pre>
+                <p><em>Parse the given code.</em></p>
+                <p>Implementations of this method should parse the given code and return a list of <code>Node</code> instances.
+The simplest implementation may directly return <code>return $this-&gt;getParser()-&gt;getParse($this-&gt;getCode());</code>.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,\PhpParser\Node&gt;
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                        <span class="label label-info">abstract</span>
+                                                <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createAnalysisTargetId" name="method_createAnalysisTargetId" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">createAnalysisTargetId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createAnalysisTargetId() : string</pre>
+                <p><em>Create an identifier for the parsed content.</em></p>
+                <p>Implementations of this method should return a string that can be used to identify a given source.
+This may be achieved by hashing a given string or returning an absolute path.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                        <span class="label label-info">abstract</span>
+                                                <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setParser" name="method_setParser" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">setParser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setParser(\PhpParser\Parser  <span class="argument">$parser</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Parser</td>
+                                <td>$parser </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_initDefaultTraverser" name="method_initDefaultTraverser" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">initDefaultTraverser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">initDefaultTraverser() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_initDefaultParser" name="method_initDefaultParser" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">initDefaultParser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">initDefaultParser() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">RequirementAnalyser.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/RequirementAnalysis\RequirementAnalyser.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/Pvra.html">\Pvra</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on December 14th, 2014 at 20:20.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

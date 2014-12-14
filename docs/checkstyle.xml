@@ -1,0 +1,289 @@
+<?xml version="1.0"?>
+<checkstyle version="1.3.0">
+  <file name="PhpParser\AnalysingNodeWalkers\Php56LanguageFeatureNodeWalker.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="9" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="14" severity="error" message="Argument $node is missing from the Docblock of enterNode" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="14" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="RequirementAnalysis\RequirementAnalysisResult.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="10" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="44" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="62" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="75" severity="error" message="Argument $formatter is missing from the Docblock of setMsgFormatter" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="75" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="85" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="111" severity="error" message="Argument $version is missing from the Docblock of addArbitraryRequirement" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="111" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="134" severity="error" message="Argument $reason is missing from the Docblock of addRequirement" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="134" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="156" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="165" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="175" severity="error" message="Argument $version is missing from the Docblock of getRequirementInfo" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="175" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="187" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="196" severity="error" message="Argument $analysisTargetId is missing from the Docblock of setAnalysisTargetId" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="196" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="210" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="218" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="230" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="235" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="15" severity="error" message="No summary for property $isSealed" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="25" severity="error" message="No summary for property $requirements" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="30" severity="error" message="No summary for property $cachedRequiredVersion" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="34" severity="error" message="No summary for property $count" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="38" severity="error" message="No summary for property $msgFormatter" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="Console\Commands\DumpAstCommand.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="14" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="19" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="34" severity="error" message="Argument $input is missing from the Docblock of execute" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="34" severity="error" message="Argument $output is missing from the Docblock of execute" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="34" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="Console\Commands\FileCommand.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="18" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="20" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="34" severity="error" message="Argument $input is missing from the Docblock of execute" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="34" severity="error" message="Argument $output is missing from the Docblock of execute" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="34" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="PhpParser\RequirementAnalyserAwareInterface.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="8" severity="error" message="No summary for interface &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50009"/>
+    <error line="14" severity="error" message="Argument $requirementAnalyser is missing from the Docblock of setOwningAnalyser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="14" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="19" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="RequirementAnalysis\RequirementAnalyser.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="13" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="34" severity="error" message="Argument $registerNameResolver is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="34" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="73" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="81" severity="error" message="Argument $nodeTraverser is missing from the Docblock of setTraverser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="81" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="96" severity="error" message="Argument $visitor is missing from the Docblock of attachRequirementVisitor" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="132" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="140" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="154" severity="error" message="Argument $result is missing from the Docblock of setResultInstance" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="154" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="189" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="200" severity="error" message="Argument $parser is missing from the Docblock of setParser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="200" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="208" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="216" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="18" severity="error" message="No summary for property $parser" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="23" severity="error" message="No summary for property $nodeTraverser" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="28" severity="error" message="No summary for property $result" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="RequirementAnalysis\Result\RequirementReason.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="6" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="49" severity="error" message="Argument $reason is missing from the Docblock of getRequiredVersionForReason" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="71" severity="error" message="Argument $value is missing from the Docblock of getReasonNameFromValue" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="115" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="147" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="34" severity="error" message="No summary for property $reasonToRequirement" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="35" severity="error" message="No summary for property $constantsCache" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="Console\Commands\CheckUpdateCommand.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="21" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="31" severity="error" message="Argument $in is missing from the Docblock of execute" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="31" severity="error" message="Argument $out is missing from the Docblock of execute" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="31" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="79" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="90" severity="error" message="Argument $target is missing from the Docblock of performGETApiRequest" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="90" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="Console\Commands\DirCommand.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="19" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="24" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="39" severity="error" message="Argument $input is missing from the Docblock of execute" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="39" severity="error" message="Argument $output is missing from the Docblock of execute" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="39" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="102" severity="error" message="Argument $input is missing from the Docblock of applyIteratorFilterFromInput" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="102" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="PhpParser\AnalysingNodeWalkers\Php55LanguageFeatureNodeWalker.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="10" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="15" severity="error" message="Argument $node is missing from the Docblock of enterNode" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="15" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="PhpParser\AnalysingNodeWalkers\LibraryAdditionsNodeWalker.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="11" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="19" severity="error" message="Argument $requirementAnalyser is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="19" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="43" severity="error" message="Argument $node is missing from the Docblock of enterNode" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="43" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="123" severity="error" message="Argument $name is missing from the Docblock of hasFunctionVersionRequirement" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="123" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="132" severity="error" message="Argument $name is missing from the Docblock of getFunctionVersionRequirement" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="132" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="145" severity="error" message="Argument $name is missing from the Docblock of hasClassVersionRequirement" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="145" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="154" severity="error" message="Argument $name is missing from the Docblock of getClassVersionRequirement" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="154" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="163" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="13" severity="error" message="No summary for property $data" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="Console\Application.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="8" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="15" severity="error" message="Argument $name is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="15" severity="error" message="Argument $version is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="15" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="PhpParser\AnalysingNodeWalkers\LanguageFeatureAnalyser.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="10" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="17" severity="error" message="Argument $requirementAnalyser is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="17" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="27" severity="error" message="Argument $requirementAnalyser is missing from the Docblock of setOwningAnalyser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="27" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="35" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="15" severity="error" message="No summary for property $requirementAnalyser" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="RequirementAnalysis\FileRequirementAnalyser.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="6" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="17" severity="error" message="Argument $file is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="17" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="30" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="39" severity="error" message="Argument $file is missing from the Docblock of isFileValid" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="39" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="48" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="11" severity="error" message="No summary for property $filePath" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="Console\Commands\PvraBaseCommand.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="21" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="RequirementAnalysis\StringRequirementAnalyser.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="6" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="14" severity="error" message="Argument $string is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="14" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="23" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="31" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="8" severity="error" message="No summary for property $string" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="RequirementAnalysis\Result\ResultCollection.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="9" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="22" severity="error" message="Argument $result is missing from the Docblock of add" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="22" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="45" severity="error" message="Argument $result is missing from the Docblock of has" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="45" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="60" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="14" severity="error" message="No summary for property $results" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="15" severity="error" message="No summary for property $highestDemand" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="PhpParser\AnalysingNodeWalkers\Php54LanguageFeatureNodeWalker.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="10" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="17" severity="error" message="Argument $node is missing from the Docblock of enterNode" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="17" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="94" severity="error" message="Argument $node is missing from the Docblock of leaveNode" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="94" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="101" severity="error" message="Argument $node is missing from the Docblock of _addThisInClosure" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="101" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="12" severity="error" message="No summary for property $inClosureLevel" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="RequirementAnalysis\Result\CallbackChainHelperTrait.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="6" severity="error" message="No summary for trait &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50010"/>
+    <error line="14" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="23" severity="error" message="Argument $areWeInCallbackChain is missing from the Docblock of inCallbackChain" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="23" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="28" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="33" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="8" severity="error" message="No summary for property $terminateCallbackChain" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="9" severity="error" message="No summary for property $inCallbackChain" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="RequirementAnalysis\Result\Exceptions\MessageLocationNeedsToBeTerminatedException.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="8" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+  </file>
+  <file name="RequirementAnalysis\Result\RequirementReasoning.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="9" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="44" severity="error" message="Argument $reasonId is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="44" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="57" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="66" severity="error" message="Argument $offset is missing from the Docblock of offsetExists" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="66" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="75" severity="error" message="Argument $offset is missing from the Docblock of offsetGet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="75" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="117" severity="error" message="Argument $offset is missing from the Docblock of offsetSet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="117" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="126" severity="error" message="Argument $offset is missing from the Docblock of offsetUnset" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="126" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="14" severity="error" message="No summary for property $reasonId" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="18" severity="error" message="No summary for property $line" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="22" severity="error" message="No summary for property $msg" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="26" severity="error" message="No summary for property $result" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="30" severity="error" message="No summary for property $data" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="34" severity="error" message="No summary for property $version" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="RequirementAnalysis\Result\ResultMessageFormatter.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="6" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="32" severity="error" message="Argument $locator is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="32" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="77" severity="error" message="Argument $transformer is missing from the Docblock of addMessageFormatter" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="77" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="88" severity="error" message="Argument $msgId is missing from the Docblock of getFormattedMessageFromId" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="88" severity="error" message="Argument $data is missing from the Docblock of getFormattedMessageFromId" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="88" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="93" severity="error" message="Argument $messageInfo is missing from the Docblock of format" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="93" severity="error" message="Argument $data is missing from the Docblock of format" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="93" severity="error" message="Argument $runUserFormatters is missing from the Docblock of format" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="93" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="121" severity="error" message="Argument $msgId is missing from the Docblock of getMessageTemplate" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="121" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="133" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="138" severity="error" message="Argument $msgId is missing from the Docblock of messageForIdExists" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="138" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="22" severity="error" message="No summary for property $locator" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="23" severity="error" message="No summary for property $throwOnMissingTemplate" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="24" severity="error" message="No summary for property $messageFormatters" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="RequirementAnalysis\Result\ResultMessageLocator.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="6" severity="error" message="No summary for class &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="28" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="52" severity="error" message="Argument $locator is missing from the Docblock of addMissingMessageHandler" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="68" severity="error" message="Argument $messageId is missing from the Docblock of messageExists" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="68" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="87" severity="error" message="Argument $mId is missing from the Docblock of validateMessageId" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="87" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="98" severity="error" message="Argument $messageId is missing from the Docblock of fetchMessage" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="98" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="156" severity="error" message="Argument $messageId is missing from the Docblock of getMessage" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="156" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="167" severity="error" message="Argument $messageId is missing from the Docblock of getMessageWithInfo" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="167" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="182" severity="error" message="Argument $string is missing from the Docblock of fromPhpFile" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="182" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="191" severity="error" message="Argument $array is missing from the Docblock of fromArray" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="191" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="212" severity="error" message="Argument $searcher is missing from the Docblock of addMessageSearcher" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="226" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="240" severity="error" message="Argument $id is missing from the Docblock of offsetExists" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="252" severity="error" message="Argument $id is missing from the Docblock of offsetGet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="265" severity="error" message="Argument $offset is missing from the Docblock of offsetSet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="278" severity="error" message="Argument $offset is missing from the Docblock of offsetUnset" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="278" severity="error" message="No summary for method &quot;&quot;" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="15" severity="error" message="No summary for property $messageSearchers" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="19" severity="error" message="No summary for property $missingMessageHandlers" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="23" severity="error" message="No summary for property $fetchedMessages" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+</checkstyle>
