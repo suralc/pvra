@@ -8,6 +8,9 @@ use Pvra\PhpParser\AnalysingNodeWalkers\Php54LanguageFeatureNodeWalker;
 use Pvra\PhpParser\AnalysingNodeWalkers\Php55LanguageFeatureNodeWalker;
 use Pvra\PhpParser\AnalysingNodeWalkers\Php56LanguageFeatureNodeWalker;
 use Pvra\RequirementAnalysis\FileRequirementAnalyser;
+use Pvra\RequirementAnalysis\RequirementAnalysisResult;
+use Pvra\RequirementAnalysis\Result\ResultMessageFormatter;
+use Pvra\RequirementAnalysis\Result\ResultMessageLocator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,7 +45,14 @@ class FileCommand extends PvraBaseCommand
         $req->attachRequirementVisitor(new Php56LanguageFeatureNodeWalker);
         $req->attachRequirementVisitor(new LibraryAdditionsNodeWalker);
 
-        $result = $req->run();
+        $result = (new RequirementAnalysisResult())
+            ->setMsgFormatter(new ResultMessageFormatter(
+                ResultMessageLocator::fromPhpFile(__DIR__ . '/../../../data/default_messages.php')
+            ), true, true);
+
+        $req->setResultInstance($result);
+
+        $req->run();
 
         $output->writeln(sprintf('<info>Required version: %s</info>', $result->getRequiredVersion()));
 
