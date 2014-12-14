@@ -1,0 +1,9 @@
+/vendor
+/tests
+/data
+/build
+/composer.lock
+/composer.phar
+/phpDocumentor.phar
+/pvra.phar
+/.idea
