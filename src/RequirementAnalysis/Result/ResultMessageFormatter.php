@@ -9,13 +9,19 @@ class ResultMessageFormatter
 
     const CALLBACK_POSITION_PREPEND = 1,
         CALLBACK_POSITION_APPEND = 2;
+
+    const FORMAT_KEY_TARGET_ID = 'targetId',
+        FORMAT_KEY_LINE = 'line',
+        FORMAT_KEY_VERSION = 'version',
+        FORMAT_KEY_REASON_ID = 'reasonId',
+        FORMAT_KEY_REASON_NAME = 'reasonName';
+
     /**
      * @var ResultMessageLocator
      */
     private $locator;
     private $throwOnMissingTemplate = false;
     private $messageFormatters = [];
-    private $defaultSuffix = ' in :targetId:::line:';
 
     /**
      * @param array|ResultMessageLocator $locator
@@ -42,7 +48,8 @@ class ResultMessageFormatter
 
         if ($addDefaultFormatter) {
             $this->addMessageFormatter(function ($id, $format) {
-                return $format . $this->defaultSuffix;
+                return sprintf('%s in :%s:::%s:', $format, ResultMessageFormatter::FORMAT_KEY_TARGET_ID,
+                    ResultMessageFormatter::FORMAT_KEY_LINE);
             });
         }
 

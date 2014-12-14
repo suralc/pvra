@@ -150,7 +150,7 @@ class ResultMessageLocator implements \ArrayAccess
     /**
      * @param int|string $messageId
      * @param bool $ignoreCachedEntries
-     * @return array|bool|null
+     * @return string|null
      * @throws \Exception
      */
     public function getMessage($messageId, $ignoreCachedEntries = false)

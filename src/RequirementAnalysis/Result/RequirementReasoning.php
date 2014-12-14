@@ -65,7 +65,7 @@ class RequirementReasoning implements ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return in_array($offset, ['data', 'reason', 'reasonName', 'line', 'msg', 'version']);
+        return in_array($offset, ['data', 'reason', 'reasonName', 'line', 'msg', 'raw_msg', 'version']);
     }
 
     /**
@@ -85,16 +85,23 @@ class RequirementReasoning implements ArrayAccess
                 return $this->reasonId;
             case 'reasonName':
                 return RequirementReason::getReasonNameFromValue($this->reasonId);
+            case 'raw_msg': {
+                if ($this->msg !== null) {
+                    return $this->msg;
+                }
+                return $this->getResult()->getMsgFormatter()->getLocator()->getMessage($this->reasonId);
+            }
             case 'msg': {
                 if ($this->msg !== null) {
                     return $this->msg;
                 }
                 return $this->getResult()->getMsgFormatter()->getFormattedMessageFromId($this->reasonId,
                     array_merge($this->data, [
-                        'line' => $this->line,
-                        'reasonId' => $this->reasonId,
-                        'targetId' => $this->getResult()->getAnalysisTargetId(),
-                        'version' => $this->version
+                        ResultMessageFormatter::FORMAT_KEY_LINE => $this->line,
+                        ResultMessageFormatter::FORMAT_KEY_REASON_ID => $this->reasonId,
+                        ResultMessageFormatter::FORMAT_KEY_TARGET_ID => $this->getResult()->getAnalysisTargetId(),
+                        ResultMessageFormatter::FORMAT_KEY_VERSION => $this->version,
+                        ResultMessageFormatter::FORMAT_KEY_REASON_NAME => $this->offsetGet('reasonName'),
                     ]));
             }
         }
