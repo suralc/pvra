@@ -1,4 +1,4 @@
-____If you are looking for a battle-tested library with a cleaner architecture and more functionality you may find your library of choice at [llaville/php-compat-info](https://github.com/llaville/php-compat-info) for now.____
+*If you are looking for a battle-tested library with a cleaner architecture and more functionality you may find your library of choice at [llaville/php-compat-info](https://github.com/llaville/php-compat-info) for now.*
 
 
 # Php Version Requirement Analyser
@@ -9,6 +9,13 @@ The library makes heavy use of [the PHP-Parser library](https://github.com/nikic
 [![Build Status](https://travis-ci.org/suralc/pvra.svg?branch=master)](https://travis-ci.org/suralc/pvra)
 [![Dependency Status](https://www.versioneye.com/user/projects/546643934de5ef5022000056/badge.svg?style=flat)](https://www.versioneye.com/user/projects/546643934de5ef5022000056)
 [![Coverage Status](https://img.shields.io/coveralls/suralc/pvra.svg)](https://coveralls.io/r/suralc/pvra?branch=master)
+
+
+
+## Api - Documentation
+
+You may find the incomplete API-documentation [here](http://suralc.github.io/pvra/docs). Please be aware that at this time it is
+uncomplete.
 
 
 ## Installation and usage of the cli app
