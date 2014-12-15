@@ -40,12 +40,10 @@ class RequirementReasoningTest extends \PHPUnit_Framework_TestCase
 
     public function testOffsetGetSimpleValue()
     {
-        $t = new RequirementReasoning(RequirementReason::TRAIT_MAGIC_CONST, 54, '5.4.2',
-            (new RequirementAnalysisResult())
-                ->setMsgFormatter(new ResultMessageFormatter(ResultMessageLocator::fromArray([
-                    RequirementReason::TRAIT_MAGIC_CONST => 'My required version is :version:'
-                ]))),
-            null, ['data1' => 'abc']);
+        $t = new RequirementReasoning(RequirementReason::TRAIT_MAGIC_CONST, 54, (new RequirementAnalysisResult())
+            ->setMsgFormatter(new ResultMessageFormatter(ResultMessageLocator::fromArray([
+                RequirementReason::TRAIT_MAGIC_CONST => 'My required version is :version:'
+            ]))), '5.4.2', null, ['data1' => 'abc']);
         $this->assertSame(12, $t['reason']);
         $this->assertSame(RequirementReason::getReasonNameFromValue(RequirementReason::TRAIT_MAGIC_CONST),
             $t['reasonName']);
@@ -60,7 +58,7 @@ class RequirementReasoningTest extends \PHPUnit_Framework_TestCase
 
     public function testOffsetGetWithMessageFormatting()
     {
-        $reason = new RequirementReasoning(12, 54, '5.4.2', new RequirementAnalysisResult());
+        $reason = new RequirementReasoning(12, 54, new RequirementAnalysisResult(), '5.4.2');
         $this->assertTrue(strpos($reason['msg'], 'magic constant') !== false);
         $this->assertTrue(strpos($reason['msg'], '5.4.2') !== false);
         $this->assertTrue(strpos($reason['msg'], '54') !== false);
@@ -68,6 +66,6 @@ class RequirementReasoningTest extends \PHPUnit_Framework_TestCase
 
     private function createDefaultRequirementReasoningInstance()
     {
-        return new RequirementReasoning(12, 54, '5.4.2', new RequirementAnalysisResult(), 'my msg');
+        return new RequirementReasoning(12, 54, new RequirementAnalysisResult(), '5.4.2', 'my msg');
     }
 }

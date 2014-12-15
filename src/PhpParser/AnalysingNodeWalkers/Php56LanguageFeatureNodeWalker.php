@@ -1,4 +1,19 @@
 <?php
+/**
+ * Php56LanguageFeatureNodeWalker.php
+ *
+ * MIT LICENSE
+ *
+ * LICENSE: This source file is subject to the MIT license.
+ * A copy of the licenses text was distributed alongside this
+ * file (usually the repository or package root). The text can also
+ * be obtained through one of the following sources:
+ * * http://opensource.org/licenses/MIT
+ * * https://github.com/suralc/pvra/blob/master/LICENSE
+ *
+ * @author     suralc <thesurwaveing@gmail.com>
+ * @license    http://opensource.org/licenses/MIT  MIT
+ */
 namespace Pvra\PhpParser\AnalysingNodeWalkers;
 
 
@@ -6,6 +21,18 @@ use PhpParser\Node;
 use Pvra\PhpParser\RequirementAnalyserAwareInterface;
 use Pvra\RequirementAnalysis\Result\RequirementReason;
 
+/**
+ * Class Php56LanguageFeatureNodeWalker
+ *
+ * Supported syntax detection:
+ * * Variadic arguments
+ * * Argument unpacking
+ * * Constant scalar expressions
+ * * The `**`(pow) operator
+ * * Function and Constant importing via `use`
+ *
+ * @package Pvra\PhpParser\AnalysingNodeWalkers
+ */
 class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
 {
     /**

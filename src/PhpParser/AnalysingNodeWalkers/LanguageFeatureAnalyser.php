@@ -1,4 +1,19 @@
 <?php
+/**
+ * LanguageFeatureAnalyser.php
+ *
+ * MIT LICENSE
+ *
+ * LICENSE: This source file is subject to the MIT license.
+ * A copy of the licenses text was distributed alongside this
+ * file (usually the repository or package root). The text can also
+ * be obtained through one of the following sources:
+ * * http://opensource.org/licenses/MIT
+ * * https://github.com/suralc/pvra/blob/master/LICENSE
+ *
+ * @author     suralc <thesurwaveing@gmail.com>
+ * @license    http://opensource.org/licenses/MIT  MIT
+ */
 namespace Pvra\PhpParser\AnalysingNodeWalkers;
 
 
@@ -7,6 +22,11 @@ use PhpParser\NodeVisitorAbstract;
 use Pvra\PhpParser\RequirementAnalyserAwareInterface;
 use Pvra\RequirementAnalysis\RequirementAnalyser;
 
+/**
+ * Class LanguageFeatureAnalyser
+ *
+ * @package Pvra\PhpParser\AnalysingNodeWalkers
+ */
 abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements RequirementAnalyserAwareInterface
 {
     /**
@@ -14,6 +34,9 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements Re
      */
     private $requirementAnalyser;
 
+    /**
+     * @param \Pvra\RequirementAnalysis\RequirementAnalyser $requirementAnalyser
+     */
     public function __construct(RequirementAnalyser $requirementAnalyser = null)
     {
         if ($requirementAnalyser !== null) {
@@ -45,5 +68,20 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements Re
     protected function getResult()
     {
         return $this->getOwningAnalyser()->getResult();
+    }
+
+    /**
+     * Called when entering a source node
+     *
+     * This method is called when a source node is entered. Contained logic determines the presence of
+     * specific syntactical features.
+     *
+     * @param \PhpParser\Node $node The node to parse.
+     * @return null The nodes should not be modified as other walkers might depend on it.
+     * @see getResult() ResultInstance
+     * @see RequirementAnalysisResult::addRequirement() Add new requirement
+     */
+    public function enterNode(Node $node)
+    {
     }
 }

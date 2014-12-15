@@ -1,8 +1,26 @@
 <?php
-
+/**
+ * ResultMessageLocator.php
+ *
+ * MIT LICENSE
+ *
+ * LICENSE: This source file is subject to the MIT license.
+ * A copy of the licenses text was distributed alongside this
+ * file (usually the repository or package root). The text can also
+ * be obtained through one of the following sources:
+ * * http://opensource.org/licenses/MIT
+ * * https://github.com/suralc/pvra/blob/master/LICENSE
+ *
+ * @author     suralc <thesurwaveing@gmail.com>
+ * @license    http://opensource.org/licenses/MIT  MIT
+ */
 namespace Pvra\RequirementAnalysis\Result;
 
-
+/**
+ * Class ResultMessageLocator
+ *
+ * @package Pvra\RequirementAnalysis\Result
+ */
 class ResultMessageLocator implements \ArrayAccess
 {
     use CallbackChainHelperTrait;
@@ -21,14 +39,6 @@ class ResultMessageLocator implements \ArrayAccess
      * @var array
      */
     private $fetchedMessages = [];
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-    }
-
 
     /**
      * Append a function to handle missing messages.

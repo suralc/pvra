@@ -43,7 +43,7 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
         }
 
         $this->fail(sprintf('Could not build test instance of %s',
-                $this->classToTest !== null ? $this->classToTest : '?. $classToTest was not set.'));
+            $this->classToTest !== null ? $this->classToTest : '?. $classToTest was not set.'));
 
         return [];
     }
@@ -59,9 +59,9 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
 
         $parser = new Parser(new Emulative());
 
-        $stmts =  $parser->parse(file_get_contents($file));
+        $stmts = $parser->parse(file_get_contents($file));
 
-        if($this->expandNames) {
+        if ($this->expandNames) {
             $trav = new NodeTraverser();
             $trav->addVisitor(new NameResolver());
             $stmts = $trav->traverse($stmts);

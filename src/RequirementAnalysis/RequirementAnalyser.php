@@ -1,5 +1,19 @@
 <?php
-
+/**
+ * RequirementAnalyser.php
+ *
+ * MIT LICENSE
+ *
+ * LICENSE: This source file is subject to the MIT license.
+ * A copy of the licenses text was distributed alongside this
+ * file (usually the repository or package root). The text can also
+ * be obtained through one of the following sources:
+ * * http://opensource.org/licenses/MIT
+ * * https://github.com/suralc/pvra/blob/master/LICENSE
+ *
+ * @author     suralc <thesurwaveing@gmail.com>
+ * @license    http://opensource.org/licenses/MIT  MIT
+ */
 namespace Pvra\RequirementAnalysis;
 
 
@@ -10,26 +24,42 @@ use PhpParser\NodeVisitor;
 use PhpParser\Parser;
 use Pvra\PhpParser\RequirementAnalyserAwareInterface;
 
+/**
+ * Class RequirementAnalyser
+ *
+ * @package Pvra\RequirementAnalysis
+ */
 abstract class RequirementAnalyser
 {
     /**
+     * The instance of Parser used to run this analysis.
+     *
      * @var Parser
      */
     private $parser;
 
     /**
+     * The NodeTraverserInterface used to run this analysis.
+     *
      * @var NodeTraverserInterface
      */
     private $nodeTraverser;
 
     /**
+     * The result-instance used to store results from this analysis.
+     *
      * @var RequirementAnalysisResult
      */
     private $result;
 
     /**
+     * RequirementAnalyser constructor
+     *
+     * This constructor registers the `NodeVisitor\NameResolver` node walker as first node traverser if the first
+     * argument is set to true. Refer to the parameters documentation.
+     *
      * @param bool $registerNameResolver If set to true `PhpParser\NodeVisitor\NameResolver` will be added as the first
-     *     visitor. This may negatively affect performance, some Visitors depend on resolved names, however.
+     * visitor. This may negatively affect performance, some Visitors depend on resolved names, however.
      */
     public function __construct($registerNameResolver = true)
     {
@@ -44,7 +74,7 @@ abstract class RequirementAnalyser
      * This method returns the associated NodeTraverser. If no NodeTraverser has been attached a default one will be
      * created.
      *
-     * @see RequirementAnalyser::initDefaultTraverser
+     * @see RequirementAnalyser::initDefaultTraverser RequirementAnalyser::initDefaultTraverser
      *
      * @return NodeTraverserInterface The NodeTraverser associated to this instance.
      */
@@ -68,7 +98,7 @@ abstract class RequirementAnalyser
     }
 
     /**
-     *
+     * Initiate this instance using the default Traverser delivered by PHP-Parser
      */
     private function initDefaultTraverser()
     {
@@ -76,6 +106,11 @@ abstract class RequirementAnalyser
     }
 
     /**
+     * Set the NodeTraverser used by this instance
+     *
+     * This method allows you to set a `NodeTraverser` before the default one is initialized.
+     * This should usually happen in the constructor of a child class.
+     *
      * @param \PhpParser\NodeTraverser|\PhpParser\NodeTraverserInterface $nodeTraverser
      */
     protected function setTraverser(NodeTraverserInterface $nodeTraverser)
@@ -127,7 +162,11 @@ abstract class RequirementAnalyser
     }
 
     /**
-     * @return bool
+     * Determines of this analyser is already run
+     *
+     * The result is based on the presence of a `RequirementAnalysisResult` instance and its state.
+     *
+     * @return bool Whether the analyser has a result instance and it was sealed.
      */
     public function isAnalyserRun()
     {
@@ -135,7 +174,16 @@ abstract class RequirementAnalyser
     }
 
     /**
-     * @return RequirementAnalysisResult
+     * Get the result instance associated with this RequirementAnalyser
+     *
+     * If a `RequirementAnalysisResult` instance is attached it will be returned.
+     * If none was attached a default one is attached. Please be aware that you cannot set
+     * a custom `ResultMessageFormatter` in an instance created using this.
+     *
+     * @return RequirementAnalysisResult The `RequirementAnalysisResult` instance attached with this
+     * analyser
+     *
+     * @see setResultInstance() Used to set an instance of a result.
      */
     public function getResult()
     {
@@ -148,8 +196,17 @@ abstract class RequirementAnalyser
     }
 
     /**
-     * @param \Pvra\RequirementAnalysis\RequirementAnalysisResult $result
-     * @throws \Exception
+     * Attach a (new) ResultInstance to this analyser
+     *
+     * Set a new result instance to this analyser. If a result was already attached or the to be attached result is
+     * already sealed an exception is thrown.
+     *
+     * @param \Pvra\RequirementAnalysis\RequirementAnalysisResult $result The `RequirementAnalysisResult` to be
+     * attached to this analyser
+     * @return $this Returns the current instance to allow method chaining
+     * @throws \Exception Thrown in case that the given result is sealed or an Result instance was already attached.
+     *
+     * @see RequirementAnalysisResult::setAnalysisTargetId() Method that is called on the attached result instance
      */
     public function setResultInstance(RequirementAnalysisResult $result)
     {
@@ -161,6 +218,8 @@ abstract class RequirementAnalyser
 
         $this->result = $result;
         $this->result->setAnalysisTargetId($this->createAnalysisTargetId());
+
+        return $this;
     }
 
     /**
@@ -169,7 +228,7 @@ abstract class RequirementAnalyser
      * Implementations of this method should parse the given code and return a list of `Node` instances.
      * The simplest implementation may directly return `return $this->getParser()->getParse($this->getCode());`.
      *
-     * @return \PhpParser\Node[]
+     * @return \PhpParser\Node[] List of nodes representing the analysing target.
      */
     protected abstract function parse();
 
@@ -179,7 +238,7 @@ abstract class RequirementAnalyser
      * Implementations of this method should return a string that can be used to identify a given source.
      * This may be achieved by hashing a given string or returning an absolute path.
      *
-     * @return string
+     * @return string Identifier to identify the target of this analyser.
      */
     protected abstract function createAnalysisTargetId();
 

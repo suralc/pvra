@@ -1,8 +1,26 @@
 <?php
-
+/**
+ * RequirementReason.php
+ *
+ * MIT LICENSE
+ *
+ * LICENSE: This source file is subject to the MIT license.
+ * A copy of the licenses text was distributed alongside this
+ * file (usually the repository or package root). The text can also
+ * be obtained through one of the following sources:
+ * * http://opensource.org/licenses/MIT
+ * * https://github.com/suralc/pvra/blob/master/LICENSE
+ *
+ * @author     suralc <thesurwaveing@gmail.com>
+ * @license    http://opensource.org/licenses/MIT  MIT
+ */
 namespace Pvra\RequirementAnalysis\Result;
 
-
+/**
+ * Class RequirementReason
+ *
+ * @package Pvra\RequirementAnalysis\Result
+ */
 abstract class RequirementReason
 {
     const UNKNOWN = 0x0,
@@ -31,7 +49,13 @@ abstract class RequirementReason
         FUNCTION_IMPORT_USE = 54,
         CONSTANT_IMPORT_USE = 55;
 
+    /**
+     * @var array
+     */
     private static $reasonToRequirement;
+    /**
+     * @var array
+     */
     private static $constantsCache;
 
     /**
@@ -112,6 +136,14 @@ abstract class RequirementReason
         static::$constantsCache = null;
     }
 
+    /**
+     * Map reasons to versions
+     *
+     * This method returns an array having the constants defined by this class as keys and their required
+     * php versions as values.
+     *
+     * @return array
+     */
     protected static function getReasonToRequirementBaseValues()
     {
         return [

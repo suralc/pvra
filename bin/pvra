@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 function includeIfExists($file)
 {
     if (file_exists($file)) {
@@ -9,7 +8,8 @@ function includeIfExists($file)
 }
 
 if ((!$loader = includeIfExists(__DIR__ . '/../vendor/autoload.php'))
-    && (!$loader = includeIfExists(__DIR__ . '/../../../autoload.php'))) {
+    && (!$loader = includeIfExists(__DIR__ . '/../../../autoload.php'))
+) {
     die('Pvra needs to be able to locate composers autoload.php');
 }
 

@@ -1,8 +1,27 @@
 <?php
-
+/**
+ * ResultMessageFormatter.php
+ *
+ * MIT LICENSE
+ *
+ * LICENSE: This source file is subject to the MIT license.
+ * A copy of the licenses text was distributed alongside this
+ * file (usually the repository or package root). The text can also
+ * be obtained through one of the following sources:
+ * * http://opensource.org/licenses/MIT
+ * * https://github.com/suralc/pvra/blob/master/LICENSE
+ *
+ * @author     suralc <thesurwaveing@gmail.com>
+ * @license    http://opensource.org/licenses/MIT  MIT
+ */
 namespace Pvra\RequirementAnalysis\Result;
 
 
+/**
+ * Class ResultMessageFormatter
+ *
+ * @package Pvra\RequirementAnalysis\Result
+ */
 class ResultMessageFormatter
 {
     use CallbackChainHelperTrait;
@@ -20,7 +39,13 @@ class ResultMessageFormatter
      * @var ResultMessageLocator
      */
     private $locator;
+    /**
+     * @var bool
+     */
     private $throwOnMissingTemplate = false;
+    /**
+     * @var array
+     */
     private $messageFormatters = [];
 
     /**
@@ -85,11 +110,23 @@ class ResultMessageFormatter
         return $this;
     }
 
+    /**
+     * @param $msgId
+     * @param array $data
+     * @return mixed
+     * @throws \Exception
+     */
     public function getFormattedMessageFromId($msgId, array $data = [])
     {
         return $this->format(['id' => $msgId, 'template' => $this->getMessageTemplate($msgId)], $data);
     }
 
+    /**
+     * @param $messageInfo
+     * @param array $data
+     * @param bool $runUserFormatters
+     * @return mixed
+     */
     public function format($messageInfo, array $data = [], $runUserFormatters = true)
     {
         if (is_string($messageInfo)) {
@@ -118,6 +155,11 @@ class ResultMessageFormatter
         return $messageInfo['template'];
     }
 
+    /**
+     * @param $msgId
+     * @return null|string
+     * @throws \Exception
+     */
     public function getMessageTemplate($msgId)
     {
         if ($this->throwOnMissingTemplate && !$this->getLocator()->messageExists($msgId)) {
@@ -135,6 +177,10 @@ class ResultMessageFormatter
         return $this->locator;
     }
 
+    /**
+     * @param $msgId
+     * @return bool
+     */
     public function messageForIdExists($msgId)
     {
         return $this->getLocator()->messageExists($msgId);
