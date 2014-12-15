@@ -56,20 +56,17 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
         if ($node instanceof Node\Stmt\Trait_) {
             $this->getResult()->addRequirement(
                 RequirementReason::TRAIT_DEFINITION,
-                $node->getLine(),
-                'Usage of the trait keyword requires PHP 5.4'
+                $node->getLine()
             );
         } elseif ($node instanceof Node\Stmt\TraitUse) {
             $this->getResult()->addRequirement(
                 RequirementReason::TRAIT_USE,
-                $node->getLine(),
-                'Usage of trait imports requires PHP 5.4'
+                $node->getLine()
             );
         } elseif ($node instanceof Node\Scalar\MagicConst\Trait_) {
             $this->getResult()->addRequirement(
                 RequirementReason::TRAIT_MAGIC_CONST,
-                $node->getLine(),
-                'Usage of the Trait magic constant requires php 5.4'
+                $node->getLine()
             );
         } elseif ($node instanceof Node\Expr\ArrayDimFetch) {
             if ($node->var instanceof Node\Expr\FuncCall
@@ -78,8 +75,7 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
             ) {
                 $this->getResult()->addRequirement(
                     RequirementReason::ARRAY_FUNCTION_DEREFERENCING,
-                    $node->getLine(),
-                    'Function dereferencing requires php 5.4'
+                    $node->getLine()
                 );
             } elseif ($this->inClosureLevel > 0
                 && $node->var instanceof Node\Expr\Variable && $node->var->name === 'this'
@@ -95,8 +91,7 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                     if ((string)$param->type === 'callable') {
                         $this->getResult()->addRequirement(
                             RequirementReason::TYPEHINT_CALLABLE,
-                            $param->getLine(),
-                            'The callable typehint requires php 5.4'
+                            $param->getLine()
                         );
                     }
                 }
@@ -105,8 +100,7 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
             if ($node->var instanceof Node\Expr\New_) {
                 $this->getResult()->addRequirement(
                     RequirementReason::INSTANT_CLASS_MEMBER_ACCESS,
-                    $node->getLine(),
-                    'Instant class member access requires php 5.4'
+                    $node->getLine()
                 );
             } elseif ($this->inClosureLevel > 0
                 && $node->var instanceof Node\Expr\Variable && $node->var->name === 'this'

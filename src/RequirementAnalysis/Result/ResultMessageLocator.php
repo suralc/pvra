@@ -55,6 +55,7 @@ class ResultMessageLocator implements \ArrayAccess
      *     $locator->terminateCallbackChain();
      * });
      * </code>
+     *
      * @param callable $locator
      * @param int $position
      * @return $this
@@ -215,6 +216,7 @@ class ResultMessageLocator implements \ArrayAccess
     /**
      * Let the callback throw a MessageLocationNeedsToBeTerminatedException if search needs to be terminated
      * for whatever reason
+     *
      * @param callable $searcher
      * @param int $position
      * @return $this
@@ -243,6 +245,7 @@ class ResultMessageLocator implements \ArrayAccess
      * OffsetExists
      * Whether a message with the given id can be found without invoking missing
      * message handlers
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
      * @param string|int $id message id
      * @return boolean true on success or false on failure.
@@ -255,6 +258,7 @@ class ResultMessageLocator implements \ArrayAccess
     /**
      * OffsetGet
      * This method proxies ::getMessage($offset)
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetget.php
      * @param string|int $id the id to retrieve
      * @return string the message template
@@ -267,6 +271,7 @@ class ResultMessageLocator implements \ArrayAccess
     /**
      * Appends a new message searcher
      * Only the following syntax is valid: `$locator[] = function($id, $locator) {};
+     *
      * @param null $offset
      * @param callable $value
      * @throws \InvalidArgumentException Exception is thrown if an offset is specified

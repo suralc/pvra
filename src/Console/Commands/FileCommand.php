@@ -80,9 +80,7 @@ class FileCommand extends PvraBaseCommand
             foreach ($reasons as $reason) {
                 $output->write("\t");
                 $output->write('Reason: ');
-                $output->write($reason['msg']);
-                $output->write(sprintf(' in %s.', $result->getAnalysisTargetId() . ':' . $reason['line']),
-                    true);
+                $output->write($reason['msg'], true);
             }
         }
     }
