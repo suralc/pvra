@@ -1,5 +1,19 @@
 <?php
-
+/**
+ * CheckUpdateCommand.php
+ *
+ * MIT LICENSE
+ *
+ * LICENSE: This source file is subject to the MIT license.
+ * A copy of the licenses text was distributed alongside this
+ * file (usually the repository or package root). The text can also
+ * be obtained through one of the following sources:
+ * * http://opensource.org/licenses/MIT
+ * * https://github.com/suralc/pvra/blob/master/LICENSE
+ *
+ * @author     suralc <thesurwaveing@gmail.com>
+ * @license    http://opensource.org/licenses/MIT  MIT
+ */
 namespace Pvra\Console\Commands;
 
 
@@ -11,6 +25,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 
 /**
  * Class CheckUpdateCommand
+ *
  * @package Pvra\Console\Commands
  */
 class CheckUpdateCommand extends Command
@@ -54,13 +69,13 @@ class CheckUpdateCommand extends Command
             $helper = $this->getHelper('question');
             $branch = $helper->ask($in, $out, $question);
             $compareResult = $this->performGETApiRequest("repos/{$repoName}/compare/{$version}...{$branch}");
-            if($compareResult === false) {
+            if ($compareResult === false) {
                 $out->writeln('<error>An error occurred. Please try again later or check for updates yourself</error>');
                 die(2);
             }
             $compareResult = json_decode($compareResult, true);
-            if(isset($compareResult['status'])) {
-                if($compareResult['status'] === 'ahead') {
+            if (isset($compareResult['status'])) {
+                if ($compareResult['status'] === 'ahead') {
                     $out->writeln('<info>Your version of pvra is newer than the remote branch you selected</info>');
                 } elseif ($compareResult['status'] === 'behind') {
                     $out->writeln('<info>Your version of pvra is older than the remote branch you selected</info>');

@@ -1,4 +1,19 @@
 <?php
+/**
+ * LibraryAdditionsNodeWalker.php
+ *
+ * MIT LICENSE
+ *
+ * LICENSE: This source file is subject to the MIT license.
+ * A copy of the licenses text was distributed alongside this
+ * file (usually the repository or package root). The text can also
+ * be obtained on one of the following sources:
+ * * http://opensource.org/licenses/MIT
+ * * https://github.com/suralc/pvra/blob/master/LICENSE
+ *
+ * @author     suralc <thesurwaveing@gmail.com>
+ * @license    http://opensource.org/licenses/MIT  MIT
+ */
 namespace Pvra\PhpParser\AnalysingNodeWalkers;
 
 
@@ -8,8 +23,19 @@ use Pvra\PhpParser\RequirementAnalyserAwareInterface;
 use Pvra\RequirementAnalysis\RequirementAnalyser;
 use Pvra\RequirementAnalysis\Result\RequirementReason;
 
+/**
+ * Class LibraryAdditionsNodeWalker
+ *
+ * This class may be used in conjunction with a library data provider (at this time it's just an array) to detect
+ * availability of a class or a function.
+ *
+ * @package Pvra\PhpParser\AnalysingNodeWalkers
+ */
 class LibraryAdditionsNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
 {
+    /**
+     * @var array
+     */
     private $data;
 
     /**
@@ -40,6 +66,9 @@ class LibraryAdditionsNodeWalker extends LanguageFeatureAnalyser implements Requ
         $this->ensureAdditionsDataIntegrity();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function enterNode(Node $node)
     {
         // TODO: refactor this, to avoid code duplication
@@ -160,6 +189,9 @@ class LibraryAdditionsNodeWalker extends LanguageFeatureAnalyser implements Requ
         return false;
     }
 
+    /**
+     *
+     */
     private function ensureAdditionsDataIntegrity()
     {
         if (empty($this->data)) {

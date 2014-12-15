@@ -1,5 +1,19 @@
 <?php
-
+/**
+ * RequirementAnalysisResult.php
+ *
+ * MIT LICENSE
+ *
+ * LICENSE: This source file is subject to the MIT license.
+ * A copy of the licenses text was distributed alongside this
+ * file (usually the repository or package root). The text can also
+ * be obtained through one of the following sources:
+ * * http://opensource.org/licenses/MIT
+ * * https://github.com/suralc/pvra/blob/master/LICENSE
+ *
+ * @author     suralc <thesurwaveing@gmail.com>
+ * @license    http://opensource.org/licenses/MIT  MIT
+ */
 namespace Pvra\RequirementAnalysis;
 
 
@@ -7,9 +21,16 @@ use Pvra\RequirementAnalysis\Result\RequirementReason;
 use Pvra\RequirementAnalysis\Result\RequirementReasoning;
 use Pvra\RequirementAnalysis\Result\ResultMessageFormatter;
 
+/**
+ * Class RequirementAnalysisResult
+ *
+ * @package Pvra\RequirementAnalysis
+ */
 class RequirementAnalysisResult implements \IteratorAggregate, \Countable
 {
     /**
+     * The state of this instance
+     *
      * @var bool
      */
     private $isSealed = false;
@@ -29,11 +50,13 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
      */
     private $cachedRequiredVersion;
     /**
+     * Number of attached reasonings.
+     *
      * @var int
      */
     private $count = 0;
     /**
-     *
+     * @var ResultMessageFormatter
      */
     private $msgFormatter;
 
@@ -121,7 +144,7 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
 
         $this->clearInstanceCaches();
 
-        $this->requirements[ $version ][] = new RequirementReasoning($reason, $line, $version, $this, $msg, $data);
+        $this->requirements[ $version ][] = new RequirementReasoning($reason, $line, $this, $version, $msg, $data);
         $this->count++;
     }
 
@@ -146,7 +169,7 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
 
         $this->clearInstanceCaches();
 
-        $this->requirements[ $version ][] = new RequirementReasoning($reason, $line, $version, $this, $msg, $data);
+        $this->requirements[ $version ][] = new RequirementReasoning($reason, $line, $this, $version, $msg, $data);
         $this->count++;
     }
 
@@ -227,11 +250,17 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
         return $it;
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         return $this->count;
     }
 
+    /**
+     *
+     */
     private function clearInstanceCaches()
     {
         $this->cachedRequiredVersion = null;
