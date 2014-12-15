@@ -84,7 +84,6 @@ class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                 $node->getLine()
             );
         } elseif ($node instanceof Node\Stmt\Use_) {
-            $msg = '';
             $cat = null;
             if ($node->type === Node\Stmt\Use_::TYPE_CONSTANT) {
                 $cat = RequirementReason::CONSTANT_IMPORT_USE;
