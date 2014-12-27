@@ -17,11 +17,11 @@
 namespace Pvra\RequirementAnalysis;
 
 
-use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
 use PhpParser\Parser;
+use Pvra\PhpParser\Lexer\ExtendedEmulativeLexer;
 use Pvra\PhpParser\RequirementAnalyserAwareInterface;
 
 /**
@@ -274,6 +274,6 @@ abstract class RequirementAnalyser
      */
     private function initDefaultParser()
     {
-        $this->setParser(new Parser(new Emulative()));
+        $this->setParser(new Parser(new ExtendedEmulativeLexer()));
     }
 }

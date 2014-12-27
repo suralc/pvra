@@ -53,6 +53,7 @@ class Php54LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [55, RequirementReason::ARRAY_FUNCTION_DEREFERENCING],
             [57, RequirementReason::INSTANT_CLASS_MEMBER_ACCESS],
             [58, RequirementReason::INSTANT_CLASS_MEMBER_ACCESS],
+            [61, RequirementReason::BINARY_NUMBER_DECLARATION],
         ];
 
         foreach ($expected as $key => $shouldBe) {

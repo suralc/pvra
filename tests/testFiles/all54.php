@@ -57,3 +57,5 @@ Omega::test5()['hello world'];
 (new Omega())->overtune();
 (new $abc)->test2();
 
+$a = 12;
+$b = 0b01010101001010001010;

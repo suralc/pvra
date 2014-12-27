@@ -35,7 +35,6 @@ use Pvra\RequirementAnalysis\Result\RequirementReason;
  *
  * Please be aware that the following syntax is not yet detected:
  * * short array syntax
- * * binary number notation
  *
  * @package Pvra\PhpParser\AnalysingNodeWalkers
  */
@@ -115,6 +114,14 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
             && $node->name instanceof Node\Expr\Variable && $node->name->name === 'this'
         ) {
             $this->_addThisInClosure($node->name);
+        } elseif ($node instanceof Node\Scalar\LNumber) {
+            if ($node->hasAttribute('originalValue')) {
+                if (stripos($node->getAttribute('originalValue'), '0b') !== false) {
+                    $this->getResult()->addRequirement(RequirementReason::BINARY_NUMBER_DECLARATION, $node->getLine());
+                }
+            } else {
+                throw new \LogicException("Missing attribute");
+            }
         }
 
         if ($node instanceof Node\Expr\Closure) {

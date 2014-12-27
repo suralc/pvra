@@ -4,10 +4,10 @@ namespace Pvra\tests;
 
 
 use Mockery as m;
-use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
+use Pvra\PhpParser\Lexer\ExtendedEmulativeLexer;
 use Pvra\PhpParser\RequirementAnalyserAwareInterface;
 use Pvra\RequirementAnalysis\RequirementAnalysisResult;
 
@@ -57,7 +57,7 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
     {
         $file = TEST_FILE_ROOT . '/' . $file . '.php';
 
-        $parser = new Parser(new Emulative());
+        $parser = new Parser(new ExtendedEmulativeLexer());
 
         $stmts = $parser->parse(file_get_contents($file));
 
