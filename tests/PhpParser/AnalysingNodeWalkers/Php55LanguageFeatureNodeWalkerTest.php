@@ -61,6 +61,8 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [21, R::CLASS_NAME_RESOLUTION],
         ];
 
+        $this->assertCount(count($expectations), $res->getRequirementInfo('5.5.0'));
+
         foreach ($expectations as $num => $expectation) {
             $this->assertSame($expectation[0], $res->getRequirementInfo('5.5.0')[ $num ]['line']);
             $this->assertSame($expectation[1], $res->getRequirementInfo('5.5.0')[ $num ]['reason']);

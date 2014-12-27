@@ -65,6 +65,19 @@ $c = array(
         'd' => 'e',
         'f' => [
             'g' => array(),
-        ]
+        ],
     ]
 );
+
+callMyFunction([
+    'a',
+], array());
+
+$callableWithArrayTypehint = function (array $arg1 = []) {
+    return function (array $arg2 = array()) {
+    };
+};
+
+
+$d = 0x4e2;
+$e = 0075;

@@ -55,6 +55,8 @@ class Php56LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [37, R::ARGUMENT_UNPACKING],
         ];
 
+        $this->assertCount(count($expected), $r->getRequirementInfo('5.6.0'));
+
         foreach ($expected as $num => $expectation) {
             $this->assertSame($expectation[0], $r->getRequirementInfo('5.6.0')[ $num ]['line']);
             $this->assertSame($expectation[1], $r->getRequirementInfo('5.6.0')[ $num ]['reason']);
@@ -73,6 +75,8 @@ class Php56LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [12, R::CONSTANT_SCALAR_EXPRESSION],
             [13, R::CONSTANT_SCALAR_EXPRESSION],
         ];
+
+        $this->assertCount(count($expected), $r->getRequirementInfo('5.6.0'));
 
         foreach ($expected as $num => $expectation) {
             $this->assertSame($expectation[0], $r->getRequirementInfo('5.6.0')[ $num ]['line']);

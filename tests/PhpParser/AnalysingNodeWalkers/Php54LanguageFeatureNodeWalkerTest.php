@@ -56,7 +56,12 @@ class Php54LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [61, RequirementReason::BINARY_NUMBER_DECLARATION],
             [64, RequirementReason::SHORT_ARRAY_DECLARATION],
             [66, RequirementReason::SHORT_ARRAY_DECLARATION],
+            [72, RequirementReason::SHORT_ARRAY_DECLARATION],
+            [76, RequirementReason::SHORT_ARRAY_DECLARATION],
         ];
+
+        $this->assertCount(count($expected), $res->getRequirementInfo('5.4.0'),
+            'Not all or too many elements were matched.');
 
         foreach ($expected as $key => $shouldBe) {
             $this->assertSame($shouldBe[0], $res->getRequirementInfo('5.4.0')[ $key ]['line']);
