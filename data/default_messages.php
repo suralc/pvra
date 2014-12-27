@@ -31,6 +31,7 @@ return [
     R::TYPEHINT_CALLABLE => 'The callable typehint requires PHP :version:',
     R::INSTANT_CLASS_MEMBER_ACCESS => 'Instant class member access requires PHP :version:',
     R::BINARY_NUMBER_DECLARATION => 'Binary representation of numbers requires PHP :version:',
+    R::SHORT_ARRAY_DECLARATION => 'Usage of the short array syntax requires PHP :version:',
     // 5.5
     R::GENERATOR_DEFINITION => 'Usage of generators requires PHP :version:',
     R::TRY_CATCH_FINALLY => 'Usage of the finally keyword requires PHP :version:',

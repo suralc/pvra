@@ -32,10 +32,7 @@ use Pvra\RequirementAnalysis\Result\RequirementReason;
  * * Array function dereferencing
  * * Callable typhint: `callable`
  * * Detection of `$this` in closures
- *
- * Please be aware that the following syntax is not yet detected:
- * * short array syntax
- *
+ * 
  * @package Pvra\PhpParser\AnalysingNodeWalkers
  */
 class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
@@ -121,6 +118,10 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
                 }
             } else {
                 throw new \LogicException("Missing attribute");
+            }
+        } elseif ($node instanceof Node\Expr\Array_) {
+            if (!$node->hasAttribute('traditionalArray')) {
+                $this->getResult()->addRequirement(RequirementReason::SHORT_ARRAY_DECLARATION, $node->getLine());
             }
         }
 

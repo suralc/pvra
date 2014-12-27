@@ -28,10 +28,11 @@ class ExtendedEmulativeLexer extends Emulative
     {
         $tokenId = parent::getNextToken($value, $startAttributes, $endAttributes);
 
-        if ($tokenId == Parser::T_LNUMBER || $tokenId == Parser::T_DNUMBER
-        ) {
+        if ($tokenId == Parser::T_LNUMBER || $tokenId == Parser::T_DNUMBER) {
             // could also use $startAttributes, doesn't really matter here
             $endAttributes['originalValue'] = $value;
+        } elseif ($tokenId == Parser::T_ARRAY) {
+            $startAttributes['traditionalArray'] = true;
         }
 
         return $tokenId;

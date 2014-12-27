@@ -21,6 +21,7 @@ use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
+use Pvra\PhpParser\Lexer\ExtendedEmulativeLexer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -59,7 +60,7 @@ class DumpAstCommand extends PvraBaseCommand
             return 0x2;
         }
 
-        $parser = new Parser(new Emulative);
+        $parser = new Parser(new ExtendedEmulativeLexer());
 
         $stmts = $parser->parse(file_get_contents($file));
 
