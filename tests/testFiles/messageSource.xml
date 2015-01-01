@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<messageFormats>
+    <format>
+        <id>13</id>
+        <template>Requires :version:</template>
+    </format>
+</messageFormats>

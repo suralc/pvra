@@ -151,6 +151,31 @@ class ResultMessageLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($locator->messageExists('item'));
     }
 
+    public function testFromJsonFile()
+    {
+        $locator = ResultMessageLocator::fromJsonFile(TEST_FILE_ROOT . 'msg_file_cmd.json');
+
+        $this->assertTrue($locator->messageExists(13));
+        $this->assertTrue($locator->messageExists('13'));
+        $this->assertFalse($locator->messageExists(14));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testFromJsonFileInvalidArgumentExceptionOnMissingFile()
+    {
+        $locator = ResultMessageLocator::fromJsonFile('non-existing.json');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testFromJsonFileInvalidArgumentExceptionOnInvalidJsonFile()
+    {
+        $locator = ResultMessageLocator::fromJsonFile(TEST_FILE_ROOT . 'invalid_formed_json.json');
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Only valid non-empty offset types are acceptable as message ids.

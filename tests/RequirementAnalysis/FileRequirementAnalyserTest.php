@@ -16,19 +16,19 @@ class FileRequirementAnalyserTest extends \PHPUnit_Framework_TestCase
         $a = new FileRequirementAnalyser('nonExistingFile.php');
     }
 
-    public function testAnalyisisTargetIdGeneration()
+    /**
+     * @expectedException \RunTimeException
+     */
+    public function testExceptionOnNonFile()
+    {
+        $a = new FileRequirementAnalyser(__DIR__);
+    }
+
+    public function testAnalysisTargetIdGeneration()
     {
         $a = new FileRequirementAnalyser(__FILE__);
         $result = new RequirementAnalysisResult();
         $a->setResultInstance($result);
         $this->assertSame(realpath(__FILE__), $result->getAnalysisTargetId());
-    }
-
-    public function testThatFileCanBeLoadedInParse()
-    {
-        // we get a warning if this fails. Need to think of a better way to test.
-        $a = new FileRequirementAnalyser(__FILE__);
-        $a->setResultInstance($result = new RequirementAnalysisResult());
-        $a->run();
     }
 }

@@ -44,8 +44,9 @@ class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
 
     public function testPropertyOfNonObjectOnCountNamePartsInParameterTypeHint()
     {
-        // this triggered a notice before the fix in this commit
+        // this triggered a notice before the fix in 44f16c2bd9
         $result = $this->runInstanceFromScratch('libAdditionsPropOnNonObjInParamHint');
+        $this->assertCount(0, $result);
     }
 
     /**

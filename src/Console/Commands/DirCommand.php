@@ -17,13 +17,8 @@
 namespace Pvra\Console\Commands;
 
 
-use Pvra\PhpParser\AnalysingNodeWalkers\Php54LanguageFeatureNodeWalker;
-use Pvra\PhpParser\AnalysingNodeWalkers\Php55LanguageFeatureNodeWalker;
-use Pvra\PhpParser\AnalysingNodeWalkers\Php56LanguageFeatureNodeWalker;
-use Pvra\RequirementAnalysis\FileRequirementAnalyser;
 use Pvra\RequirementAnalysis\Result\ResultCollection;
 use RuntimeException;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -35,7 +30,7 @@ use Symfony\Component\Finder\Finder;
  *
  * @package Pvra\Console\Commands
  */
-class DirCommand extends Command
+class DirCommand extends PvraBaseCommand
 {
     /**
      * @inheritdoc
@@ -46,8 +41,9 @@ class DirCommand extends Command
             ->setName('analyse:dir')
             ->setDescription('Iterates over a directory and runs the requirement analysis');
 
+        parent::configure();
+
         $this
-            ->addOption('dir', 'd', InputOption::VALUE_OPTIONAL, 'The directory to check', '.')
             ->addOption('recursive', 'r', InputOption::VALUE_NONE, 'Iterate recursive over directory')
             ->addArgument('filter', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Filter', ['name:*.php']);
     }
@@ -57,7 +53,7 @@ class DirCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dir = $input->getOption('dir');
+        $dir = $input->getArgument('target');
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
             $output->writeln('Dir: ' . $dir);
         }
@@ -82,33 +78,28 @@ class DirCommand extends Command
         /** @var \SplFileInfo $file */
         foreach ($files as $file) {
             if ($file->isFile()) {
-                $req = new FileRequirementAnalyser($file->getPathname());
-
-                $req->attachRequirementVisitor(new Php54LanguageFeatureNodeWalker);
-                $req->attachRequirementVisitor(new Php55LanguageFeatureNodeWalker);
-                $req->attachRequirementVisitor(new Php56LanguageFeatureNodeWalker);
-
+                $req = $this->createFileAnalyserInstance($file->getPathname());
+                $req->attachRequirementVisitors($this->createNodeWalkerInstances($input->getOption('libraryDataSource')));
                 $results->add($req->run());
             }
         }
 
-        $higestRequirement = $results->getHighestDemandingResult();
+        $highestRequirement = $results->getHighestDemandingResult();
 
-        if ($higestRequirement === null) {
+        if ($highestRequirement === null) {
             // todo better handling
             $output->writeln('Unknown error');
             return;
         }
 
-        $output->writeln('Required version: ' . $higestRequirement->getRequiredVersion());
+        $output->writeln('Required version: ' . $highestRequirement->getRequiredVersion());
         $output->writeln(sprintf('Required because %s uses following featrues:',
-            $higestRequirement->getAnalysisTargetId()));
+            $highestRequirement->getAnalysisTargetId()));
 
-        foreach ($higestRequirement->getRequirements() as $version => $reasons) {
+        foreach ($highestRequirement->getRequirements() as $version => $reasons) {
             foreach ($reasons as $reason) {
                 $output->write("\t");
-                $output->write(sprintf('%s required on line %s: %s', $version, $reason['location']['line'],
-                    $reason['msg']), true);
+                $output->write($reason['msg'], true);
             }
         }
 

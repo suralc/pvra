@@ -237,6 +237,7 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
 
     /**
      * @inheritdoc
+     * @return \ArrayIterator|array|RequirementReasoning[]
      */
     public function getIterator()
     {

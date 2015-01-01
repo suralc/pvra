@@ -127,11 +127,30 @@ abstract class RequirementAnalyser
      *
      * @param NodeVisitor|RequirementAnalyserAwareInterface $visitor
      * @return $this Returns the current instance to allow chained calls.
+     * @see RequirementAnalyserAwareInterface::setOwningAnalyser() Current instance is correctly attached.s
      */
     public function attachRequirementVisitor(RequirementAnalyserAwareInterface $visitor)
     {
         $visitor->setOwningAnalyser($this);
         $this->getNodeTraverser()->addVisitor($visitor);
+
+        return $this;
+    }
+
+    /**
+     * Attach an array of RequirementVisitors
+     *
+     * This method can be used to attach multiple `RequirementAnalyserAwareInterface` instances at once.
+     * `RequirementAnalyser::attachRequirementVisitor` is called upon each instance.
+     *
+     * @param RequirementAnalyserAwareInterface[] $visitors An array of requirement visitors
+     * @return $this Returns the current instance to allow chained calls.
+     * @see attachRequirementVisitor() Method containing implementation
+     */
+    public function attachRequirementVisitors($visitors) {
+        foreach($visitors as $visitor) {
+            $this->attachRequirementVisitor($visitor);
+        }
 
         return $this;
     }

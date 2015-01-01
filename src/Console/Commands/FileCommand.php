@@ -17,16 +17,9 @@
 namespace Pvra\Console\Commands;
 
 
-use Pvra\PhpParser\AnalysingNodeWalkers\LibraryAdditionsNodeWalker;
-use Pvra\PhpParser\AnalysingNodeWalkers\Php54LanguageFeatureNodeWalker;
-use Pvra\PhpParser\AnalysingNodeWalkers\Php55LanguageFeatureNodeWalker;
-use Pvra\PhpParser\AnalysingNodeWalkers\Php56LanguageFeatureNodeWalker;
-use Pvra\RequirementAnalysis\FileRequirementAnalyser;
 use Pvra\RequirementAnalysis\RequirementAnalysisResult;
 use Pvra\RequirementAnalysis\Result\ResultMessageFormatter;
-use Pvra\RequirementAnalysis\Result\ResultMessageLocator;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -40,11 +33,9 @@ class FileCommand extends PvraBaseCommand
     {
         $this
             ->setName('analyse:file')
-            ->setDescription('File Checker');
+            ->setDescription('Analyse the requirements of a given file.');
 
         parent::configure();
-
-        $this->addOption('file', 'f', InputOption::VALUE_REQUIRED, 'The file to check');
     }
 
     /**
@@ -52,21 +43,27 @@ class FileCommand extends PvraBaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('preventNameExpansions')) {
-            $output->writeln('<warn>Detection of newly introduced functions and classes may not work in namespaced contexts if you prevent name expansions</warn>');
+        $file = $input->getArgument('target');
+        if (!is_file($file) || !is_readable($file)) {
+            throw new \InvalidArgumentException(sprintf('The target argument with value "%s" is not a valid file.',
+                $file));
         }
 
-        $req = new FileRequirementAnalyser($input->getOption('file'),
-            $input->getOption('preventNameExpansions') !== true);
+        $output->writeln(sprintf('<info>Running analysis for "%s"</info>', realpath($file)));
 
-        $req->attachRequirementVisitor(new Php54LanguageFeatureNodeWalker);
-        $req->attachRequirementVisitor(new Php55LanguageFeatureNodeWalker);
-        $req->attachRequirementVisitor(new Php56LanguageFeatureNodeWalker);
-        $req->attachRequirementVisitor(new LibraryAdditionsNodeWalker);
+        if (in_array('Pvra\\PhpParser\\AnalysingNodeWalkers\\LibraryAdditionsNodeWalker',
+                $this->expectedWalkers) && $input->getOption('preventNameExpansion')
+        ) {
+            $output->writeln('<warn>Warning: Detection of newly introduced functions and classes may not work in namespaced contexts if you prevent name expansions</warn>');
+        }
+
+        $req = $this->createFileAnalyserInstance($input);
+
+        $req->attachRequirementVisitors($this->createNodeWalkerInstances($input->getOption('libraryDataSource')));
 
         $result = (new RequirementAnalysisResult())
             ->setMsgFormatter(new ResultMessageFormatter(
-                ResultMessageLocator::fromPhpFile(__DIR__ . '/../../../data/default_messages.php')
+                $this->createMessageLocatorInstance($input)
             ), true, true);
 
         $req->setResultInstance($result);
@@ -81,6 +78,28 @@ class FileCommand extends PvraBaseCommand
                 $output->write("\t");
                 $output->write('Reason: ');
                 $output->write($reason['msg'], true);
+            }
+        }
+
+        if ($file = $input->getOption('saveAsFile')) {
+            if (file_exists($file)) {
+                $output->writeln(sprintf('<error>%s already exists. Cannot override an already existing file!</error>',
+                    $file));
+            } else {
+                $output->writeln(sprintf('<info>Generating output file at %s</info>', $file));
+                $outData = [];
+                foreach ($result->getIterator() as $r) {
+                    $outData[] = $r;
+                }
+                switch ($input->getOption('saveFormat')) {
+                    case 'json': {
+                        file_put_contents($file, json_encode($outData));
+                        break;
+                    }
+                    default: {
+                        $output->writeln('<error>Invalid save format</error>');
+                    }
+                }
             }
         }
     }

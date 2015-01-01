@@ -195,6 +195,20 @@ class ResultMessageLocator implements \ArrayAccess
         return static::fromArray(require $string);
     }
 
+    public static function fromJsonFile($file)
+    {
+        if (is_readable($file) && is_file($file)) {
+            if (($jsonData = json_decode(file_get_contents($file), true)) !== null) {
+                return static::fromArray($jsonData);
+            } else {
+                throw new \InvalidArgumentException(sprintf("%s could not be parsed as json file. Last json error message was\n%s",
+                    $file, version_compare(PHP_VERSION, '5.5.0', '>=') ? json_last_error_msg() : json_last_error()));
+            }
+        } else {
+            throw new \InvalidArgumentException(sprintf('%s is not a valid file', $file));
+        }
+    }
+
     /**
      * @param $array
      * @return static

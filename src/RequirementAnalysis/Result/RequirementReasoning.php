@@ -18,6 +18,7 @@ namespace Pvra\RequirementAnalysis\Result;
 
 
 use ArrayAccess;
+use JsonSerializable;
 use Pvra\RequirementAnalysis\RequirementAnalysisResult;
 
 /**
@@ -25,7 +26,7 @@ use Pvra\RequirementAnalysis\RequirementAnalysisResult;
  *
  * @package Pvra\RequirementAnalysis\Result
  */
-class RequirementReasoning implements ArrayAccess
+class RequirementReasoning implements ArrayAccess, JsonSerializable
 {
     /**
      * The reason this reasoning maps to
@@ -92,7 +93,43 @@ class RequirementReasoning implements ArrayAccess
     }
 
     /**
+     * Array representation of this object
+     *
+     * This method creates an array representation of this object including all keys that would be
+     * available through offsetGet.
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'data' => $this['data'],
+            'reason' => $this['reason'],
+            'reasonName' => $this['reasonName'],
+            'line' => $this['line'],
+            'msg' => $this['msg'],
+            'raw_msg' => $this['raw_msg'],
+            'version' => $this['version'],
+            'targetId' => $this['targetId'],
+        ];
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.4.0)<br/>
+     * Specify data which should be serialized to JSON
+     *
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
+
+
+    /**
      * Get the related result
+     *
      * @return \Pvra\RequirementAnalysis\RequirementAnalysisResult
      */
     protected function getResult()
@@ -106,7 +143,7 @@ class RequirementReasoning implements ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return in_array($offset, ['data', 'reason', 'reasonName', 'line', 'msg', 'raw_msg', 'version']);
+        return in_array($offset, ['data', 'reason', 'reasonName', 'line', 'msg', 'raw_msg', 'version', 'targetId']);
     }
 
     /**
@@ -131,6 +168,9 @@ class RequirementReasoning implements ArrayAccess
                     return $this->msg;
                 }
                 return $this->getResult()->getMsgFormatter()->getLocator()->getMessage($this->reasonId);
+            }
+            case 'targetId': {
+                return $this->getResult()->getAnalysisTargetId();
             }
             case 'msg': {
                 if ($this->msg !== null) {

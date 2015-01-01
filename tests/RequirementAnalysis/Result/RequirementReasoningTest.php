@@ -31,7 +31,7 @@ class RequirementReasoningTest extends \PHPUnit_Framework_TestCase
 
     public function testOffsetExists()
     {
-        $keys = ['data', 'reason', 'reasonName', 'line', 'msg', 'raw_msg', 'version'];
+        $keys = ['data', 'reason', 'reasonName', 'line', 'msg', 'raw_msg', 'version', 'targetId'];
         $t = $this->createDefaultRequirementReasoningInstance();
         foreach ($keys as $key) {
             $this->assertTrue(isset($t[ $key ]));
@@ -62,6 +62,22 @@ class RequirementReasoningTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(strpos($reason['msg'], 'magic constant') !== false);
         $this->assertTrue(strpos($reason['msg'], '5.4.2') !== false);
         $this->assertTrue(strpos($reason['msg'], '54') !== false);
+    }
+
+    public function testToArray()
+    {
+        $reason = $this->createDefaultRequirementReasoningInstance();
+        $reasonArray = $reason->toArray();
+        foreach(['data', 'reason', 'reasonName', 'line', 'msg', 'raw_msg', 'version', 'targetId'] as $key) {
+            $this->assertArrayHasKey($key, $reasonArray);
+            $this->assertSame($reason[$key], $reasonArray[$key]);
+        }
+    }
+
+    public function testJsonSerialization()
+    {
+        $reason = $this->createDefaultRequirementReasoningInstance();
+        $this->assertSame(json_encode($reason->toArray()), json_encode($reason));
     }
 
     private function createDefaultRequirementReasoningInstance()
