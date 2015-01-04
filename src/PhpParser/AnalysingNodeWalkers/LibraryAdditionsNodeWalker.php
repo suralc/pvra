@@ -71,7 +71,6 @@ class LibraryAdditionsNodeWalker extends LanguageFeatureAnalyser implements Requ
      */
     public function enterNode(Node $node)
     {
-        // TODO: refactor this, to avoid code duplication
         // direct class calls
         if ($node instanceof Node\Expr\New_ || $node instanceof Node\Expr\StaticCall) {
             if (count($node->class->parts) === 1) {

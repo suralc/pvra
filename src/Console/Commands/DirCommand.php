@@ -87,7 +87,6 @@ class DirCommand extends PvraBaseCommand
         $highestRequirement = $results->getHighestDemandingResult();
 
         if ($highestRequirement === null) {
-            // todo better handling
             $output->writeln('Unknown error');
             return;
         }
