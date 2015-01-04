@@ -36,6 +36,7 @@ abstract class RequirementReason
         INSTANT_CLASS_MEMBER_ACCESS = 16,
         BINARY_NUMBER_DECLARATION = 17,
         SHORT_ARRAY_DECLARATION = 18,
+        STATIC_CALL_BY_EXPRESSION = 19,
         // 5.5
         GENERATOR_DEFINITION = 30,
         TRY_CATCH_FINALLY = 31,
@@ -160,6 +161,7 @@ abstract class RequirementReason
             static::INSTANT_CLASS_MEMBER_ACCESS => '5.4.0',
             static::BINARY_NUMBER_DECLARATION => '5.4.0',
             static::SHORT_ARRAY_DECLARATION => '5.4.0',
+            static::STATIC_CALL_BY_EXPRESSION => '5.4.0',
             // 5.5
             static::GENERATOR_DEFINITION => '5.5.0',
             static::TRY_CATCH_FINALLY => '5.5.0',

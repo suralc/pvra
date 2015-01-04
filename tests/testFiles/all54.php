@@ -81,3 +81,8 @@ $callableWithArrayTypehint = function (array $arg1 = []) {
 
 $d = 0x4e2;
 $e = 0075;
+
+Omega::{'my' . $var . 'Method'}();
+Omega::test5();
+$om = new Omega();
+$om->{'over' . 'tune'}();

@@ -60,6 +60,7 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
         $this->handleThisInClosure($node);
         $this->handleBinaryNumberDeclaration($node);
         $this->handleShortArrayDeclaration($node);
+        $this->handleStaticCallByExpressionSyntax($node);
     }
 
     /**
@@ -205,6 +206,13 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
     {
         if ($node instanceof Node\Expr\Array_ && $node->getAttribute('traditionalArray', false) !== true) {
             $this->getResult()->addRequirement(RequirementReason::SHORT_ARRAY_DECLARATION, $node->getLine());
+        }
+    }
+
+    private function handleStaticCallByExpressionSyntax(Node $node)
+    {
+        if ($node instanceof Node\Expr\StaticCall && $node->name instanceof Node\Expr) {
+            $this->getResult()->addRequirement(RequirementReason::STATIC_CALL_BY_EXPRESSION, $node->getLine());
         }
     }
 }

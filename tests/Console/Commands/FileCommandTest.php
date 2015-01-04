@@ -99,7 +99,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
         ])->getDisplay(true));
 
         $this->assertTrue(substr_count($out, 'Custom msg. Requires') === 2);
-        $this->assertTrue(substr_count($out, 'Message for reason') === 17);
+        $this->assertTrue(substr_count($out, 'Message for reason') === 18);
     }
 
     public function testNameExpansionWarning()

@@ -58,6 +58,7 @@ class Php54LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [66, RequirementReason::SHORT_ARRAY_DECLARATION],
             [72, RequirementReason::SHORT_ARRAY_DECLARATION],
             [76, RequirementReason::SHORT_ARRAY_DECLARATION],
+            [85, RequirementReason::STATIC_CALL_BY_EXPRESSION],
         ];
 
         $this->assertCount(count($expected), $res->getRequirementInfo('5.4.0'),
