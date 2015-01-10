@@ -133,7 +133,7 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
      */
     public function addArbitraryRequirement(
         $version,
-        $line = 0,
+        $line = -1,
         $msg = null,
         $reason = RequirementReason::UNKNOWN,
         array $data = []
@@ -154,7 +154,7 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
      * @param string $msg
      * @param array $data
      */
-    public function addRequirement($reason, $line = 0, $msg = null, array $data = [])
+    public function addRequirement($reason, $line = -1, $msg = null, array $data = [])
     {
         if ($this->isSealed()) {
             throw new \RuntimeException('Impossible to write to already sealed result');

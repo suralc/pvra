@@ -80,6 +80,7 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements Re
      * @return null The nodes should not be modified as other walkers might depend on it.
      * @see getResult() ResultInstance
      * @see RequirementAnalysisResult::addRequirement() Add new requirement
+     * @codeCoverageIgnore
      */
     public function enterNode(Node $node)
     {

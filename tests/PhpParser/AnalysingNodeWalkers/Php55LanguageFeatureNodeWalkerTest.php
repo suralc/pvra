@@ -12,7 +12,7 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 
     public function testGeneratorDetection()
     {
-        $res = $this->runInstanceFromScratch('generators');
+        $res = $this->runInstanceFromScratch('5.5/generators');
 
         $this->assertSame('5.5.0', $res->getRequiredVersion());
         $this->assertCount(1, $res->getRequirements());
@@ -28,7 +28,7 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 
     public function testFinallyDetection()
     {
-        $res = $this->runInstanceFromScratch('finally');
+        $res = $this->runInstanceFromScratch('5.5/finally');
 
         $this->assertSame('5.5.0', $res->getRequiredVersion());
         $this->assertCount(1, $res->getRequirements());
@@ -45,10 +45,9 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 
     public function testMixedDetection()
     {
-        $res = $this->runInstanceFromScratch('all55');
+        $res = $this->runInstanceFromScratch('5.5/all55');
 
         $this->assertSame('5.5.0', $res->getRequiredVersion());
-        $this->assertCount(8, $res->getRequirementInfo('5.5.0'));
         $this->assertCount(1, $res->getRequirements());
         $expectations = [
             [10, R::TRY_CATCH_FINALLY],

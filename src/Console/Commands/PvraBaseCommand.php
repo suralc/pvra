@@ -66,6 +66,7 @@ class PvraBaseCommand extends Command
     protected function getDefaultAnalysers()
     {
         return [
+            'Php53LanguageFeatureNodeWalker',
             'Php54LanguageFeatureNodeWalker',
             'Php55LanguageFeatureNodeWalker',
             'Php56LanguageFeatureNodeWalker',

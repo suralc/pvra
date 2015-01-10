@@ -13,26 +13,28 @@ class Php56LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 
     public function testVariadics()
     {
-        $res = $this->runInstanceFromScratch('variadics');
-
+        $res = $this->runInstanceFromScratch('5.6/variadics');
         $this->assertSame('5.6.0', $res->getRequiredVersion());
-        $this->assertCount(1, $res->getRequirements());
-        $this->assertCount(5, $res->getRequirementInfo('5.6.0'));
-        $this->assertSame(4, $res->getRequirementInfo('5.6.0')[0]['line']);
-        $this->assertSame(8, $res->getRequirementInfo('5.6.0')[1]['line']);
-        $this->assertSame(13, $res->getRequirementInfo('5.6.0')[2]['line']);
-        $this->assertSame(15, $res->getRequirementInfo('5.6.0')[3]['line']);
-        $this->assertSame(20, $res->getRequirementInfo('5.6.0')[4]['line']);
-        $this->assertSame(R::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[0]['reason']);
-        $this->assertSame(R::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[1]['reason']);
-        $this->assertSame(R::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[2]['reason']);
-        $this->assertSame(R::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[3]['reason']);
-        $this->assertSame(R::VARIADIC_ARGUMENT, $res->getRequirementInfo('5.6.0')[4]['reason']);
+
+        $expected = [
+            [4, R::VARIADIC_ARGUMENT],
+            [8, R::VARIADIC_ARGUMENT],
+            [13, R::VARIADIC_ARGUMENT],
+            [15, R::VARIADIC_ARGUMENT],
+            [20, R::VARIADIC_ARGUMENT],
+        ];
+
+        $this->assertCount(count($expected), $res->getRequirementInfo('5.6.0'));
+
+        foreach ($expected as $num => $expectation) {
+            $this->assertSame($expectation[0], $res->getRequirementInfo('5.6.0')[ $num ]['line']);
+            $this->assertSame($expectation[1], $res->getRequirementInfo('5.6.0')[ $num ]['reason']);
+        }
     }
 
     public function testMixedDetection()
     {
-        $r = $this->runInstanceFromScratch('all56');
+        $r = $this->runInstanceFromScratch('5.6/all56');
         $this->assertSame('5.6.0', $r->getRequiredVersion());
 
         $expected = [
@@ -65,7 +67,7 @@ class Php56LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 
     public function testConstantExpressionDetection()
     {
-        $r = $this->runInstanceFromScratch('constantExpressions');
+        $r = $this->runInstanceFromScratch('5.6/constantExpressions');
 
         $expected = [
             [4, R::CONSTANT_SCALAR_EXPRESSION],

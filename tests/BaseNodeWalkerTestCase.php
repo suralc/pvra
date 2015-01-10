@@ -33,7 +33,6 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
     protected function buildTestInstances()
     {
         if (is_string($this->classToTest) && class_exists($this->classToTest)) {
-
             $result = new RequirementAnalysisResult();
             $analyserMock = m::mock('Pvra\\RequirementAnalysis\\RequirementAnalyser');
             $analyserMock->shouldReceive('getResult')->andReturn($result);
@@ -57,7 +56,7 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
     {
         $file = TEST_FILE_ROOT . '/' . $file . '.php';
 
-        $parser = new Parser(new ExtendedEmulativeLexer());
+        $parser = new Parser(ExtendedEmulativeLexer::createDefaultInstance());
 
         $stmts = $parser->parse(file_get_contents($file));
 

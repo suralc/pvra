@@ -23,6 +23,15 @@ use PhpParser\Parser;
 
 class ExtendedEmulativeLexer extends Emulative
 {
+    /**
+     * @return ExtendedEmulativeLexer
+     */
+    public static function createDefaultInstance()
+    {
+        $class = get_called_class();
+        return new $class(['usedAttributes' => ['startLine', 'endLine', 'startFilePos', 'startTokenPos']]);
+    }
+
     // see https://github.com/nikic/PHP-Parser/issues/26#issuecomment-6150035 as reference
     public function getNextToken(&$value = null, &$startAttributes = null, &$endAttributes = null)
     {
@@ -31,6 +40,13 @@ class ExtendedEmulativeLexer extends Emulative
         if ($tokenId == Parser::T_LNUMBER || $tokenId == Parser::T_DNUMBER) {
             // could also use $startAttributes, doesn't really matter here
             $endAttributes['originalValue'] = $value;
+        } elseif ($tokenId == Parser::T_START_HEREDOC) {
+            $startAttributes['isDocSyntax'] = true;
+            if(substr($this->code, $startAttributes['startFilePos'] + 3, 1) === '\'') {
+                $startAttributes['isNowDoc'] = true;
+            } else{
+                $startAttributes['isHereDoc'] = true;
+            }
         } elseif ($tokenId == Parser::T_ARRAY) {
             $startAttributes['traditionalArray'] = true;
         }

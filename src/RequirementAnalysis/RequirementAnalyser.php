@@ -293,6 +293,6 @@ abstract class RequirementAnalyser
      */
     private function initDefaultParser()
     {
-        $this->setParser(new Parser(new ExtendedEmulativeLexer()));
+        $this->setParser(new Parser(ExtendedEmulativeLexer::createDefaultInstance()));
     }
 }

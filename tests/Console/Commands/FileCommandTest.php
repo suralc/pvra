@@ -51,10 +51,9 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     public function testSimpleExecuteWithSingleNodeWalker()
     {
         /** @var CommandTester $commandTester */
-        /** @var FileCommand $command */
-        list($commandTester, $command) = $this->getBareInstances();
+        list($commandTester) = $this->getBareInstances();
         $commandTester->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--analyser' => ['Php56LanguageFeatureNodeWalker'],
         ]);
 
@@ -67,7 +66,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     public function testSimpleExecuteWithSingleMatchingNodeWalker()
     {
         $out = trim($this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--analyser' => ['Php54LanguageFeatureNodeWalker'],
         ])->getDisplay(true));
 
@@ -93,7 +92,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     public function testWithCustomMessageSourceForNodeWalkers()
     {
         $out = trim($this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--analyser' => ['Php54LanguageFeatureNodeWalker'],
             '--messageFormatSourceFile' => TEST_FILE_ROOT . 'msg_file_cmd.json',
         ])->getDisplay(true));
@@ -105,7 +104,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     public function testNameExpansionWarning()
     {
         $out = trim($this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--preventNameExpansion' => true
         ])->getDisplay(true));
 
@@ -115,7 +114,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     public function testNoWarningOnMissingExpansionWithoutLibraryWalker()
     {
         $out = trim($this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--analyser' => ['Php54LanguageFeatureNodeWalker'],
             '--preventNameExpansion' => true
         ])->getDisplay(true));
@@ -128,7 +127,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
         $outFile = TEST_FILE_ROOT . '../testTmp/out.json';
         $this->assertFileNotExists($outFile);
         $out = trim($this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--saveAsFile' => $outFile,
             '--saveFormat' => 'json'
         ])->getDisplay(true));
@@ -147,7 +146,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     {
         $outFile = TEST_FILE_ROOT . '../testTmp/out.json';
         $out = trim($this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--saveAsFile' => $outFile,
             '--saveFormat' => 'arcanist'
         ])->getDisplay(true));
@@ -160,7 +159,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
         $outFile = TEST_FILE_ROOT . '../testTmp/out.json';
         touch($outFile);
         $out = trim($this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--saveAsFile' => $outFile,
             '--saveFormat' => 'json'
         ])->getDisplay(true));
@@ -185,9 +184,9 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     public function testErrorMessageIsDisplayedOnInvalidFile()
     {
         try {
-            $out = trim($this->execute([
+            $this->execute([
                 'target' => TEST_FILE_ROOT . 'non-existant.php',
-            ])->getDisplay(true));
+            ])->getDisplay(true);
         } catch (\InvalidArgumentException $ex) {
             $this->assertStringMatchesFormat('The target argument with value "%s" is not a valid file.',
                 $ex->getMessage());
@@ -204,19 +203,19 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testErrorOnInvalidAnalyserConfiguration()
     {
-        $out = trim($this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+        $this->execute([
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--analyser' => 'Php54LanguageFeatureNodeWalker',
-        ])->getDisplay(true));
+        ])->getDisplay(true);
     }
 
     public function testErrorOnNonExistingNodeWalkerClass()
     {
         try {
-            $out = trim($this->execute([
-                'target' => TEST_FILE_ROOT . 'all54.php',
+            $this->execute([
+                'target' => TEST_FILE_ROOT . '5.4/all54.php',
                 '--analyser' => ['NonExistingClass'],
-            ])->getDisplay(true));
+            ])->getDisplay(true);
         } catch (\InvalidArgumentException $e) {
             $this->assertStringMatchesFormat('"%s" (expanded to "%s") is not a class.', $e->getMessage());
             return;
@@ -233,7 +232,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     public function testErrorOnNonImplementingNodeWalker()
     {
         $this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--analyser' => ['NonImplementingNodeWalker'],
         ]);
     }
@@ -245,7 +244,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     public function testErrorOnMissingMessageFormatSourceFile()
     {
         $this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--messageFormatSourceFile' => TEST_FILE_ROOT . 'non-existing.php',
         ]);
     }
@@ -257,7 +256,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     public function testErrorOnNonSupportedMessageFormatSourceFileFormat()
     {
         $this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--messageFormatSourceFile' => TEST_FILE_ROOT . 'messageSource.xml',
         ]);
     }
@@ -269,7 +268,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     public function testErrorOnInvalidJsonFile()
     {
         $this->execute([
-            'target' => TEST_FILE_ROOT . 'all54.php',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--messageFormatSourceFile' => TEST_FILE_ROOT . 'invalid_formed_json.json',
         ]);
     }

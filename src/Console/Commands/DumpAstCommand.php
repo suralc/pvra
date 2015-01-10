@@ -48,7 +48,9 @@ class DumpAstCommand extends Command
             ->addArgument('file', InputArgument::REQUIRED, 'File to dump')
             ->addOption('extensive', 'x', InputOption::VALUE_NONE, 'Use more extensive output format.')
             ->addOption('preventNameExpansion', 'p', InputOption::VALUE_NONE,
-                'Prevent name expansion. May increase performance but sacrifices some functionality');
+                'Prevent name expansion. May increase performance but sacrifices some functionality')
+            ->addOption('xdebugMaxExtensiveDepth', 'd', InputOption::VALUE_REQUIRED,
+                'Rendering depth of extensive output. Only used if xdebug is loaded', 150);
     }
 
     /**
@@ -63,11 +65,11 @@ class DumpAstCommand extends Command
             return 0x2;
         }
 
-        $parser = new Parser(new ExtendedEmulativeLexer());
+        $parser = new Parser(ExtendedEmulativeLexer::createDefaultInstance());
 
         try {
             $stmts = $parser->parse(file_get_contents($file));
-        } catch(Error $error) {
+        } catch (Error $error) {
             $output->writeln('<error>' . $error->getMessage() . ' in ' . realpath($file) . '</error>');
             return 0x2;
         }
@@ -79,7 +81,14 @@ class DumpAstCommand extends Command
         }
 
         if ($input->getOption('extensive')) {
+            if ($hasXdebug = extension_loaded('xdebug')) {
+                $depth = ini_get('xdebug.var_display_max_depth');
+                ini_set('xdebug.var_display_max_depth', intval($input->getOption('xdebugMaxExtensiveDepth')));
+            }
             var_dump($stmts);
+            if ($hasXdebug) {
+                ini_set('xdebug.var_display_max_depth', $depth);
+            }
         } else {
             print_r($stmts);
         }

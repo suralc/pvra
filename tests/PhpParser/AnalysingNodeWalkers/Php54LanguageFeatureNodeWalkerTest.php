@@ -12,7 +12,7 @@ class Php54LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 
     public function testClosureMixedExamples()
     {
-        $res = $this->runInstanceFromScratch('closures');
+        $res = $this->runInstanceFromScratch('5.4/closures');
 
         $this->assertSame('5.4.0', $res->getRequiredVersion());
         $expected = [
@@ -34,7 +34,7 @@ class Php54LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 
     public function testMixed54()
     {
-        $res = $this->runInstanceFromScratch('all54');
+        $res = $this->runInstanceFromScratch('5.4/all54');
 
         $this->assertSame('5.4.0', $res->getRequiredVersion());
 

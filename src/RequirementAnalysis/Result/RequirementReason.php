@@ -23,9 +23,27 @@ namespace Pvra\RequirementAnalysis\Result;
  */
 abstract class RequirementReason
 {
+    // These integers are arbitrary. They may appear to follow some system, but be aware
+    // they do not. Always use the constants.
     const UNKNOWN = 0x0,
         CLASS_PRESENCE_CHANGE = 1,
         FUNCTION_PRESENCE_CHANGE = 2,
+        // 5.3
+        GOTO_KEYWORD = 70,
+        JUMP_LABEL = 71,
+        NAMESPACE_DECLERATION = 72,
+        NAMESPACE_MAGIC_CONSTANT = 73,
+        NAMESPACE_IMPORT = 74,
+        NOWDOC_LITERAL = 75,
+        CALLSTATIC_MAGIC_METHOD = 76,
+        INVOKE_MAGIC_METHOD = 77,
+        CONST_KEYWORD_OUTSIDE_CLASS = 78,
+        CONST_KEYWORD_DOC_SYNTAX = 79,
+        SHORT_TERNARY = 80,
+        CLOSURE_DECLARATION = 81,
+        DYNAMIC_ACCESS_TO_STATIC = 82,
+        LATE_STATE_BINDING_USING_STATIC = 83,
+        NAMESPACE_SEPARATOR = 84,
         // 5.4
         TRAIT_DEFINITION = 10,
         TRAIT_USE = 11,
@@ -151,6 +169,22 @@ abstract class RequirementReason
     {
         return [
             static::UNKNOWN => '7.0.0',
+            // 5.4
+            static::GOTO_KEYWORD => '5.3.0',
+            static::JUMP_LABEL => '5.3.0',
+            static::NAMESPACE_DECLERATION => '5.3.0',
+            static::NAMESPACE_MAGIC_CONSTANT => '5.3.0',
+            static::NAMESPACE_IMPORT => '5.3.0',
+            static::NAMESPACE_SEPARATOR => '5.3.0',
+            static::NOWDOC_LITERAL => '5.3.0',
+            static::CALLSTATIC_MAGIC_METHOD => '5.3.0',
+            static::INVOKE_MAGIC_METHOD => '5.3.0',
+            static::CONST_KEYWORD_OUTSIDE_CLASS => '5.3.0',
+            static::CONST_KEYWORD_DOC_SYNTAX => '5.3.0',
+            static::SHORT_TERNARY => '5.3.0',
+            static::CLOSURE_DECLARATION => '5.3.0',
+            static::DYNAMIC_ACCESS_TO_STATIC => '5.3.0',
+            static::LATE_STATE_BINDING_USING_STATIC => '5.3.0',
             // 5.4
             static::TRAIT_DEFINITION => '5.4.0',
             static::TRAIT_USE => '5.4.0',
