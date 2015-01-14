@@ -49,6 +49,7 @@ return [
     R::BINARY_NUMBER_DECLARATION => 'Binary representation of numbers requires PHP :version:',
     R::SHORT_ARRAY_DECLARATION => 'Usage of the short array syntax requires PHP :version:',
     R::STATIC_CALL_BY_EXPRESSION => 'Class::{expr}() syntax requires PHP :version:',
+    R::SHORT_ECHO_TAG => 'It is not reliable to depend on the short echo tag (<?=) before PHP :version:',
     // 5.5
     R::GENERATOR_DEFINITION => 'Usage of generators requires PHP :version:',
     R::TRY_CATCH_FINALLY => 'Usage of the finally keyword requires PHP :version:',

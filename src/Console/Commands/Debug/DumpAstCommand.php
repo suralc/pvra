@@ -14,7 +14,7 @@
  * @author     suralc <thesurwaveing@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
-namespace Pvra\Console\Commands;
+namespace Pvra\Console\Commands\Debug;
 
 
 use PhpParser\Error;

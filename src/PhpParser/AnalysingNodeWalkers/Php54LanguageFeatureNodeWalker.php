@@ -61,6 +61,7 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
         $this->handleBinaryNumberDeclaration($node);
         $this->handleShortArrayDeclaration($node);
         $this->handleStaticCallByExpressionSyntax($node);
+        $this->detectShortEchoSyntax($node);
     }
 
     /**
@@ -213,6 +214,13 @@ class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements 
     {
         if ($node instanceof Node\Expr\StaticCall && $node->name instanceof Node\Expr) {
             $this->getResult()->addRequirement(RequirementReason::STATIC_CALL_BY_EXPRESSION, $node->getLine());
+        }
+    }
+
+    private function detectShortEchoSyntax(Node $node)
+    {
+        if($node instanceof Node\Stmt\Echo_ && $node->hasAttribute('isShortEchoTag')) {
+            $this->getResult()->addRequirement(RequirementReason::SHORT_ECHO_TAG, $node->getLine());
         }
     }
 }

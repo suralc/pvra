@@ -4,6 +4,7 @@ namespace Pvra\tests\PhpParser\AnalysingNodeWalkers;
 
 
 use Pvra\RequirementAnalysis\Result\RequirementReason;
+use Pvra\RequirementAnalysis\Result\RequirementReasoning;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
 class Php54LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
@@ -68,5 +69,18 @@ class Php54LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             $this->assertSame($shouldBe[0], $res->getRequirementInfo('5.4.0')[ $key ]['line']);
             $this->assertSame($shouldBe[1], $res->getRequirementInfo('5.4.0')[ $key ]['reason']);
         }
+    }
+
+    public function testShortEchoOpenDetection()
+    {
+        $result = $this->runInstanceFromScratch('5.4/short_echo_tags');
+
+        $this->assertCount(1, $result);
+
+        /** @var RequirementReasoning $reasoning */
+        $reasoning = $result->getIterator()->current();
+        $this->assertSame('5.4.0', $reasoning['version']);
+        $this->assertSame(1, $reasoning['line']);
+        $this->assertSame(RequirementReason::SHORT_ECHO_TAG, $reasoning['reason']);
     }
 }

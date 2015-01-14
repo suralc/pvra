@@ -1,0 +1,4 @@
+<?= $title ?>
+<? echo $title; ?>
+<?php echo $title; ?>
+
