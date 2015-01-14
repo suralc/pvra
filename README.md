@@ -78,7 +78,11 @@ Version 5.6.0
 
 ## <a name="lib-usage"></a>Installation and usage of the library.
 
-Run `composer require <package-name>` in the root of your project and include the composer autoloader somewhere.
+Run `composer require <package-name> --prefer-dist` in the root of your project and include the composer autoloader.
+
+Please be aware that `--prefer-dist` will reduce the download size of the loaded package by removing the `tests` directory
+and other unused files.
+
 
 ```php
 <?php

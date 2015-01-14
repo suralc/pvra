@@ -53,7 +53,7 @@ class PvraBaseCommand extends Command
             ->addOption('preventNameExpansion', 'p', InputOption::VALUE_NONE,
                 'Prevent name expansion. May increase performance but sacrifices some functionality')
             ->addOption('analyser', 'a', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
-                'Analysers to run', $this->getDefaultAnalysers())
+                'Analysers to run', array_keys($this->getDefaultAnalysers()))
             ->addOption('libraryDataSource', 'l', InputOption::VALUE_REQUIRED, 'Source file of library data', false)
             ->addOption('messageFormatSourceFile', 'm', InputOption::VALUE_REQUIRED, 'File with message formats', false)
             ->addOption('saveFormat', null, InputOption::VALUE_REQUIRED, 'The format of the save file.', 'json')
@@ -65,13 +65,14 @@ class PvraBaseCommand extends Command
 
     protected function getDefaultAnalysers()
     {
-        return [
-            'Php53LanguageFeatureNodeWalker',
-            'Php54LanguageFeatureNodeWalker',
-            'Php55LanguageFeatureNodeWalker',
-            'Php56LanguageFeatureNodeWalker',
-            'LibraryAdditionsNodeWalker',
+        static $analysers = [
+            'Php53LanguageFeatureNodeWalker' => 'php-5.3',
+            'Php54LanguageFeatureNodeWalker' => 'php-5.4',
+            'Php55LanguageFeatureNodeWalker' => 'php-5.5',
+            'Php56LanguageFeatureNodeWalker' => 'php-5.6',
+            'LibraryAdditionsNodeWalker' => 'lib-add',
         ];
+        return $analysers;
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -81,6 +82,18 @@ class PvraBaseCommand extends Command
             throw new \InvalidArgumentException('The values given to the "analyser" parameter are not valid.');
         }
         foreach ($analysers as $analyser) {
+            $keys = array_values(array_keys($this->getDefaultAnalysers(), $analyser, true));
+            if (!empty($keys)) {
+                // @codeCoverageIgnoreStart
+                // this exception should never be triggerable and should only occur if ::getDefaultAnalysers was
+                // incorrectly overridden. There should be a test for that though.
+                if (isset($keys[1])) {
+                    // aliases should be unique. If a second index is set the alias is not unique
+                    throw new \UnexpectedValueException('An alias should be unique.');
+                }
+                // @codeCoverageIgnoreEnd
+                $analyser = $keys[0];
+            }
             $analyserName = self::WALKER_DEFAULT_NAMESPACE_ROOT . $analyser;
             if (!class_exists($analyserName)) {
                 throw new \InvalidArgumentException(sprintf('"%s" (expanded to "%s") is not a class.', $analyser,

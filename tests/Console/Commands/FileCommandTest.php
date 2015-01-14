@@ -74,6 +74,33 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(19, preg_match_all('/(^\\s+[\\w]+: [\\w\\\\s$ ]+\\d\\.\\d+\\.\\d+ in .+:\\d+$)/m', $out));
     }
 
+    public function testAliasedAnalyserExecution()
+    {
+        $out = trim($this->execute([
+            'target' => TEST_FILE_ROOT . '5.6/all56.php',
+            '--analyser' => ['php-5.3'],
+        ])->getDisplay(true));
+
+        $this->assertTrue(stripos($out, 'PHP 5.6') === false);
+        $this->assertTrue(stripos($out, 'PHP 5.5') === false);
+        $this->assertTrue(stripos($out, 'PHP 5.4') === false);
+        $this->assertSame(2, substr_count($out, 'PHP 5.3'));
+    }
+
+    public function testAliasedAnalysersExecution()
+    {
+        $out = trim($this->execute([
+            'target' => TEST_FILE_ROOT . '5.6/all56.php',
+            '--analyser' => ['php-5.3', 'lib-add', 'php-5.6'],
+        ])->getDisplay(true));
+
+        $this->assertTrue(stripos($out, 'PHP 5.6') !== false);
+        $this->assertTrue(stripos($out, 'PHP 5.5') === false);
+        $this->assertTrue(stripos($out, 'PHP 5.4') === false);
+        $this->assertSame(2, substr_count($out, 'PHP 5.3'));
+        $this->assertSame(16, substr_count($out, 'PHP 5.6'));
+    }
+
     public function testExclusiveLibraryAdditionsWalker()
     {
         $cmdt = $this->execute([
@@ -270,6 +297,18 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
         $this->execute([
             'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--messageFormatSourceFile' => TEST_FILE_ROOT . 'invalid_formed_json.json',
+        ]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage "php-over-9000" (expanded to "Pvra\PhpParser\AnalysingNodeWalkers\php-over-9000") is not a class.
+     */
+    public function testErrorOnInvalidAnalyserAlias()
+    {
+        $this->execute([
+            'target' => TEST_FILE_ROOT . '5.4/all54',
+            '--analyser' => ['php-over-9000'],
         ]);
     }
 }
