@@ -57,7 +57,12 @@ class Php55Features extends LanguageFeatureAnalyser implements RequirementAnalys
                 RequirementReason::LIST_IN_FOREACH,
                 $node->getLine()
             );
-        } elseif ($node instanceof Node\Expr\Empty_ && !($node->expr instanceof Node\Expr\Variable)) {
+        } elseif ($node instanceof Node\Expr\Empty_
+            && !($node->expr instanceof Node\Expr\Variable
+                || $node->expr instanceof Node\Expr\PropertyFetch
+                || $node->expr instanceof Node\Expr\StaticPropertyFetch
+                || $node->expr instanceof Node\Expr\ArrayDimFetch)
+        ) {
             $this->getResult()->addRequirement(
                 RequirementReason::EXPR_IN_EMPTY,
                 $node->getLine()

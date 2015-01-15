@@ -48,6 +48,7 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [15, R::GENERATOR_DEFINITION],
             [15, R::ARRAY_OR_STRING_DEREFERENCING],
             [21, R::CLASS_NAME_RESOLUTION],
+            [31, R::EXPR_IN_EMPTY],
         ];
 
         $this->runTestsAgainstExpectation($expected, '5.5/all55', '5.5.0');

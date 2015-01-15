@@ -23,3 +23,10 @@ function barabaz($args)
         echo "I'm done";
     }
 }
+
+empty($a);
+empty($a['abc']);
+empty($a->b);
+empty($a->$$b);
+empty(IntlBreakIterator::DONE); // ;( http://3v4l.org/RvYB7
+empty($a::$b);
