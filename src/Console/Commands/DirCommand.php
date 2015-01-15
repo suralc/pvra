@@ -91,6 +91,11 @@ class DirCommand extends PvraBaseCommand
             }
         }
 
+        if ($files->count() === 0) {
+            $output->writeln('<error>No files processed!</error>');
+            return;
+        }
+
         if ($input->getOption('groupBy') === self::GROUP_BY_NAME) {
             $this->renderResultCollectionByName($results, $output, $input);
         } elseif ($input->getOption('groupBy') === self::GROUP_BY_VERSION) {
@@ -123,8 +128,7 @@ class DirCommand extends PvraBaseCommand
         $highestRequirement = $results->getHighestDemandingResult();
 
         if ($highestRequirement === null) {
-            $out->writeln('Unknown error');
-            return;
+            throw new RuntimeException('Detection of requirements failed. Unknown error.');
         }
         $out->writeln('Highest required version: ' . $highestRequirement->getRequiredVersion());
         $out->writeln(sprintf('Required because %s uses following features:',
@@ -181,8 +185,7 @@ class DirCommand extends PvraBaseCommand
         $highestRequirement = $results->getHighestDemandingResult();
 
         if ($highestRequirement === null) {
-            $out->writeln('Unknown error');
-            return;
+            throw new RuntimeException('Detection of requirements failed. Unknown error.');
         }
         $out->writeln('Highest required version: ' . $highestRequirement->getRequiredVersion() . ' in ' . $highestRequirement->getAnalysisTargetId() . ($results->count() > 1 ? ' and others' : ''));
 
