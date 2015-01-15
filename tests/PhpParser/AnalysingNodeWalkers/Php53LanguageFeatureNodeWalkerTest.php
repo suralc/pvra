@@ -11,11 +11,11 @@ use Pvra\tests\BaseNodeWalkerTestCase;
  *
  * There are more tests for 5.3 features as modifications on the lexer were required.
  *
- * @package Pvra\tests\PhpParser\AnalysingNodeWalkers
+ * @package Pvra\tests\PhpParser\Analysers
  */
 class Php53LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 {
-    protected $classToTest = 'Pvra\\PhpParser\\AnalysingNodeWalkers\\Php53LanguageFeatureNodeWalker';
+    protected $classToTest = 'Pvra\\PhpParser\\Analysers\\Php53Features';
 
     public function testNamespaceDetection()
     {
@@ -165,7 +165,7 @@ class Php53LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [52, RequirementReason::INVOKE_MAGIC_METHOD],
             [53, RequirementReason::SHORT_TERNARY],
         ];
-        
+
         $this->runTestsAgainstExpectation($expected, '5.3/all53', '5.3.0');
     }
 }

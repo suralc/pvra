@@ -1,6 +1,6 @@
 <?php
 /**
- * LibraryAdditionsNodeWalker.php
+ * LibraryAdditions.php
  *
  * MIT LICENSE
  *
@@ -14,7 +14,7 @@
  * @author     suralc <thesurwaveing@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
-namespace Pvra\PhpParser\AnalysingNodeWalkers;
+namespace Pvra\PhpParser\Analysers;
 
 
 use PhpParser\Node;
@@ -24,14 +24,14 @@ use Pvra\RequirementAnalysis\RequirementAnalyser;
 use Pvra\RequirementAnalysis\Result\RequirementReason;
 
 /**
- * Class LibraryAdditionsNodeWalker
+ * Class LibraryAdditions
  *
  * This class may be used in conjunction with a library data provider (at this time it's just an array) to detect
  * availability of a class or a function.
  *
- * @package Pvra\PhpParser\AnalysingNodeWalkers
+ * @package Pvra\PhpParser\Analysers
  */
-class LibraryAdditionsNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
+class LibraryAdditions extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
 {
     /**
      * @var array

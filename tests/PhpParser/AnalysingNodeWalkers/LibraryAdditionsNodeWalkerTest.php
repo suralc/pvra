@@ -2,13 +2,13 @@
 
 namespace Pvra\tests\PhpParser\AnalysingNodeWalkers;
 
-use Pvra\PhpParser\AnalysingNodeWalkers\LibraryAdditionsNodeWalker;
+use Pvra\PhpParser\Analysers\LibraryAdditions;
 use Pvra\RequirementAnalysis\Result\RequirementReason;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
 class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
 {
-    protected $classToTest = 'Pvra\\PhpParser\\AnalysingNodeWalkers\\LibraryAdditionsNodeWalker';
+    protected $classToTest = 'Pvra\\PhpParser\\Analysers\\LibraryAdditions';
     protected $expandNames = true;
 
     public function testMixedDetection()
@@ -54,7 +54,7 @@ class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedInvalidFileFormatException()
     {
-        $walker = new LibraryAdditionsNodeWalker(null, TEST_FILE_ROOT . '/invalidNonExistingLibrarySource.php');
+        $walker = new LibraryAdditions(null, TEST_FILE_ROOT . '/invalidNonExistingLibrarySource.php');
     }
 
     /**
@@ -63,7 +63,7 @@ class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedClassKeyMissingException()
     {
-        $walker = new LibraryAdditionsNodeWalker(null, ['functions-added' => []]);
+        $walker = new LibraryAdditions(null, ['functions-added' => []]);
     }
 
     /**
@@ -72,7 +72,7 @@ class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedClassKeyListMissingException()
     {
-        $walker = new LibraryAdditionsNodeWalker(null, ['functions-added' => [], 'classes-added' => '']);
+        $walker = new LibraryAdditions(null, ['functions-added' => [], 'classes-added' => '']);
     }
 
     /**
@@ -81,7 +81,7 @@ class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedFunctionKeyMissingException()
     {
-        $walker = new LibraryAdditionsNodeWalker(null, ['classes-added' => []]);
+        $walker = new LibraryAdditions(null, ['classes-added' => []]);
     }
 
     /**
@@ -90,7 +90,7 @@ class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedFunctionKeyListMissingException()
     {
-        $walker = new LibraryAdditionsNodeWalker(null, ['classes-added' => [], 'functions-added' => '']);
+        $walker = new LibraryAdditions(null, ['classes-added' => [], 'functions-added' => '']);
     }
 
     /**
@@ -100,7 +100,7 @@ class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
      */
     public function testExceptionOnEmptyData()
     {
-        $walker = new LibraryAdditionsNodeWalker(null, []);
+        $walker = new LibraryAdditions(null, []);
     }
 
     /**
@@ -109,7 +109,7 @@ class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedExceptionOnObjectParameterTypeOnConstruct()
     {
-        $walker = new LibraryAdditionsNodeWalker(null,
+        $walker = new LibraryAdditions(null,
             new \SplFileInfo(TEST_FILE_ROOT . '/invalidNonExistingLibrarySource.php'));
     }
 
@@ -119,7 +119,7 @@ class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedExceptionOnWrongParameterTypeOnConstruct()
     {
-        $walker = new LibraryAdditionsNodeWalker(null,
+        $walker = new LibraryAdditions(null,
             fopen('php://memory', 'rw'));
     }
 }

@@ -9,7 +9,7 @@ use Pvra\tests\BaseNodeWalkerTestCase;
 
 class Php54LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 {
-    protected $classToTest = '\Pvra\PhpParser\AnalysingNodeWalkers\Php54LanguageFeatureNodeWalker';
+    protected $classToTest = '\Pvra\PhpParser\Analysers\Php54Features';
 
     public function testClosureMixedExamples()
     {

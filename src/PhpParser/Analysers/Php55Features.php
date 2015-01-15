@@ -1,6 +1,6 @@
 <?php
 /**
- * Php55LanguageFeatureNodeWalker.php
+ * Php55Features.php
  *
  * MIT LICENSE
  *
@@ -14,7 +14,7 @@
  * @author     suralc <thesurwaveing@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
-namespace Pvra\PhpParser\AnalysingNodeWalkers;
+namespace Pvra\PhpParser\Analysers;
 
 
 use PhpParser\Node;
@@ -22,7 +22,7 @@ use Pvra\PhpParser\RequirementAnalyserAwareInterface;
 use Pvra\RequirementAnalysis\Result\RequirementReason;
 
 /**
- * Class Php55LanguageFeatureNodeWalker
+ * Class Php55Features
  *
  * Supports the detection of following features:
  * * Generator definitions using the `yield` - keyword
@@ -32,9 +32,9 @@ use Pvra\RequirementAnalysis\Result\RequirementReason;
  * * Array and string dereferencing
  * * Classname resolution using `Name::class`
  *
- * @package Pvra\PhpParser\AnalysingNodeWalkers
+ * @package Pvra\PhpParser\Analysers
  */
-class Php55LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
+class Php55Features extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
 {
 
     /**

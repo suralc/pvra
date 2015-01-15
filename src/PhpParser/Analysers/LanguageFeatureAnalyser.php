@@ -14,7 +14,7 @@
  * @author     suralc <thesurwaveing@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
-namespace Pvra\PhpParser\AnalysingNodeWalkers;
+namespace Pvra\PhpParser\Analysers;
 
 
 use PhpParser\Node;
@@ -25,7 +25,7 @@ use Pvra\RequirementAnalysis\RequirementAnalyser;
 /**
  * Class LanguageFeatureAnalyser
  *
- * @package Pvra\PhpParser\AnalysingNodeWalkers
+ * @package Pvra\PhpParser\Analysers
  */
 abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements RequirementAnalyserAwareInterface
 {

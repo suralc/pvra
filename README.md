@@ -66,11 +66,14 @@ Version 5.6.0
 
 #### CLI - Options
 
+
+**Note:** The analysers listed below can be alias using `php-5.x`.
+
 | Name 	| Short  name 	| Description 	|
 |---------------------------	|-------------	|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | --extensive 	| -x 	|  	|
 | --preventNameExpansion 	| -p 	| Prevent the expansion of names. This may improve performance. Some detections might not work. 	|
-| --analyser 	| --a 	| Name an analyser to attach. If this option is not set the default ones will be used. Possible values: * Php54LanguageFeatureWalker * Php55LanguageFeatureWalker * Php56LanguageFeatureWalker * LibraryAdditionsNodeWalker 	|
+| --analyser 	| --a 	| Name an analyser to attach. If this option is not set the default ones will be used. Possible values: * Php54Features * Php55Features * Php56Features * LibraryAdditions 	|
 | --libraryDataSource 	| -l 	|  	|
 | --messageFormatSourceFile 	| -m 	|  	|
 | --saveFormat 	|  	| Format of the export. Only json is supported at this time. 	|
@@ -91,10 +94,10 @@ and other unused files.
 
 $req = new StringRequirementAnalyser('<?php trait abc{}');
 
-$req->attachRequirementVisitor(new Php54LanguageFeatureNodeWalker);
-$req->attachRequirementVisitor(new Php55LanguageFeatureNodeWalker);
-$req->attachRequirementVisitor(new Php56LanguageFeatureNodeWalker);
-$req->attachRequirementVisitor(new LibraryAdditionsNodeWalker);
+$req->attachRequirementVisitor(new Php54Features);
+$req->attachRequirementVisitor(new Php55Features);
+$req->attachRequirementVisitor(new Php56Features);
+$req->attachRequirementVisitor(new LibraryAdditions);
 
 $result = $req->run();
 

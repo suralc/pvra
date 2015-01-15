@@ -1,6 +1,6 @@
 <?php
 /**
- * Php53LanguageFeatureNodeWalker.php
+ * Php53Features.php
  *
  * MIT LICENSE
  *
@@ -15,17 +15,17 @@
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 
-namespace Pvra\PhpParser\AnalysingNodeWalkers;
+namespace Pvra\PhpParser\Analysers;
 
 use PhpParser\Node;
 use Pvra\RequirementAnalysis\Result\RequirementReason;
 
 /**
- * Class Php53LanguageFeatureNodeWalker
+ * Class Php53Features
  *
- * @package Pvra\PhpParser\AnalysingNodeWalkers
+ * @package Pvra\PhpParser\Analysers
  */
-class Php53LanguageFeatureNodeWalker extends LanguageFeatureAnalyser
+class Php53Features extends LanguageFeatureAnalyser
 {
     private $inClass = false;
     private $importedNames = [];

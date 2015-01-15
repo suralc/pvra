@@ -8,7 +8,7 @@ use Pvra\tests\BaseNodeWalkerTestCase;
 
 class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 {
-    protected $classToTest = 'Pvra\\PhpParser\AnalysingNodeWalkers\\Php55LanguageFeatureNodeWalker';
+    protected $classToTest = 'Pvra\\PhpParser\Analysers\\Php55Features';
 
     public function testGeneratorDetection()
     {

@@ -1,5 +1,5 @@
 <?php
-namespace Pvra\PhpParser\AnalysingNodeWalkers;
+namespace Pvra\PhpParser\Analysers;
 
 
 class NonImplementingNodeWalker

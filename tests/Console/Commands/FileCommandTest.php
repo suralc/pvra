@@ -54,7 +54,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
         list($commandTester) = $this->getBareInstances();
         $commandTester->execute([
             'target' => TEST_FILE_ROOT . '5.4/all54.php',
-            '--analyser' => ['Php56LanguageFeatureNodeWalker'],
+            '--analyser' => ['Php56Features'],
         ]);
 
         $out = trim($commandTester->getDisplay(true));
@@ -67,7 +67,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     {
         $out = trim($this->execute([
             'target' => TEST_FILE_ROOT . '5.4/all54.php',
-            '--analyser' => ['Php54LanguageFeatureNodeWalker'],
+            '--analyser' => ['Php54Features'],
         ])->getDisplay(true));
 
         $this->assertTrue(strpos($out, 'PHP 5.6.0') === false);
@@ -105,7 +105,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     {
         $cmdt = $this->execute([
             'target' => TEST_FILE_ROOT . 'libraryAdditions.php',
-            '--analyser' => ['Php54LanguageFeatureNodeWalker', 'LibraryAdditionsNodeWalker']
+            '--analyser' => ['Php54Features', 'LibraryAdditions']
         ]);
         $out = trim($cmdt->getDisplay(true));
 
@@ -120,7 +120,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     {
         $out = trim($this->execute([
             'target' => TEST_FILE_ROOT . '5.4/all54.php',
-            '--analyser' => ['Php54LanguageFeatureNodeWalker'],
+            '--analyser' => ['Php54Features'],
             '--messageFormatSourceFile' => TEST_FILE_ROOT . 'msg_file_cmd.json',
         ])->getDisplay(true));
 
@@ -142,7 +142,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     {
         $out = trim($this->execute([
             'target' => TEST_FILE_ROOT . '5.4/all54.php',
-            '--analyser' => ['Php54LanguageFeatureNodeWalker'],
+            '--analyser' => ['Php54Features'],
             '--preventNameExpansion' => true
         ])->getDisplay(true));
 
@@ -199,7 +199,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     {
         $out = trim($this->execute([
             'target' => TEST_FILE_ROOT . 'libraryAdditions.php',
-            '--analyser' => ['LibraryAdditionsNodeWalker'],
+            '--analyser' => ['LibraryAdditions'],
             '--libraryDataSource' => TEST_FILE_ROOT . 'simple_lib_data_source.php'
         ])->getDisplay(true));
 
@@ -232,7 +232,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->execute([
             'target' => TEST_FILE_ROOT . '5.4/all54.php',
-            '--analyser' => 'Php54LanguageFeatureNodeWalker',
+            '--analyser' => 'Php54Features',
         ])->getDisplay(true);
     }
 
@@ -254,7 +254,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage "Pvra\PhpParser\AnalysingNodeWalkers\NonImplementingNodeWalker" does not implement "Pvra\PhpParser\RequirementAnalyserAwareInterface"
+     * @expectedExceptionMessage "Pvra\PhpParser\Analysers\NonImplementingNodeWalker" does not implement "Pvra\PhpParser\RequirementAnalyserAwareInterface"
      */
     public function testErrorOnNonImplementingNodeWalker()
     {
@@ -302,7 +302,7 @@ class FileCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage "php-over-9000" (expanded to "Pvra\PhpParser\AnalysingNodeWalkers\php-over-9000") is not a class.
+     * @expectedExceptionMessage "php-over-9000" (expanded to "Pvra\PhpParser\Analysers\php-over-9000") is not a class.
      */
     public function testErrorOnInvalidAnalyserAlias()
     {

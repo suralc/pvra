@@ -1,6 +1,6 @@
 <?php
 /**
- * Php56LanguageFeatureNodeWalker.php
+ * Php56Features.php
  *
  * MIT LICENSE
  *
@@ -14,7 +14,7 @@
  * @author     suralc <thesurwaveing@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
-namespace Pvra\PhpParser\AnalysingNodeWalkers;
+namespace Pvra\PhpParser\Analysers;
 
 
 use PhpParser\Node;
@@ -22,7 +22,7 @@ use Pvra\PhpParser\RequirementAnalyserAwareInterface;
 use Pvra\RequirementAnalysis\Result\RequirementReason;
 
 /**
- * Class Php56LanguageFeatureNodeWalker
+ * Class Php56Features
  *
  * Supported syntax detection:
  * * Variadic arguments
@@ -31,9 +31,9 @@ use Pvra\RequirementAnalysis\Result\RequirementReason;
  * * The `**`(pow) operator
  * * Function and Constant importing via `use`
  *
- * @package Pvra\PhpParser\AnalysingNodeWalkers
+ * @package Pvra\PhpParser\Analysers
  */
-class Php56LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
+class Php56Features extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
 {
     /**
      * @inheritdoc

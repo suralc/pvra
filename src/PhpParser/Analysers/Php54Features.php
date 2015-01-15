@@ -1,6 +1,6 @@
 <?php
 /**
- * Php54LanguageFeatureNodeWalker.php
+ * Php54Features.php
  *
  * MIT LICENSE
  *
@@ -14,7 +14,7 @@
  * @author     suralc <thesurwaveing@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
-namespace Pvra\PhpParser\AnalysingNodeWalkers;
+namespace Pvra\PhpParser\Analysers;
 
 
 use PhpParser\Node;
@@ -22,7 +22,7 @@ use Pvra\PhpParser\RequirementAnalyserAwareInterface;
 use Pvra\RequirementAnalysis\Result\RequirementReason;
 
 /**
- * Class Php54LanguageFeatureNodeWalker
+ * Class Php54Features
  *
  * This class can be used to detect php 5.4 features.
  * Following features are supported:
@@ -33,9 +33,9 @@ use Pvra\RequirementAnalysis\Result\RequirementReason;
  * * Callable typhint: `callable`
  * * Detection of `$this` in closures
  *
- * @package Pvra\PhpParser\AnalysingNodeWalkers
+ * @package Pvra\PhpParser\Analysers
  */
-class Php54LanguageFeatureNodeWalker extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
+class Php54Features extends LanguageFeatureAnalyser implements RequirementAnalyserAwareInterface
 {
     /**
      * Closure nesting level

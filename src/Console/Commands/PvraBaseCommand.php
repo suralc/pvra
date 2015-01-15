@@ -34,7 +34,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class PvraBaseCommand extends Command
 {
-    const WALKER_DEFAULT_NAMESPACE_ROOT = 'Pvra\\PhpParser\\AnalysingNodeWalkers\\';
+    const WALKER_DEFAULT_NAMESPACE_ROOT = 'Pvra\\PhpParser\\Analysers\\';
 
     /**
      * A list of `Pvra\PhpParser\RequirementAnalyserAwareInterface` class names.
@@ -66,11 +66,11 @@ class PvraBaseCommand extends Command
     protected function getDefaultAnalysers()
     {
         static $analysers = [
-            'Php53LanguageFeatureNodeWalker' => 'php-5.3',
-            'Php54LanguageFeatureNodeWalker' => 'php-5.4',
-            'Php55LanguageFeatureNodeWalker' => 'php-5.5',
-            'Php56LanguageFeatureNodeWalker' => 'php-5.6',
-            'LibraryAdditionsNodeWalker' => 'lib-add',
+            'Php53Features' => 'php-5.3',
+            'Php54Features' => 'php-5.4',
+            'Php55Features' => 'php-5.5',
+            'Php56Features' => 'php-5.6',
+            'LibraryAdditions' => 'lib-add',
         ];
         return $analysers;
     }
@@ -138,7 +138,7 @@ class PvraBaseCommand extends Command
 
     /**
      * @param string $librarySourceOption
-     * @return \Pvra\PhpParser\AnalysingNodeWalkers\LanguageFeatureAnalyser[]
+     * @return \Pvra\PhpParser\Analysers\LanguageFeatureAnalyser[]
      */
     protected function createNodeWalkerInstances($librarySourceOption = null)
     {

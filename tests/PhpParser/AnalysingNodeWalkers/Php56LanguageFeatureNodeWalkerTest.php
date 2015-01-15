@@ -9,7 +9,7 @@ use Pvra\tests\BaseNodeWalkerTestCase;
 
 class Php56LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 {
-    protected $classToTest = 'Pvra\\PhpParser\AnalysingNodeWalkers\\Php56LanguageFeatureNodeWalker';
+    protected $classToTest = 'Pvra\\PhpParser\Analysers\\Php56Features';
 
     public function testVariadics()
     {
