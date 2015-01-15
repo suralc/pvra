@@ -61,7 +61,70 @@ class ResultCollection implements \Countable, \IteratorAggregate, \JsonSerializa
     }
 
     /**
-     * @param $result
+     * Remove a result from the collection
+     *
+     * Removes a result, which is identified by its analysis target id  from
+     * the current collection.
+     *
+     * @param string|RequirementAnalysisResult $result
+     * @return true
+     */
+    public function remove($result)
+    {
+        if ($result instanceof RequirementAnalysisResult) {
+            $id = $result->getAnalysisTargetId();
+        } elseif (is_string($result)) {
+            $id = $result;
+            if (isset($this->results[ $id ])) {
+                $result = $this->results[ $id ];
+            } else {
+                return true;
+            }
+        } else {
+            throw new \InvalidArgumentException('The result argument has to be an instance of RequirementAnalysisResult or a string.');
+        }
+
+        $needRecalc = false;
+        if ($this->highestDemand !== null && $result->getAnalysisTargetId() === $this->getHighestDemandingResult()->getAnalysisTargetId()) {
+            $needRecalc = true;
+        }
+
+        unset($this->results[ $id ]);
+
+        if ($needRecalc) {
+            $this->recalculateHighestDemandingResult();
+        }
+
+        return true;
+    }
+
+    /**
+     * Recalculates the highest demanding result of this collection
+     *
+     * This can be expensive. Only do this if really necessary.
+     */
+    private function recalculateHighestDemandingResult()
+    {
+        $highestVersionId = 0;
+        $highestResult = null;
+        foreach ($this->results as $result) {
+            if ($result->getRequiredVersionId() > $highestVersionId) {
+                $highestVersionId = $result->getRequiredVersionId();
+                $highestResult = $result;
+            }
+        }
+
+        if ($highestResult !== null) {
+            $this->highestDemand = $highestResult->getAnalysisTargetId();
+        } else {
+            $this->highestDemand = null;
+        }
+    }
+
+    /**
+     * Checks whether a given result is part of this collection
+     *
+     * @param string|RequirementAnalysisResult $result Analysis target Id or instance of Analysis Result
      * @return bool
      */
     public function has($result)
@@ -77,6 +140,8 @@ class ResultCollection implements \Countable, \IteratorAggregate, \JsonSerializa
     }
 
     /**
+     * Get the currently highest demanding result
+     *
      * @return null|\Pvra\RequirementAnalysis\RequirementAnalysisResult
      */
     public function getHighestDemandingResult()

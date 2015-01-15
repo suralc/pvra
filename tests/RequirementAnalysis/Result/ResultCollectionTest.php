@@ -109,4 +109,40 @@ class ResultCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $arr['my_id']);
         $this->assertSame(RequirementReason::ARGUMENT_UNPACKING, $arr['my_id'][0]['reason']);
     }
+
+    public function testRemove()
+    {
+        $r = new ResultCollection();
+        $ar1 = new RequirementAnalysisResult();
+        $ar1->setAnalysisTargetId('ar1');
+        $ar1->addArbitraryRequirement('5.5.0');
+        $ar2 = new RequirementAnalysisResult();
+        $ar2->setAnalysisTargetId('ar2');
+        $ar2->addArbitraryRequirement('5.5.2');
+        $r->add($ar1);
+        $r->add($ar2);
+        $this->assertCount(2, $r);
+        $this->assertSame($ar2, $r->getHighestDemandingResult());
+        $this->assertTrue($r->remove($ar2));
+        $this->assertCount(1, $r);
+        $this->assertSame($ar1, $r->getHighestDemandingResult());
+        $this->assertTrue($r->remove($ar1));
+        $this->assertCount(0, $r);
+        $this->assertSame(null, $r->getHighestDemandingResult());
+        $r->add($ar2);
+        $r->add($ar1);
+        $r->remove('ar1');
+        $this->assertSame($ar2, $r->getHighestDemandingResult());
+        $this->assertCount(1, $r);
+        $this->assertTrue($r->remove('non-existant'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidTypeOnRemove()
+    {
+        $r = new ResultCollection();
+        $r->remove(12);
+    }
 }
