@@ -28,6 +28,7 @@ use Pvra\RequirementAnalysis\Result\ResultMessageFormatter;
  */
 class RequirementAnalysisResult implements \IteratorAggregate, \Countable
 {
+    const INITIAL_ANALYSIS_TARGET_ID = 'unknown';
     /**
      * The state of this instance
      *
@@ -38,7 +39,7 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
     /**
      * @var string Filename or hash of input string
      */
-    private $analysisTargetId = 'unknown';
+    private $analysisTargetId = self::INITIAL_ANALYSIS_TARGET_ID;
 
     /**
      * @var array|RequirementReasoning[]
@@ -218,8 +219,8 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
      */
     public function setAnalysisTargetId($analysisTargetId)
     {
-        if ($this->isSealed()) {
-            throw new \RuntimeException('You cannot modify an already sealed result.');
+        if ($this->isSealed() || $this->getAnalysisTargetId() !== self::INITIAL_ANALYSIS_TARGET_ID) {
+            throw new \RuntimeException('You cannot modify an already set or sealed result.');
         }
 
         $this->analysisTargetId = $analysisTargetId;

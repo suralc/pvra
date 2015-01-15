@@ -204,13 +204,22 @@ class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
     public function testSetAnalysisTargetId()
     {
         $r = new RequirementAnalysisResult();
-        $this->assertSame('unknown', $r->getAnalysisTargetId());
+        $this->assertSame(RequirementAnalysisResult::INITIAL_ANALYSIS_TARGET_ID, $r->getAnalysisTargetId());
         $r->setAnalysisTargetId('abc');
         $this->assertSame('abc', $r->getAnalysisTargetId());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage You cannot modify an already set or sealed result.
+     */
+    public function testExceptionOnTargetIdOverride()
+    {
+        $r = new RequirementAnalysisResult();
         $r->setAnalysisTargetId('def');
         $this->assertSame('def', $r->getAnalysisTargetId());
         $r->setAnalysisTargetId('g')->setAnalysisTargetId('f');
-        $this->assertSame('f', $r->getAnalysisTargetId());
+        $this->assertNotSame('f', $r->getAnalysisTargetId());
     }
 
     public function testGetMessageFormatter()
@@ -228,7 +237,7 @@ class RequirementAnalysisResultTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage You cannot modify an already sealed result.
+     * @expectedExceptionMessage You cannot modify an already set or sealed result.
      */
     public function testSetAnalysisTargetIdSealedException()
     {
