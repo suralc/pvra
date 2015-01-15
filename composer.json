@@ -7,10 +7,12 @@
   "autoload": {
     "psr-4": {
       "Pvra\\": "src"
-    }
+    },
+    "classmap": ["src"]
   },
   "require": {
     "php": ">=5.4",
+    "ext-tokenizer": "*",
     "symfony/console": "~2.5",
     "symfony/finder": "~2.5",
     "nikic/php-parser": "dev-master"
