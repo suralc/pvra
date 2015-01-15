@@ -13,9 +13,6 @@ class Php54LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 
     public function testClosureMixedExamples()
     {
-        $res = $this->runInstanceFromScratch('5.4/closures');
-
-        $this->assertSame('5.4.0', $res->getRequiredVersion());
         $expected = [
             [3, RequirementReason::TYPEHINT_CALLABLE],
             [4, RequirementReason::TYPEHINT_CALLABLE],
@@ -27,18 +24,11 @@ class Php54LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [20, RequirementReason::THIS_IN_CLOSURE],
         ];
 
-        foreach ($expected as $key => $shouldBe) {
-            $this->assertSame($shouldBe[0], $res->getRequirementInfo('5.4.0')[ $key ]['line']);
-            $this->assertSame($shouldBe[1], $res->getRequirementInfo('5.4.0')[ $key ]['reason']);
-        }
+        $this->runTestsAgainstExpectation($expected, '5.4/closures', '5.4.0');
     }
 
     public function testMixed54()
     {
-        $res = $this->runInstanceFromScratch('5.4/all54');
-
-        $this->assertSame('5.4.0', $res->getRequiredVersion());
-
         $expected = [
             [3, RequirementReason::TRAIT_DEFINITION],
             [5, RequirementReason::TYPEHINT_CALLABLE],
@@ -62,13 +52,7 @@ class Php54LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [85, RequirementReason::STATIC_CALL_BY_EXPRESSION],
         ];
 
-        $this->assertCount(count($expected), $res->getRequirementInfo('5.4.0'),
-            'Not all or too many elements were matched.');
-
-        foreach ($expected as $key => $shouldBe) {
-            $this->assertSame($shouldBe[0], $res->getRequirementInfo('5.4.0')[ $key ]['line']);
-            $this->assertSame($shouldBe[1], $res->getRequirementInfo('5.4.0')[ $key ]['reason']);
-        }
+        $this->runTestsAgainstExpectation($expected, '5.4/all54', '5.4.0');
     }
 
     public function testShortEchoOpenDetection()

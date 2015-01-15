@@ -12,44 +12,34 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
 
     public function testGeneratorDetection()
     {
-        $res = $this->runInstanceFromScratch('5.5/generators');
+        $expected = [
+            [6, R::GENERATOR_DEFINITION],
+            [7, R::GENERATOR_DEFINITION],
+            [8, R::GENERATOR_DEFINITION],
+            [10, R::GENERATOR_DEFINITION],
+            [11, R::GENERATOR_DEFINITION],
+            [13, R::GENERATOR_DEFINITION],
+            [14, R::GENERATOR_DEFINITION],
+            [17, R::GENERATOR_DEFINITION],
+        ];
 
-        $this->assertSame('5.5.0', $res->getRequiredVersion());
-        $this->assertCount(1, $res->getRequirements());
-        $this->assertCount(8, $res->getRequirementInfo('5.5.0'));
-        $lines = [6, 7, 8, 10, 11, 13, 14, 17];
-        $match = 0;
-        foreach ($res->getRequirementInfo('5.5.0') as $req) {
-            $this->assertSame($lines[ $match ], $req['line']);
-            $this->assertSame(R::GENERATOR_DEFINITION, $req['reason']);
-            $match++;
-        }
+        $this->runTestsAgainstExpectation($expected, '5.5/generators', '5.5.0');
     }
 
     public function testFinallyDetection()
     {
-        $res = $this->runInstanceFromScratch('5.5/finally');
+        $expected = [
+            [9, R::TRY_CATCH_FINALLY],
+            [19, R::TRY_CATCH_FINALLY],
+            [25, R::TRY_CATCH_FINALLY],
+        ];
 
-        $this->assertSame('5.5.0', $res->getRequiredVersion());
-        $this->assertCount(1, $res->getRequirements());
-        $this->assertCount(3, $res->getRequirementInfo('5.5.0'));
-
-        $this->assertSame(9, $res->getRequirementInfo('5.5.0')[0]['line']);
-        $this->assertSame(19, $res->getRequirementInfo('5.5.0')[1]['line']);
-        $this->assertSame(25, $res->getRequirementInfo('5.5.0')[2]['line']);
-
-        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[0]['reason']);
-        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[1]['reason']);
-        $this->assertSame(R::TRY_CATCH_FINALLY, $res->getRequirementInfo('5.5.0')[2]['reason']);
+        $this->runTestsAgainstExpectation($expected, '5.5/finally', '5.5.0');
     }
 
     public function testMixedDetection()
     {
-        $res = $this->runInstanceFromScratch('5.5/all55');
-
-        $this->assertSame('5.5.0', $res->getRequiredVersion());
-        $this->assertCount(1, $res->getRequirements());
-        $expectations = [
+        $expected = [
             [10, R::TRY_CATCH_FINALLY],
             [11, R::LIST_IN_FOREACH],
             [12, R::EXPR_IN_EMPTY],
@@ -60,12 +50,6 @@ class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
             [21, R::CLASS_NAME_RESOLUTION],
         ];
 
-        $this->assertCount(count($expectations), $res->getRequirementInfo('5.5.0'));
-
-        foreach ($expectations as $num => $expectation) {
-            $this->assertSame($expectation[0], $res->getRequirementInfo('5.5.0')[ $num ]['line']);
-            $this->assertSame($expectation[1], $res->getRequirementInfo('5.5.0')[ $num ]['reason']);
-        }
-
+        $this->runTestsAgainstExpectation($expected, '5.5/all55', '5.5.0');
     }
 }

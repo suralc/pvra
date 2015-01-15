@@ -52,6 +52,28 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
         m::close();
     }
 
+    protected function runTestsAgainstExpectation(array $expected, $file, $version = null)
+    {
+        $result = $this->runInstanceFromScratch($file);
+
+        $this->assertCount(count($expected), $result);
+
+        if($version !== null) {
+            $this->assertSame($version, $result->getRequiredVersion());
+        }
+
+        $resultIt = $result->getIterator();
+
+        foreach ($expected as $expectation) {
+            if(!$resultIt->valid()){
+                $this->fail('Unexpected end of iterator.');
+            }
+            $this->assertSame($expectation[0], $resultIt->current()['line']);
+            $this->assertSame($expectation[1], $resultIt->current()['reason']);
+            $resultIt->next();
+        }
+    }
+
     protected function getAstNodesFromFile($file)
     {
         $file = TEST_FILE_ROOT . '/' . $file . '.php';
