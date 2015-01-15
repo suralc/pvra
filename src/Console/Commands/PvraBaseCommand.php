@@ -58,7 +58,7 @@ class PvraBaseCommand extends Command
             ->addOption('messageFormatSourceFile', 'm', InputOption::VALUE_REQUIRED, 'File with message formats', false)
             ->addOption('saveFormat', null, InputOption::VALUE_REQUIRED, 'The format of the save file.', 'json')
             ->addOption('saveAsFile', null, InputOption::VALUE_REQUIRED,
-                'Save the output as file. Requires usage of the format option.', false);
+                'Save the output as file. Requires usage of the format option. Value is the targets file path.', false);
 
         $this->addArgument('target', InputArgument::REQUIRED, 'The target of this analysis');
     }

@@ -95,6 +95,26 @@ class DirCommand extends PvraBaseCommand
             $this->renderResultCollectionByName($results, $output, $input);
         } elseif ($input->getOption('groupBy') === self::GROUP_BY_VERSION) {
             $this->renderResultCollectionByRequiredVersion($results, $output);
+        } else {
+            throw new \InvalidArgumentException('The value given to the groupBy option is not allowed.');
+        }
+
+        if ($file = $input->getOption('saveAsFile')) {
+            if (file_exists($file)) {
+                $output->writeln(sprintf('<error>%s already exists. Cannot override an already existing file!</error>',
+                    $file));
+            } else {
+                $output->writeln(sprintf('<info>Generating output file at %s</info>', $file));
+                switch ($input->getOption('saveFormat')) {
+                    case 'json': {
+                        file_put_contents($file, json_encode($results));
+                        break;
+                    }
+                    default: {
+                        $output->writeln('<error>Invalid save format</error>');
+                    }
+                }
+            }
         }
     }
 

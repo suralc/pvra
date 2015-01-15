@@ -96,4 +96,17 @@ class ResultCollectionTest extends \PHPUnit_Framework_TestCase
         $r->add($this->createResultMock('3', RequirementReason::GOTO_KEYWORD));
         $this->assertSame('5.5.0', $r->getHighestDemandingResult()->getRequiredVersion());
     }
+
+    public function testJsonSerialization()
+    {
+        $r = new ResultCollection();
+        $ar = new RequirementAnalysisResult();
+        $ar->setAnalysisTargetId('my_id');
+        $ar->addRequirement(RequirementReason::ARGUMENT_UNPACKING);
+        $r->add($ar);
+        $arr = json_decode(json_encode($r), true);
+        $this->assertArrayHasKey('my_id', $arr);
+        $this->assertCount(1, $arr['my_id']);
+        $this->assertSame(RequirementReason::ARGUMENT_UNPACKING, $arr['my_id'][0]['reason']);
+    }
 }

@@ -25,7 +25,7 @@ use Traversable;
  *
  * @package Pvra\RequirementAnalysis\Result
  */
-class ResultCollection implements \Countable, \IteratorAggregate
+class ResultCollection implements \Countable, \IteratorAggregate, \JsonSerializable
 {
     /**
      * @var \Pvra\RequirementAnalysis\RequirementAnalysisResult[]
@@ -89,8 +89,8 @@ class ResultCollection implements \Countable, \IteratorAggregate
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Retrieve an external iterator
+     *
      * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
      * @return Traversable|RequirementAnalysisResult[]
      */
@@ -100,16 +100,35 @@ class ResultCollection implements \Countable, \IteratorAggregate
     }
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Count elements of an object
+     * Count attached results
+     *
      * @link http://php.net/manual/en/countable.count.php
      * @return int The custom count as an integer.
-     * </p>
-     * <p>
      * The return value is cast to an integer.
      */
     public function count()
     {
         return count($this->results);
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     *
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by json_encode,
+     * which is a value of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+        $results = [];
+        foreach ($this->getIterator() as $result) {
+            $reasonings = [];
+            foreach ($result->getIterator() as $reason) {
+                $reasonings[] = $reason->toArray();
+            }
+            $results[ $result->getAnalysisTargetId() ] = $reasonings;
+        }
+
+        return $results;
     }
 }

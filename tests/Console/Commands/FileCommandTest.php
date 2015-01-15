@@ -4,49 +4,11 @@ namespace Pvra\tests\Console\Commands;
 
 require_once TEST_FILE_ROOT . 'NonImplementingNodeWalker.php';
 
-use Pvra\Console\Application;
-use Pvra\Console\Commands\FileCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class FileCommandTest extends \PHPUnit_Framework_TestCase
+class FileCommandTest extends PvraBaseCommandTestBase
 {
-    public function tearDown()
-    {
-        if (file_exists(TEST_FILE_ROOT . '../testTmp/out.php')) {
-            unlink(TEST_FILE_ROOT . '../testTmp/out.php');
-        }
-        if (file_exists(TEST_FILE_ROOT . '../testTmp/out.json')) {
-            unlink(TEST_FILE_ROOT . '../testTmp/out.json');
-        }
-    }
-
-
-    private function getBareInstances()
-    {
-        $application = new Application();
-        $application->add(new FileCommand());
-
-        $command = $application->find('analyse:file');
-        $commandTester = new CommandTester($command);
-
-        return [$commandTester, $command, $application];
-    }
-
-    /**
-     * @param array $argumetns
-     * @param array $options
-     * @param null $command
-     * @param null $application
-     * @return \Symfony\Component\Console\Tester\CommandTester
-     */
-    private function execute($argumetns = [], $options = [], &$command = null, &$application = null)
-    {
-        /** @var CommandTester $commandTester */
-        /** @var FileCommand $command */
-        list($commandTester, $command, $application) = $this->getBareInstances();
-        $commandTester->execute($argumetns, $options);
-        return $commandTester;
-    }
+    protected $commandToTest = 'analyse:file';
 
     public function testSimpleExecuteWithSingleNodeWalker()
     {
