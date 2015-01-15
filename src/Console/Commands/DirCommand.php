@@ -17,12 +17,15 @@
 namespace Pvra\Console\Commands;
 
 
+use Pvra\RequirementAnalysis\RequirementAnalysisResult;
+use Pvra\RequirementAnalysis\Result\RequirementReasoning;
 use Pvra\RequirementAnalysis\Result\ResultCollection;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -32,6 +35,9 @@ use Symfony\Component\Finder\Finder;
  */
 class DirCommand extends PvraBaseCommand
 {
+    const GROUP_BY_NAME = 'n',
+        GROUP_BY_VERSION = 'v';
+
     /**
      * @inheritdoc
      */
@@ -45,7 +51,9 @@ class DirCommand extends PvraBaseCommand
 
         $this
             ->addOption('recursive', 'r', InputOption::VALUE_NONE, 'Iterate recursive over directory')
-            ->addArgument('filter', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Filter', ['name:*.php']);
+            ->addOption('groupBy', 'g', InputOption::VALUE_REQUIRED, 'Group output by name[n] or required version[v]',
+                self::GROUP_BY_NAME)
+            ->addArgument('filters', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Filter', ['name:*.php']);
     }
 
     /**
@@ -70,8 +78,7 @@ class DirCommand extends PvraBaseCommand
             $files->depth(0);
         }
 
-        $this->applyIteratorFilterFromInput($input, $files);
-
+        $this->applyIteratorFilter($files, $input->getArgument('filters'));
 
         $results = new ResultCollection();
 
@@ -84,34 +91,116 @@ class DirCommand extends PvraBaseCommand
             }
         }
 
+        if ($input->getOption('groupBy') === self::GROUP_BY_NAME) {
+            $this->renderResultCollectionByName($results, $output, $input);
+        } elseif ($input->getOption('groupBy') === self::GROUP_BY_VERSION) {
+            $this->renderResultCollectionByRequiredVersion($results, $output);
+        }
+    }
+
+    protected function renderResultCollectionByName(ResultCollection $results, OutputInterface $out, InputInterface $in)
+    {
         $highestRequirement = $results->getHighestDemandingResult();
 
         if ($highestRequirement === null) {
-            $output->writeln('Unknown error');
+            $out->writeln('Unknown error');
             return;
         }
-
-        $output->writeln('Required version: ' . $highestRequirement->getRequiredVersion());
-        $output->writeln(sprintf('Required because %s uses following featrues:',
+        $out->writeln('Highest required version: ' . $highestRequirement->getRequiredVersion());
+        $out->writeln(sprintf('Required because %s uses following features:',
             $highestRequirement->getAnalysisTargetId()));
 
         foreach ($highestRequirement->getRequirements() as $version => $reasons) {
             foreach ($reasons as $reason) {
-                $output->write("\t");
-                $output->write($reason['msg'], true);
+                $out->write("\t");
+                $out->write($reason['msg'], true);
+            }
+        }
+
+        if ($results->count() > 1) {
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion('Continue with showing remaining ' . ($results->count() - 1) . ' results? [Y/n] ',
+                'y');
+
+            if (!$helper->ask($in, $out, $question)) {
+                return;
+            }
+            $out->writeln('<info>Other results(' . ($results->count() - 1) . '):</info>');
+            /** @var RequirementAnalysisResult $result */
+            foreach ($results as $result) {
+                if ($result->getAnalysisTargetId() === $highestRequirement->getAnalysisTargetId()) {
+                    continue;
+                }
+                $out->write(implode('', [
+                    'The file "',
+                    $result->getAnalysisTargetId(),
+                    '" requires PHP ',
+                    $result->getRequiredVersion(),
+                    ' for the following reasons:',
+                    "\n"
+                ]));
+                /** @var  RequirementReasoning */
+                foreach ($result as $reason) {
+                    $out->write("\t");
+                    $out->write($reason['msg'], true);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param \Pvra\RequirementAnalysis\Result\ResultCollection $results
+     * @param \Symfony\Component\Console\Output\OutputInterface $out
+     */
+    protected function renderResultCollectionByRequiredVersion(
+        ResultCollection $results,
+        OutputInterface $out
+        // InputInterface $in
+    )
+    {
+        $highestRequirement = $results->getHighestDemandingResult();
+
+        if ($highestRequirement === null) {
+            $out->writeln('Unknown error');
+            return;
+        }
+        $out->writeln('Highest required version: ' . $highestRequirement->getRequiredVersion() . ' in ' . $highestRequirement->getAnalysisTargetId() . ($results->count() > 1 ? ' and others' : ''));
+
+        $usedVersions = [];
+        /** @var RequirementAnalysisResult $result */
+        foreach ($results as $result) {
+            $versions = array_keys($result->getRequirements());
+            foreach ($versions as $version) {
+                $usedVersions[ $version ] = $version;
+            }
+        }
+
+        usort($usedVersions, function ($a, $b) {
+            return version_compare($b, $a);
+        });
+
+        foreach ($usedVersions as $version) {
+            $out->writeln('Reasons for ' . $version);
+            /** @var RequirementAnalysisResult $result */
+            foreach ($results as $result) {
+                $selectedResults = $result->getRequirementInfo($version);
+                if (!empty($selectedResults)) {
+                    foreach ($selectedResults as $reason) {
+                        $out->write("\t");
+                        $out->writeln($reason['msg']);
+                    }
+                }
             }
         }
 
     }
 
     /**
-     * @param InputInterface $input
      * @param Finder $files
+     * @param array $filterList
      */
-    protected function applyIteratorFilterFromInput(InputInterface $input, Finder $files)
+    protected function applyIteratorFilter(Finder $files, array $filterList = [])
     {
-        $filterList = $input->getArgument('filter');
-
         if (!empty($filterList) && is_array($filterList)) {
             foreach ($filterList as $currentFilter) {
                 if (!stripos($currentFilter, ':')) {

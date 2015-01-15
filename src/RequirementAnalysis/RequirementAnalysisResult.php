@@ -50,6 +50,12 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
      * @var string|null
      */
     private $cachedRequiredVersion;
+
+    /**
+     * @var int
+     */
+
+    private $cachedRequiredVersionId;
     /**
      * Number of attached reasonings.
      *
@@ -62,22 +68,32 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
     private $msgFormatter;
 
     /**
+     * Calculate the id of the required version
+     *
+     * Creates an integer representation of a version in the format "a.b[.c]".
+     * The third version element is optional and can be omitted. A default value of "0" will be
+     * assumed.
+     *
      * @return int
      * @throws \Exception
      */
     public function getRequiredVersionId()
     {
-        $version = explode('.', $this->getRequiredVersion());
+        if ($this->cachedRequiredVersionId === null) {
+            $version = explode('.', $this->getRequiredVersion());
 
-        $c = count($version);
-        if ($c > 3 || $c < 2) {
-            throw new \Exception(sprintf('A version id has to be built from two or three segments. "%s" is not valid.',
-                $this->getRequiredVersion()));
+            $c = count($version);
+            if ($c > 3 || $c < 2) {
+                throw new \Exception(sprintf('A version id has to be built from two or three segments. "%s" is not valid.',
+                    $this->getRequiredVersion()));
+            }
+
+            $version += [2 => 0];
+
+            $this->cachedRequiredVersionId = $version[0] * 10000 + $version[1] * 100 + $version[2];
         }
 
-        $version += [2 => 0];
-
-        return $version[0] * 10000 + $version[1] * 100 + $version[2];
+        return $this->cachedRequiredVersionId;
     }
 
     /**
@@ -263,8 +279,9 @@ class RequirementAnalysisResult implements \IteratorAggregate, \Countable
     /**
      *
      */
-    private function clearInstanceCaches()
+    public function clearInstanceCaches()
     {
         $this->cachedRequiredVersion = null;
+        $this->cachedRequiredVersionId = null;
     }
 }
