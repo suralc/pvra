@@ -38,8 +38,6 @@ requires you to be able to run `<php> composer install --prefer-dist --no-dev` o
 ```php
 <?php
 
-// code does not make sense, it's still a nice example
-
 trait Gamma
 {
     public function test(callable $abc, ...$vars) {
@@ -79,6 +77,8 @@ Version 5.6.0
 | --saveFormat 	|  	| Format of the export. Only json is supported at this time. 	|
 | --saveAsFile 	|  	| If this option is set the results will be saved to the given file. 	|
 
+*Note: Classes within the src/Console directory are not part of the public API*
+
 ## <a name="lib-usage"></a>Installation and usage of the library.
 
 Run `composer require <package-name> --prefer-dist` in the root of your project and include the composer autoloader.
@@ -90,9 +90,10 @@ and other unused files.
 ```php
 <?php
 
-// autoloading and namespace import is assumed
+use Pvra;
+use Pvra\Analysers;
 
-$req = new StringRequirementAnalyser('<?php trait abc{}');
+$req = new StringAnalyser('<?php trait abc{}');
 
 $req->attachRequirementVisitor(new Php54Features);
 $req->attachRequirementVisitor(new Php55Features);

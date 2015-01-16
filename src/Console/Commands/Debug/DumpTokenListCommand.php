@@ -19,7 +19,7 @@ namespace Pvra\Console\Commands\Debug;
 
 
 use PhpParser\Lexer;
-use Pvra\PhpParser\Lexer\ExtendedEmulativeLexer;
+use Pvra\Lexer\ExtendedEmulativeLexer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

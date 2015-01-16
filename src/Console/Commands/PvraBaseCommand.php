@@ -17,8 +17,8 @@
 namespace Pvra\Console\Commands;
 
 
-use Pvra\RequirementAnalysis\FileRequirementAnalyser;
-use Pvra\RequirementAnalysis\Result\ResultMessageLocator;
+use Pvra\FileAnalyser;
+use Pvra\Result\MessageLocator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,7 +34,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class PvraBaseCommand extends Command
 {
-    const WALKER_DEFAULT_NAMESPACE_ROOT = 'Pvra\\PhpParser\\Analysers\\';
+    const WALKER_DEFAULT_NAMESPACE_ROOT = 'Pvra\\Analysers\\';
 
     /**
      * A list of `Pvra\PhpParser\RequirementAnalyserAwareInterface` class names.
@@ -98,10 +98,10 @@ class PvraBaseCommand extends Command
             if (!class_exists($analyserName)) {
                 throw new \InvalidArgumentException(sprintf('"%s" (expanded to "%s") is not a class.', $analyser,
                     $analyserName));
-            } elseif (!in_array('Pvra\\PhpParser\\RequirementAnalyserAwareInterface', class_implements($analyserName))
+            } elseif (!in_array('Pvra\\AnalyserAwareInterface', class_implements($analyserName))
             ) {
                 throw new \InvalidArgumentException(sprintf('"%s" does not implement "%s"', $analyserName,
-                    'Pvra\\PhpParser\\RequirementAnalyserAwareInterface'));
+                    'Pvra\\AnalyserAwareInterface'));
             }
             $this->expectedWalkers[] = $analyserName;
         }
@@ -111,11 +111,11 @@ class PvraBaseCommand extends Command
     /**
      * @param \Symfony\Component\Console\Input\InputInterface|string $input
      * @param null|bool $preventNameExpansion
-     * @return \Pvra\RequirementAnalysis\FileRequirementAnalyser
+     * @return \Pvra\FileAnalyser
      */
     protected function createFileAnalyserInstance($input, $preventNameExpansion = null)
     {
-        return new FileRequirementAnalyser($input instanceof InputInterface ? $input->getArgument('target') : $input,
+        return new FileAnalyser($input instanceof InputInterface ? $input->getArgument('target') : $input,
             $input instanceof InputInterface ? $input->getOption('preventNameExpansion') !== true : (bool)$preventNameExpansion);
     }
 
@@ -124,9 +124,9 @@ class PvraBaseCommand extends Command
         $file = $input->getOption('messageFormatSourceFile');
         $locator = null;
         if (is_string($file)) {
-            $locator = ResultMessageLocator::fromArray($this->getArrayFromFile($file)[1]);
+            $locator = MessageLocator::fromArray($this->getArrayFromFile($file)[1]);
         } else {
-            $locator = ResultMessageLocator::fromPhpFile(__DIR__ . '/../../../data/default_messages.php');
+            $locator = MessageLocator::fromPhpFile(__DIR__ . '/../../../data/default_messages.php');
         }
 
         $locator->addMissingMessageHandler(function () {
@@ -138,7 +138,7 @@ class PvraBaseCommand extends Command
 
     /**
      * @param string $librarySourceOption
-     * @return \Pvra\PhpParser\Analysers\LanguageFeatureAnalyser[]
+     * @return \Pvra\Analysers\LanguageFeatureAnalyser[]
      */
     protected function createNodeWalkerInstances($librarySourceOption = null)
     {

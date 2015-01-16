@@ -13,7 +13,7 @@
         verbose="true">
     <testsuites>
         <testsuite name="AllTests">
-            <directory>tests/*</directory>
+            <directory suffix="Test.php">tests/</directory>
         </testsuite>
         <testsuite name="console">
             <directory>tests/Console</directory>
@@ -21,9 +21,14 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">src/PhpParser</directory>
-            <directory suffix=".php">src/RequirementAnalysis</directory>
-            <file>src/Console/Application.php</file>
+            <directory suffix=".php">src/Analysers</directory>
+            <directory suffix=".php">src/Lexer</directory>
+            <directory suffix=".php">src/Result</directory>
+            <file>src/Analyser.php</file>
+            <file>src/AnalyserAwareInterface.php</file>
+            <file>src/AnalysisResult.php</file>
+            <file>src/FileAnalyser.php</file>
+            <file>src/StringAnalyser.php</file>
             <file>src/Console/Commands/PvraBaseCommand.php</file>
             <file>src/Console/Commands/FileCommand.php</file>
         </whitelist>

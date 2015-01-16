@@ -16,7 +16,7 @@
  */
 namespace Pvra\data;
 
-use Pvra\RequirementAnalysis\Result\RequirementReason as R;
+use Pvra\Result\Reason as R;
 
 return [
     R::UNKNOWN => 0x0,

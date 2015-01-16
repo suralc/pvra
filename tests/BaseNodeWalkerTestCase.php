@@ -7,9 +7,9 @@ use Mockery as m;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
-use Pvra\PhpParser\Lexer\ExtendedEmulativeLexer;
-use Pvra\PhpParser\RequirementAnalyserAwareInterface;
-use Pvra\RequirementAnalysis\RequirementAnalysisResult;
+use Pvra\AnalyserAwareInterface;
+use Pvra\AnalysisResult;
+use Pvra\Lexer\ExtendedEmulativeLexer;
 
 /**
  * Class BaseNodeWalkerTestCase
@@ -33,8 +33,8 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
     protected function buildTestInstances()
     {
         if (is_string($this->classToTest) && class_exists($this->classToTest)) {
-            $result = new RequirementAnalysisResult();
-            $analyserMock = m::mock('Pvra\\RequirementAnalysis\\RequirementAnalyser');
+            $result = new AnalysisResult();
+            $analyserMock = m::mock('Pvra\\Analyser');
             $analyserMock->shouldReceive('getResult')->andReturn($result);
 
             $className = $this->classToTest;
@@ -91,7 +91,7 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
         return $stmts;
     }
 
-    protected function traverseInstanceOverStmts($stmts, RequirementAnalyserAwareInterface $walker)
+    protected function traverseInstanceOverStmts($stmts, AnalyserAwareInterface $walker)
     {
         $traverser = new NodeTraverser();
 
@@ -102,7 +102,7 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $file
-     * @return RequirementAnalysisResult
+     * @return AnalysisResult
      */
     protected function runInstanceFromScratch($file)
     {

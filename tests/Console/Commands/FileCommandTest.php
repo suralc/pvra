@@ -97,7 +97,7 @@ class FileCommandTest extends PvraBaseCommandTestBase
             '--preventNameExpansion' => true
         ])->getDisplay(true));
 
-        $this->assertTrue(strpos($out, 'Warning: Detection') !== false);
+        $this->assertTrue(stripos($out, 'Warning: Detection') !== false);
     }
 
     public function testNoWarningOnMissingExpansionWithoutLibraryWalker()
@@ -216,7 +216,7 @@ class FileCommandTest extends PvraBaseCommandTestBase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage "Pvra\PhpParser\Analysers\NonImplementingNodeWalker" does not implement "Pvra\PhpParser\RequirementAnalyserAwareInterface"
+     * @expectedExceptionMessage "Pvra\Analysers\NonImplementingNodeWalker" does not implement "Pvra\AnalyserAwareInterface"
      */
     public function testErrorOnNonImplementingNodeWalker()
     {
@@ -264,12 +264,12 @@ class FileCommandTest extends PvraBaseCommandTestBase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage "php-over-9000" (expanded to "Pvra\PhpParser\Analysers\php-over-9000") is not a class.
+     * @expectedExceptionMessage "php-over-9000" (expanded to "Pvra\Analysers\php-over-9000") is not a class.
      */
     public function testErrorOnInvalidAnalyserAlias()
     {
         $this->execute([
-            'target' => TEST_FILE_ROOT . '5.4/all54',
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
             '--analyser' => ['php-over-9000'],
         ]);
     }

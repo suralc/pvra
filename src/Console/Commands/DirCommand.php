@@ -17,9 +17,9 @@
 namespace Pvra\Console\Commands;
 
 
-use Pvra\RequirementAnalysis\RequirementAnalysisResult;
-use Pvra\RequirementAnalysis\Result\RequirementReasoning;
-use Pvra\RequirementAnalysis\Result\ResultCollection;
+use Pvra\AnalysisResult;
+use Pvra\Result\Collection;
+use Pvra\Result\Reasoning;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -80,7 +80,7 @@ class DirCommand extends PvraBaseCommand
 
         $this->applyIteratorFilter($files, $input->getArgument('filters'));
 
-        $results = new ResultCollection();
+        $results = new Collection();
 
         /** @var \SplFileInfo $file */
         foreach ($files as $file) {
@@ -123,7 +123,7 @@ class DirCommand extends PvraBaseCommand
         }
     }
 
-    protected function renderResultCollectionByName(ResultCollection $results, OutputInterface $out, InputInterface $in)
+    protected function renderResultCollectionByName(Collection $results, OutputInterface $out, InputInterface $in)
     {
         $highestRequirement = $results->getHighestDemandingResult();
 
@@ -150,7 +150,7 @@ class DirCommand extends PvraBaseCommand
                 return;
             }
             $out->writeln('<info>Other results(' . ($results->count() - 1) . '):</info>');
-            /** @var RequirementAnalysisResult $result */
+            /** @var AnalysisResult $result */
             foreach ($results as $result) {
                 if ($result->getAnalysisTargetId() === $highestRequirement->getAnalysisTargetId()) {
                     continue;
@@ -163,7 +163,7 @@ class DirCommand extends PvraBaseCommand
                     ' for the following reasons:',
                     "\n"
                 ]));
-                /** @var  RequirementReasoning */
+                /** @var  Reasoning */
                 foreach ($result as $reason) {
                     $out->write("\t");
                     $out->write($reason['msg'], true);
@@ -173,11 +173,11 @@ class DirCommand extends PvraBaseCommand
     }
 
     /**
-     * @param \Pvra\RequirementAnalysis\Result\ResultCollection $results
+     * @param \Pvra\Result\Collection $results
      * @param \Symfony\Component\Console\Output\OutputInterface $out
      */
     protected function renderResultCollectionByRequiredVersion(
-        ResultCollection $results,
+        Collection $results,
         OutputInterface $out
         // InputInterface $in
     )
@@ -190,7 +190,7 @@ class DirCommand extends PvraBaseCommand
         $out->writeln('Highest required version: ' . $highestRequirement->getRequiredVersion() . ' in ' . $highestRequirement->getAnalysisTargetId() . ($results->count() > 1 ? ' and others' : ''));
 
         $usedVersions = [];
-        /** @var RequirementAnalysisResult $result */
+        /** @var AnalysisResult $result */
         foreach ($results as $result) {
             $versions = array_keys($result->getRequirements());
             foreach ($versions as $version) {
@@ -204,7 +204,7 @@ class DirCommand extends PvraBaseCommand
 
         foreach ($usedVersions as $version) {
             $out->writeln('Reasons for ' . $version);
-            /** @var RequirementAnalysisResult $result */
+            /** @var AnalysisResult $result */
             foreach ($results as $result) {
                 $selectedResults = $result->getRequirementInfo($version);
                 if (!empty($selectedResults)) {

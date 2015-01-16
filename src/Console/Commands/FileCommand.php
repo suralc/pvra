@@ -17,8 +17,8 @@
 namespace Pvra\Console\Commands;
 
 
-use Pvra\RequirementAnalysis\RequirementAnalysisResult;
-use Pvra\RequirementAnalysis\Result\ResultMessageFormatter;
+use Pvra\AnalysisResult;
+use Pvra\Result\MessageFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -51,7 +51,7 @@ class FileCommand extends PvraBaseCommand
 
         $output->writeln(sprintf('<info>Running analysis for "%s"</info>', realpath($file)));
 
-        if (in_array('Pvra\\PhpParser\\Analysers\\LibraryAdditions',
+        if (in_array('Pvra\\Analysers\\LibraryAdditions',
                 $this->expectedWalkers) && $input->getOption('preventNameExpansion')
         ) {
             $output->writeln('<warn>Warning: Detection of newly introduced functions and classes may not work in namespaced contexts if you prevent name expansions</warn>');
@@ -61,8 +61,8 @@ class FileCommand extends PvraBaseCommand
 
         $req->attachRequirementVisitors($this->createNodeWalkerInstances($input->getOption('libraryDataSource')));
 
-        $result = (new RequirementAnalysisResult())
-            ->setMsgFormatter(new ResultMessageFormatter(
+        $result = (new AnalysisResult())
+            ->setMsgFormatter(new MessageFormatter(
                 $this->createMessageLocatorInstance($input)
             ), true, true);
 
