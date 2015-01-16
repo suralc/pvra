@@ -52,4 +52,5 @@ namespace {
     $walker->__InVoKe();
     $runningWalker = $walker ?: null;
     $anotherTernary = $runningWalker instanceof MyWalkerTestDemo ? 'a' : 'b';
+    $currentWorkingDir = __DIR__;
 }

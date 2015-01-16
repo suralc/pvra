@@ -38,6 +38,7 @@ return [
     R::CLOSURE_DECLARATION => 'It was not possible before PHP :version: to declare closures or anonymous functions',
     R::DYNAMIC_ACCESS_TO_STATIC => 'Static methods and properties could not be accessed dynamically before PHP :version:',
     R::LATE_STATE_BINDING_USING_STATIC => 'Late state binding was not available before PHP :version:',
+    R::DIR_MAGIC_CONSTANT => 'Usage of the __DIR__ magic constant requires PHP :version:',
     // 5.4
     R::TRAIT_DEFINITION => 'Usage of the trait keyword requires PHP :version:',
     R::TRAIT_USE => 'Usage of trait imports requires PHP :version:',

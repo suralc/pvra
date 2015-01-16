@@ -44,6 +44,7 @@ abstract class RequirementReason
         DYNAMIC_ACCESS_TO_STATIC = 82,
         LATE_STATE_BINDING_USING_STATIC = 83,
         NAMESPACE_SEPARATOR = 84,
+        DIR_MAGIC_CONSTANT = 85,
         // 5.4
         TRAIT_DEFINITION = 10,
         TRAIT_USE = 11,
@@ -186,6 +187,7 @@ abstract class RequirementReason
             static::CLOSURE_DECLARATION => '5.3.0',
             static::DYNAMIC_ACCESS_TO_STATIC => '5.3.0',
             static::LATE_STATE_BINDING_USING_STATIC => '5.3.0',
+            static::DIR_MAGIC_CONSTANT => '5.3.0',
             // 5.4
             static::TRAIT_DEFINITION => '5.4.0',
             static::TRAIT_USE => '5.4.0',

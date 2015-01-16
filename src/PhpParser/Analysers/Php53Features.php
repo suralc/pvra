@@ -48,7 +48,7 @@ class Php53Features extends LanguageFeatureAnalyser
         $this->detectGotoKeywordAndJumpLabel($node);
         $this->detectNamespaces($node);
         $this->detectNowDoc($node);
-        $this->detectNewMagicMethods($node);
+        $this->detectNewMagicDefinitions($node);
         $this->detectDocFormatConstantInitializationAndConstOutsideClass($node);
         $this->detectShortHandTernary($node);
         $this->detectClosures($node);
@@ -120,7 +120,7 @@ class Php53Features extends LanguageFeatureAnalyser
         }
     }
 
-    private function detectNewMagicMethods(Node $node)
+    private function detectNewMagicDefinitions(Node $node)
     {
         if (($node instanceof Node\Stmt\ClassMethod && $node->isPublic())
             || ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\StaticCall)
@@ -131,6 +131,8 @@ class Php53Features extends LanguageFeatureAnalyser
             } elseif (strcasecmp($node->name, '__invoke') === 0) {
                 $this->getResult()->addRequirement(RequirementReason::INVOKE_MAGIC_METHOD, $node->getLine());
             }
+        } elseif ($node instanceof Node\Scalar\MagicConst\Dir) {
+            $this->getResult()->addRequirement(RequirementReason::DIR_MAGIC_CONSTANT, $node->getLine());
         }
     }
 
@@ -191,6 +193,7 @@ class Php53Features extends LanguageFeatureAnalyser
      *
      * non functional needs further investigation or rewrite of Library***Walker to not depend on
      * NameResolver
+     *
      * @param \PhpParser\Node $node
      * @codeCoverageIgnore
      */

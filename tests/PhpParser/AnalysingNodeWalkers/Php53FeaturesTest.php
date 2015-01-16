@@ -164,6 +164,7 @@ class Php53FeaturesTest extends BaseNodeWalkerTestCase
             [50, RequirementReason::CALLSTATIC_MAGIC_METHOD],
             [52, RequirementReason::INVOKE_MAGIC_METHOD],
             [53, RequirementReason::SHORT_TERNARY],
+            [55, RequirementReason::DIR_MAGIC_CONSTANT],
         ];
 
         $this->runTestsAgainstExpectation($expected, '5.3/all53', '5.3.0');
