@@ -30,12 +30,20 @@ use Pvra\AnalyserAwareInterface;
 abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements AnalyserAwareInterface
 {
     /**
+     * The `Analyser` representing the currently running operation.
      * @var Analyser
      */
     private $requirementAnalyser;
 
     /**
+     * Create an instance of the child Analyser
+     *
+     * It is optional to set the related analyser during instance creation.
+     * When using this class in the context of an `Analyser` it will always be ensured
+     * that this `Analyser` will be known to the instance before any node is traversed.
+     *
      * @param \Pvra\Analyser $requirementAnalyser
+     * @see setOwningAnalyser() Set the owning analyser
      */
     public function __construct(Analyser $requirementAnalyser = null)
     {
@@ -45,7 +53,7 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements An
     }
 
     /**
-     * @param Analyser $requirementAnalyser
+     * @inheritdoc
      */
     public function setOwningAnalyser(Analyser $requirementAnalyser)
     {
@@ -53,7 +61,7 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements An
     }
 
     /**
-     * @return Analyser
+     * @inheritdoc
      */
     public function getOwningAnalyser()
     {
@@ -61,9 +69,10 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements An
     }
 
     /**
-     * Get the result instance of the currently attached Analyser.
+     * Get the  instance of the currently used `Pvra\AnalysisResult`.
      *
      * @return \Pvra\AnalysisResult
+     * @see Analyser::getResult() Method used to retrieve the result
      */
     protected function getResult()
     {
@@ -77,9 +86,10 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements An
      * specific syntactical features.
      *
      * @param \PhpParser\Node $node The node to parse.
-     * @return null The nodes should not be modified as other walkers might depend on it.
+     * @return null|Node The nodes should not be modified as other walkers might depend on it.
      * @see getResult() ResultInstance
-     * @see RequirementAnalysisResult::addRequirement() Add new requirement
+     * @see AnalysisResult::addRequirement() Add new requirement
+     * @see AnalysisResult::addArbitraryRequirement() Add new arbitrary requirement
      * @codeCoverageIgnore
      */
     public function enterNode(Node $node)

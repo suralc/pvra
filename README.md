@@ -4,7 +4,8 @@
 # Php Version Requirement Analyser
 
 This repository contains a library and a console application to validate your php files' version requirements.
-The library makes heavy use of [the PHP-Parser library](https://github.com/nikic/PHP-Parser)
+The library makes heavy use of [the PHP-Parser library](https://github.com/nikic/PHP-Parser). Everything here is quite moving, 
+if you want to use the library component yourself you may want to lock your dependencies on a specific tag. 
 
 [![Build Status](https://travis-ci.org/suralc/pvra.svg?branch=master)](https://travis-ci.org/suralc/pvra)
 [![Dependency Status](https://www.versioneye.com/user/projects/546643934de5ef5022000056/badge.svg?style=flat)](https://www.versioneye.com/user/projects/546643934de5ef5022000056)
@@ -90,17 +91,16 @@ and other unused files.
 ```php
 <?php
 
-use Pvra;
-use Pvra\Analysers;
+// autoloading and namespace import is assumed
 
-$req = new StringAnalyser('<?php trait abc{}');
+$analyser = new \Pvra\StringAnalyser('<?php trait abc{}');
 
-$req->attachRequirementVisitor(new Php54Features);
-$req->attachRequirementVisitor(new Php55Features);
-$req->attachRequirementVisitor(new Php56Features);
-$req->attachRequirementVisitor(new LibraryAdditions);
+$analyser->attachRequirementVisitor(new Php54Features);
+$analyser->attachRequirementVisitor(new Php55Features);
+$analyser->attachRequirementVisitor(new Php56Features);
+$analyser->attachRequirementVisitor(new LibraryAdditions);
 
-$result = $req->run();
+$result = $analyser->run();
 
 echo $result->getRequiredVersion(), PHP_EOL; // 5.4.0
 

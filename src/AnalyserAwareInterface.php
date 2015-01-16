@@ -27,13 +27,19 @@ use PhpParser\NodeVisitor;
 interface AnalyserAwareInterface extends NodeVisitor
 {
     /**
-     * @param \Pvra\Analyser $requirementAnalyser
+     * Set or override the owning analyser
+     *
+     * @param \Pvra\Analyser $requirementAnalyser The owning analyser.
      * @return void
      */
     public function setOwningAnalyser(Analyser $requirementAnalyser);
 
     /**
-     * @return \Pvra\Analyser
+     * Retrieve the owning analyser
+     *
+     * If no analyser has been set `null` will be returned
+     *
+     * @return \Pvra\Analyser|null
      */
     public function getOwningAnalyser();
 }

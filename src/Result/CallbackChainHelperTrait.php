@@ -20,7 +20,6 @@ namespace Pvra\Result;
  * Class CallbackChainHelperTrait
  *
  * @package Pvra\Result
- * @internal
  */
 trait CallbackChainHelperTrait
 {

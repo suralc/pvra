@@ -23,7 +23,12 @@ use PhpParser\Parser;
 class ExtendedEmulativeLexer extends Emulative
 {
     /**
-     * @return ExtendedEmulativeLexer
+     * Create a new Lexer instance with appropriate configuration options
+     *
+     * Whenever a new lexer instance is created that is meant to be passed to
+     * a `Pvra\Analyser` or consumed by a `Pvra\AnalyserAwareInterface` this method should be used.
+     *
+     * @return ExtendedEmulativeLexer|static
      */
     public static function createDefaultInstance()
     {
@@ -31,7 +36,20 @@ class ExtendedEmulativeLexer extends Emulative
         return new $class(['usedAttributes' => ['startLine', 'endLine', 'startFilePos', 'startTokenPos']]);
     }
 
-    // see https://github.com/nikic/PHP-Parser/issues/26#issuecomment-6150035 as reference
+    /**
+     * Override to the native getNextToken method
+     *
+     * This method override ensures that the original value of tokens that would be transformed is stored
+     * besides them in the result ast. Depending on the token type various attributes will be added to the token
+     * and produced ast. These modifications are required to ensure the correct behaviour of the binary number detection,
+     * the detection of booth flavors of the doc syntax, short array syntax and short echo tags.
+     *
+     * @param null|string $value
+     * @param null|array $startAttributes
+     * @param null|array $endAttributes
+     * @return int Retrieved token id
+     * @see https://github.com/nikic/PHP-Parser/issues/26#issuecomment-6150035 Original implementation
+     */
     public function getNextToken(&$value = null, &$startAttributes = null, &$endAttributes = null)
     {
         $tokenId = parent::getNextToken($value, $startAttributes, $endAttributes);

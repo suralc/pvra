@@ -62,6 +62,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      * @var int
      */
     private $count = 0;
+
     /**
      * @var MessageFormatter
      */
@@ -97,6 +98,10 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     }
 
     /**
+     * Get the attached message formatter
+     *
+     * If no message formatter has been set a default one will be created assuming default values.
+     *
      * @return \Pvra\Result\MessageFormatter
      */
     public function getMsgFormatter()
@@ -120,7 +125,14 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return string
+     * Retrieve the determined required version
+     *
+     * This method calculates the highest required version of all known requirements.
+     * If no changes were made between the calls to this method the version requirement will
+     * not be recalculated.
+     *
+     * @return string The required version in the format `Major.Minor[.Patch]`
+     * @see http://php.net/manual/en/function.version-compare.php version_compare()
      */
     public function getRequiredVersion()
     {
@@ -142,11 +154,17 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @param string $version
-     * @param int $line
-     * @param string $msg
-     * @param int $reason
-     * @param array $data
+     * Add an arbitrary requirement identified by version
+     *
+     * This method can be used to add an arbitrary requirement. All parameters but the first are optional
+     *
+     * @param string $version The version in the format `Major.Minor[.Patch]`
+     * @param int $line The line that caused the requirement.
+     * @param string $msg The message template that should be used. If `null` is passed the attached `MessageLocator`
+     *     will be called to retrieve a template based on the `$reason` parameter.
+     * @param int $reason The reason for this requirement. Please be aware: Setting this parameter will **not**
+     *     override the required version
+     * @param array $data Additional data that should be passed to the message formatter.
      */
     public function addArbitraryRequirement(
         $version,
@@ -166,10 +184,16 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @param int $reason
-     * @param int $line
-     * @param string $msg
-     * @param array $data
+     * Add a requirement identified by reason id
+     *
+     * This method can be used to add a requirement that is identified by its reason id.
+     *
+     * @param int $reason The reason for this requirement. The required version is determined from this id.
+     * @param int $line The line that caused the requirement.
+     * @param string $msg The message template that should be used. If `null` is passed the attached `MessageLocator`
+     *     will be called to retrieve a template based on the `$reason` parameter.
+     * @param array $data Additional data that should be passed to the message formatter.
+     * @throws \LogicException Thrown if the reason is unknown or does not have a version requirement associated.
      */
     public function addRequirement($reason, $line = -1, $msg = null, array $data = [])
     {
@@ -209,8 +233,12 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @param string $version
-     * @return array
+     * Get all reasonings related to a version
+     *
+     * If no reasoning for a version is known an empty array will be returned.
+     *
+     * @param string $version Version in the format `Major.Minor.Patch`
+     * @return array|Reasoning[] List of `Reasoning` or empty array
      */
     public function getRequirementInfo($version)
     {
@@ -277,9 +305,9 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     }
 
     /**
-     *
+     * Clear the cached max version requirements
      */
-    public function clearInstanceCaches()
+    private function clearInstanceCaches()
     {
         $this->cachedRequiredVersion = null;
         $this->cachedRequiredVersionId = null;

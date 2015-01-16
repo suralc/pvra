@@ -32,7 +32,7 @@ use Pvra\Result\Reason;
  * * Array and string dereferencing
  * * Classname resolution using `Name::class`
  *
- * @package Pvra\PhpParser\Analysers
+ * @package Pvra\Analysers
  */
 class Php55Features extends LanguageFeatureAnalyser implements AnalyserAwareInterface
 {

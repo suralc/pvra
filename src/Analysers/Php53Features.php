@@ -23,10 +23,27 @@ use Pvra\Result\Reason;
 /**
  * Class Php53Features
  *
- * @package Pvra\PhpParser\Analysers
+ * Used for the detection of the following elements:
+ * * `goto` and Jump constructs
+ * * Namespace related features
+ * * NowDoc definitions
+ * * Definitions of PHP 5.3+ magic methods and their explicit usage
+ * * __DIR__ constant
+ * * Short ternary
+ * * Closure definition using `function() {}` syntax
+ * * Late state binding
+ *
+ * @package Pvra\Analysers
  */
 class Php53Features extends LanguageFeatureAnalyser
 {
+    /**
+     * Stores the current in class state of this NodeVisitor.
+     * This is required to detect the usage of doc-syntax usaged within class constant
+     * definitions.
+     *
+     * @var bool
+     */
     private $inClass = false;
     private $importedNames = [];
 
@@ -57,6 +74,9 @@ class Php53Features extends LanguageFeatureAnalyser
         //$this->detectNamespaceSeparator($node);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function leaveNode(Node $node)
     {
         if ($node instanceof Node\Stmt\Class_
@@ -113,6 +133,9 @@ class Php53Features extends LanguageFeatureAnalyser
         }
     }
 
+    /**
+     * @param \PhpParser\Node $node
+     */
     private function detectNowDoc(Node $node)
     {
         if ($node->hasAttribute('isNowDoc') && $node instanceof Node\Scalar\String) {
@@ -120,6 +143,9 @@ class Php53Features extends LanguageFeatureAnalyser
         }
     }
 
+    /**
+     * @param \PhpParser\Node $node
+     */
     private function detectNewMagicDefinitions(Node $node)
     {
         if (($node instanceof Node\Stmt\ClassMethod && $node->isPublic())
@@ -136,6 +162,9 @@ class Php53Features extends LanguageFeatureAnalyser
         }
     }
 
+    /**
+     * @param \PhpParser\Node $node
+     */
     private function detectDocFormatConstantInitializationAndConstOutsideClass(Node $node)
     {
         if ($node instanceof Node\Stmt\Const_) {
@@ -157,6 +186,9 @@ class Php53Features extends LanguageFeatureAnalyser
         }
     }
 
+    /**
+     * @param \PhpParser\Node $node
+     */
     private function detectShortHandTernary(Node $node)
     {
         if ($node instanceof Node\Expr\Ternary && $node->if === null) {
@@ -164,6 +196,9 @@ class Php53Features extends LanguageFeatureAnalyser
         }
     }
 
+    /**
+     * @param \PhpParser\Node $node
+     */
     private function detectClosures(Node $node)
     {
         if ($node instanceof Node\Expr\Closure) {
@@ -171,6 +206,9 @@ class Php53Features extends LanguageFeatureAnalyser
         }
     }
 
+    /**
+     * @param \PhpParser\Node $node
+     */
     private function detectDynamicAccessToStatic(Node $node)
     {
         if (($node instanceof Node\Expr\StaticPropertyFetch || $node instanceof Node\Expr\StaticCall)
@@ -180,6 +218,9 @@ class Php53Features extends LanguageFeatureAnalyser
         }
     }
 
+    /**
+     * @param \PhpParser\Node $node
+     */
     private function detectLateStateBinding(Node $node)
     {
         if (($node instanceof Node\Expr\StaticPropertyFetch || $node instanceof Node\Expr\StaticCall || $node instanceof Node\Expr\ClassConstFetch)
@@ -190,11 +231,13 @@ class Php53Features extends LanguageFeatureAnalyser
     }
 
     /**
+     * Detect namespace seperator
      *
      * non functional needs further investigation or rewrite of Library***Walker to not depend on
      * NameResolver
      *
      * @param \PhpParser\Node $node
+     * @internal
      * @codeCoverageIgnore
      */
     private function detectNamespaceSeparator(Node $node)

@@ -28,17 +28,23 @@ use Traversable;
 class Collection implements \Countable, \IteratorAggregate, \JsonSerializable
 {
     /**
+     * Result instances that are part of this collection
+     *
      * @var \Pvra\AnalysisResult[]
      */
     private $results = [];
     /**
+     * The targetId of the currently highest demanding result
+     *
      * @var string
      */
     private $highestDemand;
 
     /**
-     * @param \Pvra\AnalysisResult $result
-     * @param bool $ignoreIfExists
+     * Add a result to this collection
+     *
+     * @param \Pvra\AnalysisResult $result The result to be added
+     * @param bool $ignoreIfExists Do not add+override an already existing result with the same targetId.
      * @return $this
      */
     public function add(AnalysisResult $result, $ignoreIfExists = true)

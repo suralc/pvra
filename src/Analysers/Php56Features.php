@@ -31,7 +31,7 @@ use Pvra\Result\Reason;
  * * The `**`(pow) operator
  * * Function and Constant importing via `use`
  *
- * @package Pvra\PhpParser\Analysers
+ * @package Pvra\Analysers
  */
 class Php56Features extends LanguageFeatureAnalyser implements AnalyserAwareInterface
 {
