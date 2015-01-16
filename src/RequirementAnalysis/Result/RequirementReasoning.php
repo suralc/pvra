@@ -97,6 +97,7 @@ class RequirementReasoning implements ArrayAccess, JsonSerializable
      *
      * This method creates an array representation of this object including all keys that would be
      * available through offsetGet.
+     *
      * @return array
      */
     public function toArray()
@@ -135,6 +136,21 @@ class RequirementReasoning implements ArrayAccess, JsonSerializable
     protected function getResult()
     {
         return $this->result;
+    }
+
+    /**
+     * @param string $name
+     * @return array|int|null|string
+     */
+    public function get($name)
+    {
+        if ($this->offsetExists($name)) {
+            return $this->offsetGet($name);
+        } else {
+            throw new \RuntimeException(sprintf('%s::$%s accessed through "get" does not exist or is not accessible.',
+                get_class($this),
+                $name));
+        }
     }
 
     /**

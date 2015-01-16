@@ -77,7 +77,28 @@ class RequirementReasoningTest extends \PHPUnit_Framework_TestCase
     public function testJsonSerialization()
     {
         $reason = $this->createDefaultRequirementReasoningInstance();
-        $this->assertSame(json_encode($reason->toArray()), json_encode($reason));
+        $this->assertSame(json_encode($reason->toArray()), $value = json_encode($reason));
+        $value = json_decode($value, true);
+        $this->assertSame($reason['msg'], $value['msg']);
+        $this->assertSame($reason['reasonName'], $value['reasonName']); // check the calculated values
+        $this->assertSame($reason['line'], $value['line']);
+    }
+
+    public function testGet()
+    {
+        $reason = $this->createDefaultRequirementReasoningInstance();
+        $this->assertSame(12, $reason->get('reason'));
+        $this->assertSame(54, $reason->get('line'));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Pvra\RequirementAnalysis\Result\RequirementReasoning::$wrong accessed through "get" does not exist or is not accessible.
+     */
+    public function testGetException()
+    {
+        $reason = $this->createDefaultRequirementReasoningInstance();
+        $reason->get('wrong');
     }
 
     private function createDefaultRequirementReasoningInstance()
