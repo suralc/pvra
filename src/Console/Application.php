@@ -26,7 +26,7 @@ use Symfony\Component\Console\Application as BaseApplication;
  */
 class Application extends BaseApplication
 {
-    const APPLICATION_DEFAULT_VERSION = '0.0.1';
+    const APPLICATION_DEFAULT_VERSION = '0.1.0-dev';
 
     /**
      * @inheritdoc
