@@ -13,7 +13,7 @@ use Pvra\tests\BaseNodeWalkerTestCase;
  *
  * @package Pvra\tests\PhpParser\Analysers
  */
-class Php53LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
+class Php53FeaturesTest extends BaseNodeWalkerTestCase
 {
     protected $classToTest = 'Pvra\\PhpParser\\Analysers\\Php53Features';
 

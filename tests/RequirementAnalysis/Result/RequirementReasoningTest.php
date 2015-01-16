@@ -68,9 +68,9 @@ class RequirementReasoningTest extends \PHPUnit_Framework_TestCase
     {
         $reason = $this->createDefaultRequirementReasoningInstance();
         $reasonArray = $reason->toArray();
-        foreach(['data', 'reason', 'reasonName', 'line', 'msg', 'raw_msg', 'version', 'targetId'] as $key) {
+        foreach (['data', 'reason', 'reasonName', 'line', 'msg', 'raw_msg', 'version', 'targetId'] as $key) {
             $this->assertArrayHasKey($key, $reasonArray);
-            $this->assertSame($reason[$key], $reasonArray[$key]);
+            $this->assertSame($reason[ $key ], $reasonArray[ $key ]);
         }
     }
 
@@ -89,6 +89,14 @@ class RequirementReasoningTest extends \PHPUnit_Framework_TestCase
         $reason = $this->createDefaultRequirementReasoningInstance();
         $this->assertSame(12, $reason->get('reason'));
         $this->assertSame(54, $reason->get('line'));
+    }
+
+    public function testVersionRetrieval()
+    {
+        $reasoning = new RequirementReasoning(RequirementReason::ARGUMENT_UNPACKING, -1,
+            new RequirementAnalysisResult());
+        $this->assertSame(RequirementReason::getRequiredVersionForReason(RequirementReason::ARGUMENT_UNPACKING),
+            $reasoning['version']);
     }
 
     /**

@@ -6,7 +6,7 @@ namespace Pvra\tests\PhpParser\AnalysingNodeWalkers;
 use Pvra\RequirementAnalysis\Result\RequirementReason as R;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
-class Php55LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
+class Php55FeaturesTest extends BaseNodeWalkerTestCase
 {
     protected $classToTest = 'Pvra\\PhpParser\Analysers\\Php55Features';
 

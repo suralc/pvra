@@ -7,7 +7,7 @@ use Pvra\RequirementAnalysis\Result\RequirementReason as R;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
 
-class Php56LanguageFeatureNodeWalkerTest extends BaseNodeWalkerTestCase
+class Php56FeaturesTest extends BaseNodeWalkerTestCase
 {
     protected $classToTest = 'Pvra\\PhpParser\Analysers\\Php56Features';
 

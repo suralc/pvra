@@ -6,7 +6,7 @@ use Pvra\PhpParser\Analysers\LibraryAdditions;
 use Pvra\RequirementAnalysis\Result\RequirementReason;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
-class LibraryAdditionsNodeWalkerTest extends BaseNodeWalkerTestCase
+class LibraryAdditionsTest extends BaseNodeWalkerTestCase
 {
     protected $classToTest = 'Pvra\\PhpParser\\Analysers\\LibraryAdditions';
     protected $expandNames = true;
