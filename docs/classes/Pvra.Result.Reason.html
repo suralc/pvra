@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/Pvra.html">\Pvra</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">223</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">109</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1840510385"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-1840510385" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1771632173"></a>
+                                <a href="../namespaces/Pvra.html" style="margin-left: 30px; padding-left: 0">Pvra</a>
+            </div>
+            <div id="namespace-1771632173" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1156685587"></a>
+                                <a href="../namespaces/Pvra.Analysers.html" style="margin-left: 30px; padding-left: 0">Analysers</a>
+            </div>
+            <div id="namespace-1156685587" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html">LanguageFeatureAnalyser</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Analysers.LibraryAdditions.html">LibraryAdditions</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Analysers.Php53Features.html">Php53Features</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Analysers.Php54Features.html">Php54Features</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Analysers.Php55Features.html">Php55Features</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Analysers.Php56Features.html">Php56Features</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1692474457"></a>
+                                <a href="../namespaces/Pvra.Console.html" style="margin-left: 30px; padding-left: 0">Console</a>
+            </div>
+            <div id="namespace-1692474457" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1569771126"></a>
+                                <a href="../namespaces/Pvra.Console.Commands.html" style="margin-left: 30px; padding-left: 0">Commands</a>
+            </div>
+            <div id="namespace-1569771126" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1394233318"></a>
+                                <a href="../namespaces/Pvra.Console.Commands.Debug.html" style="margin-left: 30px; padding-left: 0">Debug</a>
+            </div>
+            <div id="namespace-1394233318" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.Debug.DumpAstCommand.html">DumpAstCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.Debug.DumpTokenListCommand.html">DumpTokenListCommand</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.CheckUpdateCommand.html">CheckUpdateCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.DirCommand.html">DirCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.FileCommand.html">FileCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.PvraBaseCommand.html">PvraBaseCommand</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Console.Application.html">Application</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-486022500"></a>
+                                <a href="../namespaces/Pvra.Lexer.html" style="margin-left: 30px; padding-left: 0">Lexer</a>
+            </div>
+            <div id="namespace-486022500" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Lexer.ExtendedEmulativeLexer.html">ExtendedEmulativeLexer</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-223635863"></a>
+                                <a href="../namespaces/Pvra.Result.html" style="margin-left: 30px; padding-left: 0">Result</a>
+            </div>
+            <div id="namespace-223635863" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/Pvra.Result.CallbackChainHelperTrait.html">CallbackChainHelperTrait</a></li>
+                                                                            <li class="class"><a href="../classes/Pvra.Result.Collection.html">Collection</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Result.MessageFormatter.html">MessageFormatter</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Result.MessageLocator.html">MessageLocator</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Result.Reason.html">Reason</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Result.Reasoning.html">Reasoning</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Pvra.AnalyserAwareInterface.html">AnalyserAwareInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Analyser.html">Analyser</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.AnalysisResult.html">AnalysisResult</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.FileAnalyser.html">FileAnalyser</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.StringAnalyser.html">StringAnalyser</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/Pvra.Result.html">\Pvra\Result</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\Pvra\Result</small>Reason</h1>
+                    <p><em>Class Reason</em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.Result.Reason.html#method_getRequiredVersionForReason" class="">getRequiredVersionForReason()</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#method_getReasonNameFromValue" class="">getReasonNameFromValue()</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#method_getReasonNames" class="">getReasonNames()</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#method_clear" class="">clear()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_UNKNOWN" class="">UNKNOWN</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_CLASS_PRESENCE_CHANGE" class="">CLASS_PRESENCE_CHANGE</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_FUNCTION_PRESENCE_CHANGE" class="">FUNCTION_PRESENCE_CHANGE</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_GOTO_KEYWORD" class="">GOTO_KEYWORD</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_JUMP_LABEL" class="">JUMP_LABEL</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_NAMESPACE_DECLERATION" class="">NAMESPACE_DECLERATION</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_NAMESPACE_MAGIC_CONSTANT" class="">NAMESPACE_MAGIC_CONSTANT</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_NAMESPACE_IMPORT" class="">NAMESPACE_IMPORT</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_NOWDOC_LITERAL" class="">NOWDOC_LITERAL</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_CALLSTATIC_MAGIC_METHOD" class="">CALLSTATIC_MAGIC_METHOD</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_INVOKE_MAGIC_METHOD" class="">INVOKE_MAGIC_METHOD</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_CONST_KEYWORD_OUTSIDE_CLASS" class="">CONST_KEYWORD_OUTSIDE_CLASS</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_CONST_KEYWORD_DOC_SYNTAX" class="">CONST_KEYWORD_DOC_SYNTAX</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_SHORT_TERNARY" class="">SHORT_TERNARY</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_CLOSURE_DECLARATION" class="">CLOSURE_DECLARATION</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_DYNAMIC_ACCESS_TO_STATIC" class="">DYNAMIC_ACCESS_TO_STATIC</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_LATE_STATE_BINDING_USING_STATIC" class="">LATE_STATE_BINDING_USING_STATIC</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_NAMESPACE_SEPARATOR" class="">NAMESPACE_SEPARATOR</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_DIR_MAGIC_CONSTANT" class="">DIR_MAGIC_CONSTANT</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_TRAIT_DEFINITION" class="">TRAIT_DEFINITION</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_TRAIT_USE" class="">TRAIT_USE</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_TRAIT_MAGIC_CONST" class="">TRAIT_MAGIC_CONST</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_ARRAY_FUNCTION_DEREFERENCING" class="">ARRAY_FUNCTION_DEREFERENCING</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_THIS_IN_CLOSURE" class="">THIS_IN_CLOSURE</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_TYPEHINT_CALLABLE" class="">TYPEHINT_CALLABLE</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_INSTANT_CLASS_MEMBER_ACCESS" class="">INSTANT_CLASS_MEMBER_ACCESS</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_BINARY_NUMBER_DECLARATION" class="">BINARY_NUMBER_DECLARATION</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_SHORT_ARRAY_DECLARATION" class="">SHORT_ARRAY_DECLARATION</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_STATIC_CALL_BY_EXPRESSION" class="">STATIC_CALL_BY_EXPRESSION</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_SHORT_ECHO_TAG" class="">SHORT_ECHO_TAG</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_GENERATOR_DEFINITION" class="">GENERATOR_DEFINITION</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_TRY_CATCH_FINALLY" class="">TRY_CATCH_FINALLY</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_LIST_IN_FOREACH" class="">LIST_IN_FOREACH</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_EXPR_IN_EMPTY" class="">EXPR_IN_EMPTY</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_ARRAY_OR_STRING_DEREFERENCING" class="">ARRAY_OR_STRING_DEREFERENCING</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_CLASS_NAME_RESOLUTION" class="">CLASS_NAME_RESOLUTION</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_VARIADIC_ARGUMENT" class="">VARIADIC_ARGUMENT</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_ARGUMENT_UNPACKING" class="">ARGUMENT_UNPACKING</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_CONSTANT_SCALAR_EXPRESSION" class="">CONSTANT_SCALAR_EXPRESSION</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_POW_OPERATOR" class="">POW_OPERATOR</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_FUNCTION_IMPORT_USE" class="">FUNCTION_IMPORT_USE</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#constant_CONSTANT_IMPORT_USE" class="">CONSTANT_IMPORT_USE</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.Result.Reason.html#method_getReasonToRequirementBaseValues" class="">getReasonToRequirementBaseValues()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.Result.Reason.html#method___construct" class="">__construct()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.Result.Reason.html#property_reasonToRequirement" class="">$reasonToRequirement</a><br />
+                                                                    <a href="../classes/Pvra.Result.Reason.html#property_constantsCache" class="">$constantsCache</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                            <span class="label label-info">abstract</span>
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/Result.Reason.html"><div class="path-wrapper">Result\Reason.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Pvra\Result</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\Pvra\Result\Reason</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_UNKNOWN" name="constant_UNKNOWN" class="anchor"></a>
+            <article id="constant_UNKNOWN" class="constant">
+                <h3 class="">UNKNOWN</h3>
+                <pre class="signature">UNKNOWN</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CLASS_PRESENCE_CHANGE" name="constant_CLASS_PRESENCE_CHANGE" class="anchor"></a>
+            <article id="constant_CLASS_PRESENCE_CHANGE" class="constant">
+                <h3 class="">CLASS_PRESENCE_CHANGE</h3>
+                <pre class="signature">CLASS_PRESENCE_CHANGE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_FUNCTION_PRESENCE_CHANGE" name="constant_FUNCTION_PRESENCE_CHANGE" class="anchor"></a>
+            <article id="constant_FUNCTION_PRESENCE_CHANGE" class="constant">
+                <h3 class="">FUNCTION_PRESENCE_CHANGE</h3>
+                <pre class="signature">FUNCTION_PRESENCE_CHANGE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_GOTO_KEYWORD" name="constant_GOTO_KEYWORD" class="anchor"></a>
+            <article id="constant_GOTO_KEYWORD" class="constant">
+                <h3 class="">GOTO_KEYWORD</h3>
+                <pre class="signature">GOTO_KEYWORD</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_JUMP_LABEL" name="constant_JUMP_LABEL" class="anchor"></a>
+            <article id="constant_JUMP_LABEL" class="constant">
+                <h3 class="">JUMP_LABEL</h3>
+                <pre class="signature">JUMP_LABEL</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_NAMESPACE_DECLERATION" name="constant_NAMESPACE_DECLERATION" class="anchor"></a>
+            <article id="constant_NAMESPACE_DECLERATION" class="constant">
+                <h3 class="">NAMESPACE_DECLERATION</h3>
+                <pre class="signature">NAMESPACE_DECLERATION</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_NAMESPACE_MAGIC_CONSTANT" name="constant_NAMESPACE_MAGIC_CONSTANT" class="anchor"></a>
+            <article id="constant_NAMESPACE_MAGIC_CONSTANT" class="constant">
+                <h3 class="">NAMESPACE_MAGIC_CONSTANT</h3>
+                <pre class="signature">NAMESPACE_MAGIC_CONSTANT</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_NAMESPACE_IMPORT" name="constant_NAMESPACE_IMPORT" class="anchor"></a>
+            <article id="constant_NAMESPACE_IMPORT" class="constant">
+                <h3 class="">NAMESPACE_IMPORT</h3>
+                <pre class="signature">NAMESPACE_IMPORT</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_NOWDOC_LITERAL" name="constant_NOWDOC_LITERAL" class="anchor"></a>
+            <article id="constant_NOWDOC_LITERAL" class="constant">
+                <h3 class="">NOWDOC_LITERAL</h3>
+                <pre class="signature">NOWDOC_LITERAL</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CALLSTATIC_MAGIC_METHOD" name="constant_CALLSTATIC_MAGIC_METHOD" class="anchor"></a>
+            <article id="constant_CALLSTATIC_MAGIC_METHOD" class="constant">
+                <h3 class="">CALLSTATIC_MAGIC_METHOD</h3>
+                <pre class="signature">CALLSTATIC_MAGIC_METHOD</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_INVOKE_MAGIC_METHOD" name="constant_INVOKE_MAGIC_METHOD" class="anchor"></a>
+            <article id="constant_INVOKE_MAGIC_METHOD" class="constant">
+                <h3 class="">INVOKE_MAGIC_METHOD</h3>
+                <pre class="signature">INVOKE_MAGIC_METHOD</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CONST_KEYWORD_OUTSIDE_CLASS" name="constant_CONST_KEYWORD_OUTSIDE_CLASS" class="anchor"></a>
+            <article id="constant_CONST_KEYWORD_OUTSIDE_CLASS" class="constant">
+                <h3 class="">CONST_KEYWORD_OUTSIDE_CLASS</h3>
+                <pre class="signature">CONST_KEYWORD_OUTSIDE_CLASS</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CONST_KEYWORD_DOC_SYNTAX" name="constant_CONST_KEYWORD_DOC_SYNTAX" class="anchor"></a>
+            <article id="constant_CONST_KEYWORD_DOC_SYNTAX" class="constant">
+                <h3 class="">CONST_KEYWORD_DOC_SYNTAX</h3>
+                <pre class="signature">CONST_KEYWORD_DOC_SYNTAX</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_SHORT_TERNARY" name="constant_SHORT_TERNARY" class="anchor"></a>
+            <article id="constant_SHORT_TERNARY" class="constant">
+                <h3 class="">SHORT_TERNARY</h3>
+                <pre class="signature">SHORT_TERNARY</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CLOSURE_DECLARATION" name="constant_CLOSURE_DECLARATION" class="anchor"></a>
+            <article id="constant_CLOSURE_DECLARATION" class="constant">
+                <h3 class="">CLOSURE_DECLARATION</h3>
+                <pre class="signature">CLOSURE_DECLARATION</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DYNAMIC_ACCESS_TO_STATIC" name="constant_DYNAMIC_ACCESS_TO_STATIC" class="anchor"></a>
+            <article id="constant_DYNAMIC_ACCESS_TO_STATIC" class="constant">
+                <h3 class="">DYNAMIC_ACCESS_TO_STATIC</h3>
+                <pre class="signature">DYNAMIC_ACCESS_TO_STATIC</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_LATE_STATE_BINDING_USING_STATIC" name="constant_LATE_STATE_BINDING_USING_STATIC" class="anchor"></a>
+            <article id="constant_LATE_STATE_BINDING_USING_STATIC" class="constant">
+                <h3 class="">LATE_STATE_BINDING_USING_STATIC</h3>
+                <pre class="signature">LATE_STATE_BINDING_USING_STATIC</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_NAMESPACE_SEPARATOR" name="constant_NAMESPACE_SEPARATOR" class="anchor"></a>
+            <article id="constant_NAMESPACE_SEPARATOR" class="constant">
+                <h3 class="">NAMESPACE_SEPARATOR</h3>
+                <pre class="signature">NAMESPACE_SEPARATOR</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DIR_MAGIC_CONSTANT" name="constant_DIR_MAGIC_CONSTANT" class="anchor"></a>
+            <article id="constant_DIR_MAGIC_CONSTANT" class="constant">
+                <h3 class="">DIR_MAGIC_CONSTANT</h3>
+                <pre class="signature">DIR_MAGIC_CONSTANT</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TRAIT_DEFINITION" name="constant_TRAIT_DEFINITION" class="anchor"></a>
+            <article id="constant_TRAIT_DEFINITION" class="constant">
+                <h3 class="">TRAIT_DEFINITION</h3>
+                <pre class="signature">TRAIT_DEFINITION</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TRAIT_USE" name="constant_TRAIT_USE" class="anchor"></a>
+            <article id="constant_TRAIT_USE" class="constant">
+                <h3 class="">TRAIT_USE</h3>
+                <pre class="signature">TRAIT_USE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TRAIT_MAGIC_CONST" name="constant_TRAIT_MAGIC_CONST" class="anchor"></a>
+            <article id="constant_TRAIT_MAGIC_CONST" class="constant">
+                <h3 class="">TRAIT_MAGIC_CONST</h3>
+                <pre class="signature">TRAIT_MAGIC_CONST</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_ARRAY_FUNCTION_DEREFERENCING" name="constant_ARRAY_FUNCTION_DEREFERENCING" class="anchor"></a>
+            <article id="constant_ARRAY_FUNCTION_DEREFERENCING" class="constant">
+                <h3 class="">ARRAY_FUNCTION_DEREFERENCING</h3>
+                <pre class="signature">ARRAY_FUNCTION_DEREFERENCING</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_THIS_IN_CLOSURE" name="constant_THIS_IN_CLOSURE" class="anchor"></a>
+            <article id="constant_THIS_IN_CLOSURE" class="constant">
+                <h3 class="">THIS_IN_CLOSURE</h3>
+                <pre class="signature">THIS_IN_CLOSURE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TYPEHINT_CALLABLE" name="constant_TYPEHINT_CALLABLE" class="anchor"></a>
+            <article id="constant_TYPEHINT_CALLABLE" class="constant">
+                <h3 class="">TYPEHINT_CALLABLE</h3>
+                <pre class="signature">TYPEHINT_CALLABLE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_INSTANT_CLASS_MEMBER_ACCESS" name="constant_INSTANT_CLASS_MEMBER_ACCESS" class="anchor"></a>
+            <article id="constant_INSTANT_CLASS_MEMBER_ACCESS" class="constant">
+                <h3 class="">INSTANT_CLASS_MEMBER_ACCESS</h3>
+                <pre class="signature">INSTANT_CLASS_MEMBER_ACCESS</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_BINARY_NUMBER_DECLARATION" name="constant_BINARY_NUMBER_DECLARATION" class="anchor"></a>
+            <article id="constant_BINARY_NUMBER_DECLARATION" class="constant">
+                <h3 class="">BINARY_NUMBER_DECLARATION</h3>
+                <pre class="signature">BINARY_NUMBER_DECLARATION</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_SHORT_ARRAY_DECLARATION" name="constant_SHORT_ARRAY_DECLARATION" class="anchor"></a>
+            <article id="constant_SHORT_ARRAY_DECLARATION" class="constant">
+                <h3 class="">SHORT_ARRAY_DECLARATION</h3>
+                <pre class="signature">SHORT_ARRAY_DECLARATION</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_STATIC_CALL_BY_EXPRESSION" name="constant_STATIC_CALL_BY_EXPRESSION" class="anchor"></a>
+            <article id="constant_STATIC_CALL_BY_EXPRESSION" class="constant">
+                <h3 class="">STATIC_CALL_BY_EXPRESSION</h3>
+                <pre class="signature">STATIC_CALL_BY_EXPRESSION</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_SHORT_ECHO_TAG" name="constant_SHORT_ECHO_TAG" class="anchor"></a>
+            <article id="constant_SHORT_ECHO_TAG" class="constant">
+                <h3 class="">SHORT_ECHO_TAG</h3>
+                <pre class="signature">SHORT_ECHO_TAG</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_GENERATOR_DEFINITION" name="constant_GENERATOR_DEFINITION" class="anchor"></a>
+            <article id="constant_GENERATOR_DEFINITION" class="constant">
+                <h3 class="">GENERATOR_DEFINITION</h3>
+                <pre class="signature">GENERATOR_DEFINITION</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TRY_CATCH_FINALLY" name="constant_TRY_CATCH_FINALLY" class="anchor"></a>
+            <article id="constant_TRY_CATCH_FINALLY" class="constant">
+                <h3 class="">TRY_CATCH_FINALLY</h3>
+                <pre class="signature">TRY_CATCH_FINALLY</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_LIST_IN_FOREACH" name="constant_LIST_IN_FOREACH" class="anchor"></a>
+            <article id="constant_LIST_IN_FOREACH" class="constant">
+                <h3 class="">LIST_IN_FOREACH</h3>
+                <pre class="signature">LIST_IN_FOREACH</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_EXPR_IN_EMPTY" name="constant_EXPR_IN_EMPTY" class="anchor"></a>
+            <article id="constant_EXPR_IN_EMPTY" class="constant">
+                <h3 class="">EXPR_IN_EMPTY</h3>
+                <pre class="signature">EXPR_IN_EMPTY</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_ARRAY_OR_STRING_DEREFERENCING" name="constant_ARRAY_OR_STRING_DEREFERENCING" class="anchor"></a>
+            <article id="constant_ARRAY_OR_STRING_DEREFERENCING" class="constant">
+                <h3 class="">ARRAY_OR_STRING_DEREFERENCING</h3>
+                <pre class="signature">ARRAY_OR_STRING_DEREFERENCING</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CLASS_NAME_RESOLUTION" name="constant_CLASS_NAME_RESOLUTION" class="anchor"></a>
+            <article id="constant_CLASS_NAME_RESOLUTION" class="constant">
+                <h3 class="">CLASS_NAME_RESOLUTION</h3>
+                <pre class="signature">CLASS_NAME_RESOLUTION</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_VARIADIC_ARGUMENT" name="constant_VARIADIC_ARGUMENT" class="anchor"></a>
+            <article id="constant_VARIADIC_ARGUMENT" class="constant">
+                <h3 class="">VARIADIC_ARGUMENT</h3>
+                <pre class="signature">VARIADIC_ARGUMENT</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_ARGUMENT_UNPACKING" name="constant_ARGUMENT_UNPACKING" class="anchor"></a>
+            <article id="constant_ARGUMENT_UNPACKING" class="constant">
+                <h3 class="">ARGUMENT_UNPACKING</h3>
+                <pre class="signature">ARGUMENT_UNPACKING</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CONSTANT_SCALAR_EXPRESSION" name="constant_CONSTANT_SCALAR_EXPRESSION" class="anchor"></a>
+            <article id="constant_CONSTANT_SCALAR_EXPRESSION" class="constant">
+                <h3 class="">CONSTANT_SCALAR_EXPRESSION</h3>
+                <pre class="signature">CONSTANT_SCALAR_EXPRESSION</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_POW_OPERATOR" name="constant_POW_OPERATOR" class="anchor"></a>
+            <article id="constant_POW_OPERATOR" class="constant">
+                <h3 class="">POW_OPERATOR</h3>
+                <pre class="signature">POW_OPERATOR</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_FUNCTION_IMPORT_USE" name="constant_FUNCTION_IMPORT_USE" class="anchor"></a>
+            <article id="constant_FUNCTION_IMPORT_USE" class="constant">
+                <h3 class="">FUNCTION_IMPORT_USE</h3>
+                <pre class="signature">FUNCTION_IMPORT_USE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_CONSTANT_IMPORT_USE" name="constant_CONSTANT_IMPORT_USE" class="anchor"></a>
+            <article id="constant_CONSTANT_IMPORT_USE" class="constant">
+                <h3 class="">CONSTANT_IMPORT_USE</h3>
+                <pre class="signature">CONSTANT_IMPORT_USE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_reasonToRequirement" name="property_reasonToRequirement" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$reasonToRequirement</h3>
+                <pre class="signature">$reasonToRequirement : array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_constantsCache" name="property_constantsCache" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$constantsCache</h3>
+                <pre class="signature">$constantsCache : array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRequiredVersionForReason" name="method_getRequiredVersionForReason" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRequiredVersionForReason()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRequiredVersionForReason(integer  <span class="argument">$reason</span>) : string|boolean</pre>
+                <p><em>Get the required version for a reason.</em></p>
+                <p>This static method may be used to get the required version of a reason constant defined in RequirementReason.
+If no matching version for a constant can be found an InvalidArgumentException will be thrown.</p>
+<p>This method may return a falseable string or bool(false). Use !== false to check for a valid returned version.
+If false is returned refer to the corresponding method on the class that returned the constant.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$reason </td>
+                                <td><p>One of the constants defined in RequirementReason</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string|boolean
+                                            &mdash; <p>The required version or bool(false)</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getReasonNameFromValue" name="method_getReasonNameFromValue" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getReasonNameFromValue()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getReasonNameFromValue(integer  <span class="argument">$value</span>) : string</pre>
+                <p><em>Get the constant name from constant value</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$value </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>The name of the constant or 'UNKNOWN'</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getReasonNames" name="method_getReasonNames" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getReasonNames()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getReasonNames() : array</pre>
+                <p><em>Get a list of defined constants and their values.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_clear" name="method_clear" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">clear()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">clear() </pre>
+                <p><em>Clears the cached constant lists.</em></p>
+                <p>May be useful to save memory or to force regeneration of the list in tests.</p>
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getReasonToRequirementBaseValues" name="method_getReasonToRequirementBaseValues" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getReasonToRequirementBaseValues()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getReasonToRequirementBaseValues() : array</pre>
+                <p><em>Map reasons to versions</em></p>
+                <p>This method returns an array having the constants defined by this class as keys and their required
+php versions as values.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            codeCoverageIgnore
+                        </th>
+                        <td>
+                                                                                            
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">Reason.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/Result\Reason.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/Pvra.html">\Pvra</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 17th, 2015 at 00:13.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

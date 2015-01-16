@@ -58,7 +58,7 @@ class CheckUpdateCommand extends Command
             $branches = json_decode($branches, true);
             if (empty($branches)) {
                 $out->writeln('<error>Could not get branch information. Please check for updates yourself</error>');
-                die(2);
+                return 2;
             }
             $branchList = [];
             array_walk($branches, function ($value) use (&$branchList) {
@@ -71,7 +71,7 @@ class CheckUpdateCommand extends Command
             $compareResult = $this->performGETApiRequest("repos/{$repoName}/compare/{$version}...{$branch}");
             if ($compareResult === false) {
                 $out->writeln('<error>An error occurred. Please try again later or check for updates yourself</error>');
-                die(2);
+                return 2;
             }
             $compareResult = json_decode($compareResult, true);
             if (isset($compareResult['status'])) {
@@ -85,9 +85,10 @@ class CheckUpdateCommand extends Command
             } else {
                 $out->writeln('<error>No status could be determined</error>');
             }
-            exit;
+            return 0;
         } else {
             $out->writeln('<info>Implementation missing</info>');
+            return 0;
         }
     }
 

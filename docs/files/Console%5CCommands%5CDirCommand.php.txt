@@ -17,17 +17,15 @@
 namespace Pvra\Console\Commands;
 
 
-use Pvra\PhpParser\AnalysingNodeWalkers\Php54LanguageFeatureNodeWalker;
-use Pvra\PhpParser\AnalysingNodeWalkers\Php55LanguageFeatureNodeWalker;
-use Pvra\PhpParser\AnalysingNodeWalkers\Php56LanguageFeatureNodeWalker;
-use Pvra\RequirementAnalysis\FileRequirementAnalyser;
-use Pvra\RequirementAnalysis\Result\ResultCollection;
+use Pvra\AnalysisResult;
+use Pvra\Result\Collection;
+use Pvra\Result\Reasoning;
 use RuntimeException;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -35,8 +33,11 @@ use Symfony\Component\Finder\Finder;
  *
  * @package Pvra\Console\Commands
  */
-class DirCommand extends Command
+class DirCommand extends PvraBaseCommand
 {
+    const GROUP_BY_NAME = 'n',
+        GROUP_BY_VERSION = 'v';
+
     /**
      * @inheritdoc
      */
@@ -46,10 +47,13 @@ class DirCommand extends Command
             ->setName('analyse:dir')
             ->setDescription('Iterates over a directory and runs the requirement analysis');
 
+        parent::configure();
+
         $this
-            ->addOption('dir', 'd', InputOption::VALUE_OPTIONAL, 'The directory to check', '.')
             ->addOption('recursive', 'r', InputOption::VALUE_NONE, 'Iterate recursive over directory')
-            ->addArgument('filter', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Filter', ['name:*.php']);
+            ->addOption('groupBy', 'g', InputOption::VALUE_REQUIRED, 'Group output by name[n] or required version[v]',
+                self::GROUP_BY_NAME)
+            ->addArgument('filters', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Filter', ['name:*.php']);
     }
 
     /**
@@ -57,7 +61,7 @@ class DirCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dir = $input->getOption('dir');
+        $dir = $input->getArgument('target');
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
             $output->writeln('Dir: ' . $dir);
         }
@@ -74,54 +78,152 @@ class DirCommand extends Command
             $files->depth(0);
         }
 
-        $this->applyIteratorFilterFromInput($input, $files);
+        $this->applyIteratorFilter($files, $input->getArgument('filters'));
 
-
-        $results = new ResultCollection();
+        $results = new Collection();
 
         /** @var \SplFileInfo $file */
         foreach ($files as $file) {
             if ($file->isFile()) {
-                $req = new FileRequirementAnalyser($file->getPathname());
-
-                $req->attachRequirementVisitor(new Php54LanguageFeatureNodeWalker);
-                $req->attachRequirementVisitor(new Php55LanguageFeatureNodeWalker);
-                $req->attachRequirementVisitor(new Php56LanguageFeatureNodeWalker);
-
+                $req = $this->createFileAnalyserInstance($file->getPathname());
+                $req->attachRequirementVisitors($this->createNodeWalkerInstances($input->getOption('libraryDataSource')));
                 $results->add($req->run());
             }
         }
 
-        $higestRequirement = $results->getHighestDemandingResult();
-
-        if ($higestRequirement === null) {
-            // todo better handling
-            $output->writeln('Unknown error');
+        if ($files->count() === 0) {
+            $output->writeln('<error>No files processed!</error>');
             return;
         }
 
-        $output->writeln('Required version: ' . $higestRequirement->getRequiredVersion());
-        $output->writeln(sprintf('Required because %s uses following featrues:',
-            $higestRequirement->getAnalysisTargetId()));
+        if ($input->getOption('groupBy') === self::GROUP_BY_NAME) {
+            $this->renderResultCollectionByName($results, $output, $input);
+        } elseif ($input->getOption('groupBy') === self::GROUP_BY_VERSION) {
+            $this->renderResultCollectionByRequiredVersion($results, $output);
+        } else {
+            throw new \InvalidArgumentException('The value given to the groupBy option is not allowed.');
+        }
 
-        foreach ($higestRequirement->getRequirements() as $version => $reasons) {
+        if ($file = $input->getOption('saveAsFile')) {
+            if (file_exists($file)) {
+                $output->writeln(sprintf('<error>%s already exists. Cannot override an already existing file!</error>',
+                    $file));
+            } else {
+                $output->writeln(sprintf('<info>Generating output file at %s</info>', $file));
+                switch ($input->getOption('saveFormat')) {
+                    case 'json': {
+                        file_put_contents($file, json_encode($results));
+                        break;
+                    }
+                    default: {
+                        $output->writeln('<error>Invalid save format</error>');
+                    }
+                }
+            }
+        }
+    }
+
+    protected function renderResultCollectionByName(Collection $results, OutputInterface $out, InputInterface $in)
+    {
+        $highestRequirement = $results->getHighestDemandingResult();
+
+        if ($highestRequirement === null) {
+            throw new RuntimeException('Detection of requirements failed. Unknown error.');
+        }
+        $out->writeln('Highest required version: ' . $highestRequirement->getRequiredVersion());
+        $out->writeln(sprintf('Required because %s uses following features:',
+            $highestRequirement->getAnalysisTargetId()));
+
+        foreach ($highestRequirement->getRequirements() as $version => $reasons) {
             foreach ($reasons as $reason) {
-                $output->write("\t");
-                $output->write(sprintf('%s required on line %s: %s', $version, $reason['location']['line'],
-                    $reason['msg']), true);
+                $out->write("\t");
+                $out->write($reason['msg'], true);
+            }
+        }
+
+        if ($results->count() > 1) {
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion('Continue with showing remaining ' . ($results->count() - 1) . ' results? [Y/n] ',
+                'y');
+
+            if (!$helper->ask($in, $out, $question)) {
+                return;
+            }
+            $out->writeln('<info>Other results(' . ($results->count() - 1) . '):</info>');
+            /** @var AnalysisResult $result */
+            foreach ($results as $result) {
+                if ($result->getAnalysisTargetId() === $highestRequirement->getAnalysisTargetId()) {
+                    continue;
+                }
+                $out->write(implode('', [
+                    'The file "',
+                    $result->getAnalysisTargetId(),
+                    '" requires PHP ',
+                    $result->getRequiredVersion(),
+                    ' for the following reasons:',
+                    "\n"
+                ]));
+                /** @var  Reasoning */
+                foreach ($result as $reason) {
+                    $out->write("\t");
+                    $out->write($reason['msg'], true);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param \Pvra\Result\Collection $results
+     * @param \Symfony\Component\Console\Output\OutputInterface $out
+     */
+    protected function renderResultCollectionByRequiredVersion(
+        Collection $results,
+        OutputInterface $out
+        // InputInterface $in
+    )
+    {
+        $highestRequirement = $results->getHighestDemandingResult();
+
+        if ($highestRequirement === null) {
+            throw new RuntimeException('Detection of requirements failed. Unknown error.');
+        }
+        $out->writeln('Highest required version: ' . $highestRequirement->getRequiredVersion() . ' in ' . $highestRequirement->getAnalysisTargetId() . ($results->count() > 1 ? ' and others' : ''));
+
+        $usedVersions = [];
+        /** @var AnalysisResult $result */
+        foreach ($results as $result) {
+            $versions = array_keys($result->getRequirements());
+            foreach ($versions as $version) {
+                $usedVersions[ $version ] = $version;
+            }
+        }
+
+        usort($usedVersions, function ($a, $b) {
+            return version_compare($b, $a);
+        });
+
+        foreach ($usedVersions as $version) {
+            $out->writeln('Reasons for ' . $version);
+            /** @var AnalysisResult $result */
+            foreach ($results as $result) {
+                $selectedResults = $result->getRequirementInfo($version);
+                if (!empty($selectedResults)) {
+                    foreach ($selectedResults as $reason) {
+                        $out->write("\t");
+                        $out->writeln($reason['msg']);
+                    }
+                }
             }
         }
 
     }
 
     /**
-     * @param InputInterface $input
      * @param Finder $files
+     * @param array $filterList
      */
-    protected function applyIteratorFilterFromInput(InputInterface $input, Finder $files)
+    protected function applyIteratorFilter(Finder $files, array $filterList = [])
     {
-        $filterList = $input->getArgument('filter');
-
         if (!empty($filterList) && is_array($filterList)) {
             foreach ($filterList as $currentFilter) {
                 if (!stripos($currentFilter, ':')) {

@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/Pvra.html">\Pvra</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">223</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">109</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-294827264"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-294827264" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-992161248"></a>
+                                <a href="../namespaces/Pvra.html" style="margin-left: 30px; padding-left: 0">Pvra</a>
+            </div>
+            <div id="namespace-992161248" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-541848561"></a>
+                                <a href="../namespaces/Pvra.Analysers.html" style="margin-left: 30px; padding-left: 0">Analysers</a>
+            </div>
+            <div id="namespace-541848561" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html">LanguageFeatureAnalyser</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Analysers.LibraryAdditions.html">LibraryAdditions</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Analysers.Php53Features.html">Php53Features</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Analysers.Php54Features.html">Php54Features</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Analysers.Php55Features.html">Php55Features</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Analysers.Php56Features.html">Php56Features</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-959239840"></a>
+                                <a href="../namespaces/Pvra.Console.html" style="margin-left: 30px; padding-left: 0">Console</a>
+            </div>
+            <div id="namespace-959239840" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2004359809"></a>
+                                <a href="../namespaces/Pvra.Console.Commands.html" style="margin-left: 30px; padding-left: 0">Commands</a>
+            </div>
+            <div id="namespace-2004359809" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-630333515"></a>
+                                <a href="../namespaces/Pvra.Console.Commands.Debug.html" style="margin-left: 30px; padding-left: 0">Debug</a>
+            </div>
+            <div id="namespace-630333515" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.Debug.DumpAstCommand.html">DumpAstCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.Debug.DumpTokenListCommand.html">DumpTokenListCommand</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.CheckUpdateCommand.html">CheckUpdateCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.DirCommand.html">DirCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.FileCommand.html">FileCommand</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Console.Commands.PvraBaseCommand.html">PvraBaseCommand</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Console.Application.html">Application</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-190531611"></a>
+                                <a href="../namespaces/Pvra.Lexer.html" style="margin-left: 30px; padding-left: 0">Lexer</a>
+            </div>
+            <div id="namespace-190531611" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Lexer.ExtendedEmulativeLexer.html">ExtendedEmulativeLexer</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1700867985"></a>
+                                <a href="../namespaces/Pvra.Result.html" style="margin-left: 30px; padding-left: 0">Result</a>
+            </div>
+            <div id="namespace-1700867985" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/Pvra.Result.CallbackChainHelperTrait.html">CallbackChainHelperTrait</a></li>
+                                                                            <li class="class"><a href="../classes/Pvra.Result.Collection.html">Collection</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Result.MessageFormatter.html">MessageFormatter</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Result.MessageLocator.html">MessageLocator</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Result.Reason.html">Reason</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.Result.Reasoning.html">Reasoning</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Pvra.AnalyserAwareInterface.html">AnalyserAwareInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/Pvra.Analyser.html">Analyser</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.AnalysisResult.html">AnalysisResult</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.FileAnalyser.html">FileAnalyser</a></li>
+                                                    <li class="class"><a href="../classes/Pvra.StringAnalyser.html">StringAnalyser</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/Pvra.Analysers.html">\Pvra\Analysers</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\Pvra\Analysers</small>Php54Features</h1>
+                    <p><em>Class Php54Features</em></p>
+                    <p>This class can be used to detect php 5.4 features.
+Following features are supported:</p>
+<ul>
+<li>Trait definition using the <code>trait</code> keyword</li>
+<li>Trait using syntax</li>
+<li>Magic trait constant: <code>__TRAIT__</code></li>
+<li>Array function dereferencing</li>
+<li>Callable typhint: <code>callable</code></li>
+<li>Detection of <code>$this</code> in closures</li>
+</ul>
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html#method_setOwningAnalyser" class="">setOwningAnalyser()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html#method_getOwningAnalyser" class="">getOwningAnalyser()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_enterNode" class="">enterNode()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_leaveNode" class="">leaveNode()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html#method_getResult" class="">getResult()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_addThisInClosureRequirement" class="">addThisInClosureRequirement()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_handleTraitFeatures" class="">handleTraitFeatures()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_handleFunctionDereferencing" class="">handleFunctionDereferencing()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_handleCallableType" class="">handleCallableType()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_handleInstantClassMemberAccess" class="">handleInstantClassMemberAccess()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_handleThisInClosure" class="">handleThisInClosure()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_handleBinaryNumberDeclaration" class="">handleBinaryNumberDeclaration()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_handleShortArrayDeclaration" class="">handleShortArrayDeclaration()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_handleStaticCallByExpressionSyntax" class="">handleStaticCallByExpressionSyntax()</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#method_detectShortEchoSyntax" class="">detectShortEchoSyntax()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html#property_requirementAnalyser" class="">$requirementAnalyser</a><br />
+                                                                    <a href="../classes/Pvra.Analysers.Php54Features.html#property_inClosureLevel" class="">$inClosureLevel</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/Analysers.Php54Features.html"><div class="path-wrapper">Analysers\Php54Features.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">PhpParser\Analysers</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                        <div class="namespace-wrapper">\PhpParser\NodeVisitorAbstract</div>
+                                                                    
+                                        <div class="namespace-wrapper"><a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html">\Pvra\Analysers\LanguageFeatureAnalyser</a></div>
+                                                                                                    <div class="namespace-wrapper">\Pvra\Analysers\Php54Features</div>
+                            </dd>
+
+                                                                            <dt>Implements</dt>
+                                                        <dd><a href="../classes/Pvra.AnalyserAwareInterface.html"><div class="namespace-wrapper">\Pvra\AnalyserAwareInterface</div></a></dd>
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_requirementAnalyser" name="property_requirementAnalyser" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$requirementAnalyser</h3>
+                <pre class="signature">$requirementAnalyser : \Pvra\Analyser</pre>
+                <p><em>The `Analyser` representing the currently running operation.</em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/Pvra.Analyser.html">\Pvra\Analyser</a>
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html"><div class="path-wrapper">\Pvra\Analysers\LanguageFeatureAnalyser</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_inClosureLevel" name="property_inClosureLevel" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$inClosureLevel</h3>
+                <pre class="signature">$inClosureLevel : integer</pre>
+                <p><em>Closure nesting level</em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(\Pvra\Analyser  <span class="argument">$requirementAnalyser = null</span>) </pre>
+                <p><em>Create an instance of the child Analyser</em></p>
+                <p>It is optional to set the related analyser during instance creation.
+When using this class in the context of an <code>Analyser</code> it will always be ensured
+that this <code>Analyser</code> will be known to the instance before any node is traversed.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/Pvra.Analyser.html">\Pvra\Analyser</a></td>
+                                <td>$requirementAnalyser </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html"><div class="path-wrapper">\Pvra\Analysers\LanguageFeatureAnalyser</div></a></dd>
+                                                                            <dt>See also</dt>
+                                                                <dd><a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html#method_setOwningAnalyser"><span class="namespace-wrapper">Set the owning analyser</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setOwningAnalyser" name="method_setOwningAnalyser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setOwningAnalyser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setOwningAnalyser(\Pvra\Analyser  <span class="argument">$requirementAnalyser</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/Pvra.Analyser.html">\Pvra\Analyser</a></td>
+                                <td>$requirementAnalyser </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html"><div class="path-wrapper">\Pvra\Analysers\LanguageFeatureAnalyser</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            inheritdoc
+                        </th>
+                        <td>
+                                                                                            
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOwningAnalyser" name="method_getOwningAnalyser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOwningAnalyser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOwningAnalyser() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html"><div class="path-wrapper">\Pvra\Analysers\LanguageFeatureAnalyser</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            inheritdoc
+                        </th>
+                        <td>
+                                                                                            
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_enterNode" name="method_enterNode" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">enterNode()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">enterNode(\PhpParser\Node  <span class="argument">$node</span>) : null|\PhpParser\Node</pre>
+                <p><em>Called when entering a source node</em></p>
+                <p>This method is called when a source node is entered. Contained logic determines the presence of
+specific syntactical features.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    null|\PhpParser\Node
+                                            &mdash; <p>The nodes should not be modified as other walkers might depend on it.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            inheritdoc
+                        </th>
+                        <td>
+                                                                                            
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_leaveNode" name="method_leaveNode" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">leaveNode()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">leaveNode(\PhpParser\Node  <span class="argument">$node</span>) : void</pre>
+                <p><em>Leave node</em></p>
+                <p>Currently only used to decrease closure level.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper">Closure Level</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getResult" name="method_getResult" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getResult()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getResult() : \Pvra\AnalysisResult</pre>
+                <p><em>Get the  instance of the currently used `Pvra\AnalysisResult`.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Pvra.AnalysisResult.html">\Pvra\AnalysisResult</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Pvra.Analysers.LanguageFeatureAnalyser.html"><div class="path-wrapper">\Pvra\Analysers\LanguageFeatureAnalyser</div></a></dd>
+                                                                            <dt>See also</dt>
+                                                                <dd><a href="../classes/Pvra.Analyser.html#method_getResult"><span class="namespace-wrapper">Method used to retrieve the result</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addThisInClosureRequirement" name="method_addThisInClosureRequirement" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">addThisInClosureRequirement()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addThisInClosureRequirement(\PhpParser\Node  <span class="argument">$node</span>) </pre>
+                <p><em>Wrapper for message addition in closure-this context</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_handleTraitFeatures" name="method_handleTraitFeatures" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">handleTraitFeatures()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">handleTraitFeatures(\PhpParser\Node  <span class="argument">$node</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_handleFunctionDereferencing" name="method_handleFunctionDereferencing" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">handleFunctionDereferencing()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">handleFunctionDereferencing(\PhpParser\Node  <span class="argument">$node</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_handleCallableType" name="method_handleCallableType" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">handleCallableType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">handleCallableType(\PhpParser\Node  <span class="argument">$node</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_handleInstantClassMemberAccess" name="method_handleInstantClassMemberAccess" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">handleInstantClassMemberAccess()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">handleInstantClassMemberAccess(\PhpParser\Node  <span class="argument">$node</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_handleThisInClosure" name="method_handleThisInClosure" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">handleThisInClosure()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">handleThisInClosure(\PhpParser\Node  <span class="argument">$node</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_handleBinaryNumberDeclaration" name="method_handleBinaryNumberDeclaration" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">handleBinaryNumberDeclaration()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">handleBinaryNumberDeclaration(\PhpParser\Node  <span class="argument">$node</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_handleShortArrayDeclaration" name="method_handleShortArrayDeclaration" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">handleShortArrayDeclaration()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">handleShortArrayDeclaration(\PhpParser\Node  <span class="argument">$node</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_handleStaticCallByExpressionSyntax" name="method_handleStaticCallByExpressionSyntax" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">handleStaticCallByExpressionSyntax()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">handleStaticCallByExpressionSyntax(\PhpParser\Node  <span class="argument">$node</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_detectShortEchoSyntax" name="method_detectShortEchoSyntax" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">detectShortEchoSyntax()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">detectShortEchoSyntax(\PhpParser\Node  <span class="argument">$node</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\PhpParser\Node</td>
+                                <td>$node </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">Php54Features.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/Analysers\Php54Features.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/Pvra.html">\Pvra</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 17th, 2015 at 00:13.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

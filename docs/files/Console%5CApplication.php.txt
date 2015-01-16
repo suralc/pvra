@@ -31,7 +31,7 @@ class Application extends BaseApplication
     /**
      * @inheritdoc
      */
-    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
+    public function __construct($name = 'UNKNOWN', $version = '@package_version@')
     {
         if ($version === '@package' . '_version@') {
             $version = static::APPLICATION_DEFAULT_VERSION;
