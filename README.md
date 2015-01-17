@@ -29,7 +29,7 @@ incomplete.
 
 ## <a name="cli-usage"></a> Installation and usage of the cli app
 
-The packed `pvra.phar` file is available as a download on the releases page (once there is a release). Run
+The packed `pvra.phar` file is available as a download on the [release page](https://github.com/suralc/pvra/releases). Run
 `php pvra.phar` to see a list of available commands. If you downloaded or cloned the repository itself run `php bin/pvra`
 from the root of the repository. Make sure all dependencies are available (not required if you run from phar), this 
 requires you to be able to run `<php> composer install --prefer-dist --no-dev` on your machine.
