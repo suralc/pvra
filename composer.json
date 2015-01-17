@@ -1,6 +1,6 @@
 {
   "name": "suralc/pvra",
-  "description": "Checks the required php version of a file",
+  "description": "Detects the php-version requirement of a given piece of code.",
   "keywords": ["requirement", "version", "php"],
   "minimum-stability": "stable",
   "license": "MIT",
