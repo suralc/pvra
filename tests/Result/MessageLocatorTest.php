@@ -178,6 +178,14 @@ class MessageLocatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
+     */
+    public function testFromPhpFileNotFound()
+    {
+        $locator = MessageLocator::fromPhpFile('non-existant');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Only valid non-empty offset types are acceptable as message ids.
      */
     public function testMessageSearchTerminationException()

@@ -187,13 +187,16 @@ class MessageLocator implements \ArrayAccess
     }
 
     /**
-     * @param $string
+     * @param string $path
      * @return \Pvra\Result\MessageLocator
      */
-    public static function fromPhpFile($string)
+    public static function fromPhpFile($path)
     {
-        // todo add check to prevent fatal here
-        return static::fromArray(require $string);
+        if(is_file($path) && is_readable($path)) {
+            return static::fromArray(require $path);
+        }
+
+        throw new \InvalidArgumentException('Invalid path or not readable.');
     }
 
     public static function fromJsonFile($file)

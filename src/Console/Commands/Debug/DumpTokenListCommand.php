@@ -18,7 +18,6 @@
 namespace Pvra\Console\Commands\Debug;
 
 
-use PhpParser\Lexer;
 use Pvra\Lexer\ExtendedEmulativeLexer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -47,7 +46,7 @@ class DumpTokenListCommand extends Command
         $file = $in->getArgument('target');
         if (!is_file($file) || !is_readable($file)) {
             $out->writeln(sprintf('<error>"%s" is not a valid file!</error>', $file));
-            exit;
+            return;
         }
         $tokenizer = $in->getOption('tokenizer');
         if ($tokenizer === 'php') {
