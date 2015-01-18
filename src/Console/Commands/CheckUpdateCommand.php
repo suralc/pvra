@@ -49,12 +49,17 @@ class CheckUpdateCommand extends Command
         $out->writeln('Checking version for updates...');
         $out->writeln('Current version is: ' . $version = $this->getApplication()->getVersion());
         $out->writeln('Attemping to connect: ' . $repoName);
-        $ghReleases = $this->performGETApiRequest("repos/{$repoName}/releases");
+        list($ghReleases, $header) = $this->performGETApiRequest("repos/{$repoName}/releases");
+        if ($in->getOption('verbose')) {
+            $headers = $this->parseHeader($header);
+            $out->writeln('Github api limit: ' . $headers['X-RateLimit-Limit']);
+            $out->writeln('Github api limit remaining: ' . $headers['X-RateLimit-Remaining']);
+        }
         $ghReleasesContent = json_decode($ghReleases, true);
         unset($ghReleases);
         if (empty($ghReleasesContent)) {
             $out->writeln('No releases were found. Attemping to compare commit-hashes.');
-            $branches = $this->performGETApiRequest("repos/{$repoName}/branches");
+            list($branches) = $this->performGETApiRequest("repos/{$repoName}/branches");
             $branches = json_decode($branches, true);
             if (empty($branches)) {
                 $out->writeln('<error>Could not get branch information. Please check for updates yourself</error>');
@@ -68,7 +73,7 @@ class CheckUpdateCommand extends Command
             $question->setErrorMessage('Branch %s is invalid.');
             $helper = $this->getHelper('question');
             $branch = $helper->ask($in, $out, $question);
-            $compareResult = $this->performGETApiRequest("repos/{$repoName}/compare/{$version}...{$branch}");
+            list($compareResult) = $this->performGETApiRequest("repos/{$repoName}/compare/{$version}...{$branch}");
             if ($compareResult === false) {
                 $out->writeln('<error>An error occurred. Please try again later or check for updates yourself</error>');
                 return 2;
@@ -87,7 +92,23 @@ class CheckUpdateCommand extends Command
             }
             return 0;
         } else {
-            $out->writeln('<info>Implementation missing</info>');
+            $remoteVersion = substr($ghReleasesContent[0]['tag_name'], 1);
+            $out->writeln('Current remote version is: ' . $remoteVersion);
+            $compared = version_compare($this->getApplication()->getVersion(), $remoteVersion);
+            switch (true) {
+                case 0 < $compared: {
+                    $out->writeln('Your version is newer than the latest release.');
+                    break;
+                }
+                case 0 > $compared: {
+                    $out->writeln('Your version is older than the latest release.');
+                    break;
+                }
+                case $compared === 0: {
+                    $out->writeln('Your version and the latest released one are equal.');
+                    break;
+                }
+            }
             return 0;
         }
     }
@@ -105,6 +126,22 @@ class CheckUpdateCommand extends Command
 
     private function performGETApiRequest($target = '')
     {
-        return @file_get_contents("https://api.github.com/" . $target, 0, $this->getNewDefaultStreamContext());
+        $response = file_get_contents("https://api.github.com/" . $target, 0, $this->getNewDefaultStreamContext());
+        return [$response, $http_response_header];
+    }
+
+    private function parseHeader(array $headerArray)
+    {
+        $headers = [];
+        foreach ($headerArray as $num => $headerLine) {
+            if ($num === 0) {
+                // status code
+                continue;
+            }
+            list($key, $value) = explode(':', $headerLine);
+            $headers[ $key ] = $value;
+        }
+
+        return $headers;
     }
 }
