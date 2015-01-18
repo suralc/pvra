@@ -114,7 +114,6 @@ class MessageLocator implements \ArrayAccess
             'fallbackHandler' => false,
         ];
 
-
         reset($this->messageSearchers);
         $this->inCallbackChain(true);
         /** @var callable $searchCallback */
@@ -192,7 +191,7 @@ class MessageLocator implements \ArrayAccess
      */
     public static function fromPhpFile($path)
     {
-        if(is_file($path) && is_readable($path)) {
+        if (is_file($path) && is_readable($path)) {
             return static::fromArray(require $path);
         }
 

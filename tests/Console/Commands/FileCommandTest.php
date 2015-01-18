@@ -73,7 +73,7 @@ class FileCommandTest extends PvraBaseCommandTestBase
 
         $this->assertTrue(substr_count($out, '5.6.0') === 3);
         $this->assertTrue(strpos($out, 'session_status') !== false);
-        $this->assertSame(13,
+        $this->assertSame(15,
             preg_match_all("/(^[.\\s]+.+\\\"(?P<req_name>[a-zA-Z\\_]+)\\\" (?P<type>function|class).+\\d\\.\\d+\\.\\d+ in .+\\:(?P<line_num>\\d+)$)/m",
                 $out));
     }

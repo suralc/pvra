@@ -28,6 +28,8 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
             [21, Reason::CLASS_PRESENCE_CHANGE],
             [25, Reason::CLASS_PRESENCE_CHANGE],
             [25, Reason::CLASS_PRESENCE_CHANGE],
+            [42, Reason::CLASS_PRESENCE_CHANGE],
+            [46, Reason::CLASS_PRESENCE_CHANGE],
         ];
 
         $this->assertCount(count($expected) + /* 5.6 below the foreach */
@@ -54,7 +56,7 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedInvalidFileFormatException()
     {
-        $walker = new LibraryAdditions(null, TEST_FILE_ROOT . '/invalidNonExistingLibrarySource.php');
+        new LibraryAdditions(null, TEST_FILE_ROOT . '/invalidNonExistingLibrarySource.php');
     }
 
     /**
@@ -63,7 +65,7 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedClassKeyMissingException()
     {
-        $walker = new LibraryAdditions(null, ['functions-added' => []]);
+        new LibraryAdditions(null, ['functions-added' => []]);
     }
 
     /**
@@ -72,7 +74,7 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedClassKeyListMissingException()
     {
-        $walker = new LibraryAdditions(null, ['functions-added' => [], 'classes-added' => '']);
+        new LibraryAdditions(null, ['functions-added' => [], 'classes-added' => '']);
     }
 
     /**
@@ -81,7 +83,7 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedFunctionKeyMissingException()
     {
-        $walker = new LibraryAdditions(null, ['classes-added' => []]);
+        new LibraryAdditions(null, ['classes-added' => []]);
     }
 
     /**
@@ -90,7 +92,7 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedFunctionKeyListMissingException()
     {
-        $walker = new LibraryAdditions(null, ['classes-added' => [], 'functions-added' => '']);
+        new LibraryAdditions(null, ['classes-added' => [], 'functions-added' => '']);
     }
 
     /**
@@ -100,7 +102,7 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
      */
     public function testExceptionOnEmptyData()
     {
-        $walker = new LibraryAdditions(null, []);
+        new LibraryAdditions(null, []);
     }
 
     /**
@@ -109,8 +111,7 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedExceptionOnObjectParameterTypeOnConstruct()
     {
-        $walker = new LibraryAdditions(null,
-            new \SplFileInfo(TEST_FILE_ROOT . '/invalidNonExistingLibrarySource.php'));
+        new LibraryAdditions(null, new \SplFileInfo(TEST_FILE_ROOT . '/invalidNonExistingLibrarySource.php'));
     }
 
     /**
@@ -119,7 +120,6 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedExceptionOnWrongParameterTypeOnConstruct()
     {
-        $walker = new LibraryAdditions(null,
-            fopen('php://memory', 'rw'));
+        new LibraryAdditions(null, fopen('php://memory', 'rw'));
     }
 }

@@ -3,6 +3,8 @@
 namespace Pvra\tests\Analysers;
 
 
+use PhpParser\Node\Scalar\LNumber;
+use Pvra\Analysers\Php54Features;
 use Pvra\Result\Reason;
 use Pvra\Result\Reasoning;
 use Pvra\tests\BaseNodeWalkerTestCase;
@@ -66,5 +68,16 @@ class Php54FeaturesTest extends BaseNodeWalkerTestCase
         $this->assertSame('5.4.0', $reasoning['version']);
         $this->assertSame(1, $reasoning['line']);
         $this->assertSame(Reason::SHORT_ECHO_TAG, $reasoning['reason']);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Node attribute ("originalValue") missing.
+     */
+    public function testMissingLNumberNodeAttribute()
+    {
+        $node = new LNumber(100);
+        $visitor = new Php54Features();
+        $visitor->enterNode($node);
     }
 }

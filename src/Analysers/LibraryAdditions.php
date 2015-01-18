@@ -72,17 +72,17 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
     public function enterNode(Node $node)
     {
         // direct class calls
-        if ($node instanceof Node\Expr\New_ || $node instanceof Node\Expr\StaticCall) {
-            if (count($node->class->parts) === 1) {
-                if ($this->hasClassVersionRequirement($node->class->parts[0])) {
-                    $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
-                        $this->getClassVersionRequirement($node->class->parts[0]),
-                        $node->getLine(),
-                        null,
-                        Reason::CLASS_PRESENCE_CHANGE,
-                        ['className' => $node->class->parts[0]]
-                    );
-                }
+        if ($node instanceof Node\Expr\New_ || $node instanceof Node\Expr\StaticCall || $node instanceof Node\Expr\ClassConstFetch) {
+            if (count($node->class->parts) === 1
+                && is_string($req = $this->getClassVersionRequirement($node->class->parts[0]))
+            ) {
+                $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
+                    $req,
+                    $node->getLine(),
+                    null,
+                    Reason::CLASS_PRESENCE_CHANGE,
+                    ['className' => $node->class->parts[0]]
+                );
             }
         } elseif ($node instanceof Node\Stmt\Function_
             || $node instanceof Node\Stmt\ClassMethod
@@ -92,10 +92,10 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
                 foreach ($node->params as $param) {
                     if (isset($param->type) && !is_string($param->type)
                         && count($param->type->parts) === 1
-                        && $this->hasClassVersionRequirement($param->type->getLast())
+                        && is_string(($req = $this->getClassVersionRequirement($param->type->getLast())))
                     ) {
                         $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
-                            $this->getClassVersionRequirement($param->type->getLast()),
+                            $req,
                             $param->getLine(),
                             null,
                             Reason::CLASS_PRESENCE_CHANGE,
@@ -120,9 +120,9 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
             }
 
             foreach ($names as $name) {
-                if (count($name->parts) === 1 && $this->hasClassVersionRequirement($name->getLast())) {
+                if (count($name->parts) === 1 && is_string($req = $this->getClassVersionRequirement($name->getLast()))) {
                     $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
-                        $this->getClassVersionRequirement($name->getLast()),
+                        $req,
                         $node->getLine(),
                         null,
                         Reason::CLASS_PRESENCE_CHANGE,
@@ -131,10 +131,10 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
                 }
             }
         } elseif ($node instanceof Node\Expr\FuncCall) {
-            // core functions are not namespaced:
-            if (count($node->name->parts) === 1 && $this->hasFunctionVersionRequirement($node->name->getLast())) {
+            // core functions are not namespaced, has to be redone to allow extension support
+            if (count($node->name->parts) === 1 && is_string(($req = $this->getFunctionVersionRequirement($node->name->getLast())))) {
                 $this->getResult()->addArbitraryRequirement(
-                    $this->getFunctionVersionRequirement($node->name->getLast()),
+                    $req,
                     $node->getLine(),
                     null,
                     Reason::FUNCTION_PRESENCE_CHANGE,
@@ -148,18 +148,9 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
      * @param string $name
      * @return bool
      */
-    private function hasFunctionVersionRequirement($name)
-    {
-        return isset($this->data['functions-added'][ $name ]);
-    }
-
-    /**
-     * @param string $name
-     * @return bool
-     */
     private function getFunctionVersionRequirement($name)
     {
-        if ($this->hasFunctionVersionRequirement($name)) {
+        if (isset($this->data['functions-added'][ $name ])) {
             return $this->data['functions-added'][ $name ];
         }
 
@@ -170,18 +161,9 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
      * @param string $name
      * @return bool
      */
-    private function hasClassVersionRequirement($name)
-    {
-        return isset($this->data['classes-added'][ $name ]);
-    }
-
-    /**
-     * @param string $name
-     * @return bool
-     */
     private function getClassVersionRequirement($name)
     {
-        if ($this->hasClassVersionRequirement($name)) {
+        if (isset($this->data['classes-added'][ $name ])) {
             return $this->data['classes-added'][ $name ];
         }
 

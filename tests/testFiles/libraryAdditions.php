@@ -38,4 +38,10 @@ namespace MyNameSpace {
     class MyNamespacedCoreClassNameImplementation implements JsonSerializable
     {
     }
+
+    abstract class MyNamespacedCoreClassNameImplementation2 implements \JsonSerializable
+    {
+    }
+
+    $forward = \Transliterator::FORWARD;
 }

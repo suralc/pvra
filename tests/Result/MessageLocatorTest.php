@@ -198,6 +198,15 @@ class MessageLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $locator = new MessageLocator();
 
+        $locator->addMissingMessageHandler(function ($id, MessageLocator $locator) {
+            $locator->terminateCallbackChain();
+            return false;
+        });
+
+        $locator->addMissingMessageHandler(function () {
+            $this->fail('This handler should not have been called.');
+        });
+
         $locator->addMessageSearcher(function ($id, MessageLocator $locator) {
             $locator->terminateCallbackChain();
         });
