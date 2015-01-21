@@ -56,7 +56,7 @@ return [
     R::TRY_CATCH_FINALLY => 'Usage of the finally keyword requires PHP :version:',
     R::LIST_IN_FOREACH => 'Usage of list in foreach ValueVar statement requires PHP :version:',
     R::EXPR_IN_EMPTY => 'Usage of arbitrary expressions in empty statement requires PHP :version:',
-    R::ARRAY_OR_STRING_DEREFERENCING => 'Array and string literal dereferencing requires PHP :version',
+    R::ARRAY_OR_STRING_DEREFERENCING => 'Array and string literal dereferencing requires PHP :version:',
     R::CLASS_NAME_RESOLUTION => 'Class name resolution via ::class requires PHP :version:',
     // 5.6
     R::VARIADIC_ARGUMENT => 'Variadic arguments require PHP :version:',
