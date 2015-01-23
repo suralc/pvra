@@ -38,18 +38,18 @@ abstract class PvraBaseCommandTestBase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $argumetns
+     * @param array $arguments
      * @param array $options
      * @param null $command
      * @param null $application
      * @return \Symfony\Component\Console\Tester\CommandTester
      */
-    protected function execute($argumetns = [], $options = [], &$command = null, &$application = null)
+    protected function execute($arguments = [], $options = [], &$command = null, &$application = null)
     {
         /** @var CommandTester $commandTester */
         /** @var FileCommand $command */
         list($commandTester, $command, $application) = $this->getBareInstances();
-        $commandTester->execute($argumetns, $options);
+        $commandTester->execute($arguments, $options);
         return $commandTester;
     }
 }

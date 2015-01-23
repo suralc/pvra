@@ -18,6 +18,7 @@ namespace Pvra\Console\Commands;
 
 
 use Pvra\AnalysisResult;
+use Pvra\Console\Services\FileFinderBuilder;
 use Pvra\Result\Collection;
 use Pvra\Result\Reasoning;
 use RuntimeException;
@@ -26,7 +27,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Finder\Finder;
 
 /**
  * Class DirCommand
@@ -53,6 +53,10 @@ class DirCommand extends PvraBaseCommand
             ->addOption('recursive', 'r', InputOption::VALUE_NONE, 'Iterate recursive over directory')
             ->addOption('groupBy', 'g', InputOption::VALUE_REQUIRED, 'Group output by name[n] or required version[v]',
                 self::GROUP_BY_NAME)
+            ->addOption('sortBy', 'o', InputOption::VALUE_REQUIRED, 'Order of iteration. n[ame]/m[time]',
+                FileFinderBuilder::SORT_BY_NAME)
+            ->addOption('listFilesOnly', null, InputOption::VALUE_NONE,
+                'Only list matched files and do not run analysis.')
             ->addArgument('filters', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Filter', ['name:*.php']);
     }
 
@@ -62,23 +66,26 @@ class DirCommand extends PvraBaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dir = $input->getArgument('target');
-        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
-            $output->writeln('Dir: ' . $dir);
+
+        $files = (new FileFinderBuilder($dir))
+            ->isRecursive($input->getOption('recursive'))
+            ->sortBy($input->getOption('sortBy'))
+            ->withFilters($input->getArgument('filters'))
+            ->getFinder();
+
+        if ($files->count() === 0) {
+            $output->writeln('<error>No files processed!</error>');
+            return;
         }
 
-        if (!is_dir($dir) || !is_readable($dir)) {
-            throw new RuntimeException(sprintf('"%s" is not a valid directory', $dir));
+        if ($input->getOption('listFilesOnly')) {
+            $output->writeln($files->count() . ' files to process.');
+            /** @var \SplFileInfo $file */
+            foreach ($files as $file) {
+                $output->writeln($file->getRealPath());
+            }
+            return;
         }
-
-        $files = (new Finder())
-            ->files()
-            ->in($dir);
-
-        if ($input->getOption('recursive') === false) {
-            $files->depth(0);
-        }
-
-        $this->applyIteratorFilter($files, $input->getArgument('filters'));
 
         $results = new Collection();
 
@@ -91,17 +98,12 @@ class DirCommand extends PvraBaseCommand
             }
         }
 
-        if ($files->count() === 0) {
-            $output->writeln('<error>No files processed!</error>');
-            return;
-        }
-
         if ($input->getOption('groupBy') === self::GROUP_BY_NAME) {
             $this->renderResultCollectionByName($results, $output, $input);
         } elseif ($input->getOption('groupBy') === self::GROUP_BY_VERSION) {
             $this->renderResultCollectionByRequiredVersion($results, $output);
         } else {
-            throw new \InvalidArgumentException('The value given to the groupBy option is not allowed.');
+            throw new \InvalidArgumentException('The value given to the groupBy option is not supported.');
         }
 
         if ($file = $input->getOption('saveAsFile')) {
@@ -116,7 +118,7 @@ class DirCommand extends PvraBaseCommand
                         break;
                     }
                     default: {
-                        $output->writeln('<error>Invalid save format</error>');
+                        $output->writeln('<error>Invalid save format.</error>');
                     }
                 }
             }
@@ -128,17 +130,23 @@ class DirCommand extends PvraBaseCommand
         $highestRequirement = $results->getHighestDemandingResult();
 
         if ($highestRequirement === null) {
+            // @codeCoverageIgnoreStart
             throw new RuntimeException('Detection of requirements failed. Unknown error.');
+            // @codeCoverageIgnoreEnd
         }
         $out->writeln('Highest required version: ' . $highestRequirement->getRequiredVersion());
-        $out->writeln(sprintf('Required because %s uses following features:',
+        $out->writeln(sprintf('Required because %s uses the following features:',
             $highestRequirement->getAnalysisTargetId()));
 
-        foreach ($highestRequirement->getRequirements() as $version => $reasons) {
-            foreach ($reasons as $reason) {
-                $out->write("\t");
-                $out->write($reason['msg'], true);
+        if ($highestRequirement->count() !== 0) {
+            foreach ($highestRequirement->getRequirements() as $version => $reasons) {
+                foreach ($reasons as $reason) {
+                    $out->write("\t");
+                    $out->write($reason['msg'], true);
+                }
             }
+        } else {
+            $out->writeln("\t<info>No requirements beyond the default version (5.3) could be found.</info>");
         }
 
         if ($results->count() > 1) {
@@ -163,7 +171,7 @@ class DirCommand extends PvraBaseCommand
                     ' for the following reasons:',
                     "\n"
                 ]));
-                /** @var  Reasoning */
+                /** @var $reason Reasoning */
                 foreach ($result as $reason) {
                     $out->write("\t");
                     $out->write($reason['msg'], true);
@@ -185,8 +193,11 @@ class DirCommand extends PvraBaseCommand
         $highestRequirement = $results->getHighestDemandingResult();
 
         if ($highestRequirement === null) {
+            // @codeCoverageIgnoreStart
             throw new RuntimeException('Detection of requirements failed. Unknown error.');
+            // @codeCoverageIgnoreEnd
         }
+
         $out->writeln('Highest required version: ' . $highestRequirement->getRequiredVersion() . ' in ' . $highestRequirement->getAnalysisTargetId() . ($results->count() > 1 ? ' and others' : ''));
 
         $usedVersions = [];
@@ -216,45 +227,5 @@ class DirCommand extends PvraBaseCommand
             }
         }
 
-    }
-
-    /**
-     * @param Finder $files
-     * @param array $filterList
-     */
-    protected function applyIteratorFilter(Finder $files, array $filterList = [])
-    {
-        if (!empty($filterList) && is_array($filterList)) {
-            foreach ($filterList as $currentFilter) {
-                if (!stripos($currentFilter, ':')) {
-                    throw new \InvalidArgumentException(sprintf('The filter "%s" is not a valid filter',
-                        $currentFilter));
-                }
-
-                $currentFilterElements = explode(':', $currentFilter);
-
-                if (count($currentFilterElements) !== 2) {
-                    throw new \InvalidArgumentException(sprintf('The filter "%s" is not a valid filter',
-                        $currentFilter));
-                }
-
-                switch ($currentFilterElements[0]) {
-                    case 'exclude':
-                        $files->exclude($currentFilterElements[1]);
-                        break;
-                    case 'name':
-                        $files->name($currentFilterElements[1]);
-                        break;
-                    case 'notName':
-                        $files->notName($currentFilterElements[1]);
-                        break;
-                    case 'path':
-                        $files->path($currentFilterElements[1]);
-                        break;
-                    case 'size':
-                        $files->size($currentFilterElements[1]);
-                }
-            }
-        }
     }
 }

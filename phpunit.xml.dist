@@ -24,6 +24,7 @@
             <directory suffix=".php">src/Analysers</directory>
             <directory suffix=".php">src/Lexer</directory>
             <directory suffix=".php">src/Result</directory>
+            <directory suffix=".php">src/Console/Services</directory>
             <file>src/Analyser.php</file>
             <file>src/AnalyserAwareInterface.php</file>
             <file>src/AnalysisResult.php</file>
@@ -31,6 +32,7 @@
             <file>src/StringAnalyser.php</file>
             <file>src/Console/Commands/PvraBaseCommand.php</file>
             <file>src/Console/Commands/FileCommand.php</file>
+            <file>src/Console/Commands/DirCommand.php</file>
         </whitelist>
     </filter>
 </phpunit>

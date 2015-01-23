@@ -4,6 +4,7 @@
 /docs
 /data/cov
 /docs/cov
+/coverage
 pvra.phar
 composer.lock
 composer.phar
