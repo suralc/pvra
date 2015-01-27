@@ -35,8 +35,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  */
 class DirCommand extends PvraBaseCommand
 {
-    const GROUP_BY_NAME = 'n',
-        GROUP_BY_VERSION = 'v';
+    const GROUP_BY_NAME = 'name',
+        GROUP_BY_VERSION = 'version';
 
     /**
      * @inheritdoc
@@ -45,15 +45,15 @@ class DirCommand extends PvraBaseCommand
     {
         $this
             ->setName('analyse:dir')
-            ->setDescription('Iterates over a directory and runs the requirement analysis');
+            ->setDescription('Iterates over a directory and runs the specified analysers.');
 
         parent::configure();
 
         $this
             ->addOption('recursive', 'r', InputOption::VALUE_NONE, 'Iterate recursive over directory')
-            ->addOption('groupBy', 'g', InputOption::VALUE_REQUIRED, 'Group output by name[n] or required version[v]',
+            ->addOption('groupBy', 'g', InputOption::VALUE_REQUIRED, 'Group output by name or required version.',
                 self::GROUP_BY_NAME)
-            ->addOption('sortBy', 'o', InputOption::VALUE_REQUIRED, 'Order of iteration. n[ame]/m[time]',
+            ->addOption('sortBy', 'o', InputOption::VALUE_REQUIRED, 'Sort order of remaining files. Only takes effect while using --groupBy=n[ame]',
                 FileFinderBuilder::SORT_BY_NAME)
             ->addOption('listFilesOnly', null, InputOption::VALUE_NONE,
                 'Only list matched files and do not run analysis.')
@@ -226,6 +226,5 @@ class DirCommand extends PvraBaseCommand
                 }
             }
         }
-
     }
 }

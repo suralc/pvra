@@ -49,7 +49,6 @@ class PvraBaseCommand extends Command
     protected function configure()
     {
         $this
-            ->addOption('extensive', 'x', InputOption::VALUE_NONE, 'Use more extensive output format (var_dump like)')
             ->addOption('preventNameExpansion', 'p', InputOption::VALUE_NONE,
                 'Prevent name expansion. May increase performance but sacrifices some functionality')
             ->addOption('analyser', 'a', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,

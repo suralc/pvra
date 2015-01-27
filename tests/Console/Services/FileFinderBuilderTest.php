@@ -59,11 +59,37 @@ class FileFinderBuilderTest extends \PHPUnit_Framework_TestCase
     public function testSortBy()
     {
         $finderMock = $this->getDefaultFinderMock();
-        $finderMock->shouldReceive('sortByName')->twice();
+        $finderMock->shouldReceive('sortByName')->twice()->andReturnSelf();
         (new FileFinderBuilder(TEST_FILE_ROOT, $finderMock))->sortBy(FileFinderBuilder::SORT_BY_NAME)->sortBy('name');
         $finderMock = $this->getDefaultFinderMock();
-        $finderMock->shouldReceive('sortByChangedTime')->twice();
-        (new FileFinderBuilder(TEST_FILE_ROOT, $finderMock))->sortBy(FileFinderBuilder::SORT_BY_CTIME)->sortBy('ctime');
+        $finderMock->shouldReceive('sortByChangedTime')->twice()->andReturnSelf();
+        (new FileFinderBuilder(TEST_FILE_ROOT, $finderMock))->sortBy(FileFinderBuilder::SORT_BY_CHANGED_TIME)->sortBy('ctime');
+        $finderMock = $this->getDefaultFinderMock();
+        $finderMock->shouldReceive('sortByAccessedTime')->twice()->andReturnSelf();
+        (new FileFinderBuilder(TEST_FILE_ROOT, $finderMock))->sortBy(FileFinderBuilder::SORT_BY_ACCESSED_TIME)->sortBy('atime');
+        $finderMock = $this->getDefaultFinderMock();
+        $finderMock->shouldReceive('sortByType')->twice()->andReturnSelf();
+        (new FileFinderBuilder(TEST_FILE_ROOT, $finderMock))->sortBy(FileFinderBuilder::SORT_BY_TYPE)->sortBy('type');
+        $finderMock = $this->getDefaultFinderMock();
+        $finderMock->shouldReceive('sortByModifiedTime')->twice()->andReturnSelf();
+        (new FileFinderBuilder(TEST_FILE_ROOT, $finderMock))->sortBy(FileFinderBuilder::SORT_BY_MODIFIED_TIME)->sortBy('mtime');
+    }
+
+    public function testSortByWithCallable()
+    {
+        $callable = function() { return 0; };
+        $finderMock = $this->getDefaultFinderMock();
+        $finderMock->shouldReceive('sort')->once()->with($callable)->andReturnSelf();
+        (new FileFinderBuilder(TEST_FILE_ROOT, $finderMock))->sortBy($callable);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage is not a supported argument for sorting.
+     */
+    public function testSortByError()
+    {
+        (new FileFinderBuilder(TEST_FILE_ROOT))->sortBy('non-existing');
     }
 
     public function testGetIterator()

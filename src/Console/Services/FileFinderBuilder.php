@@ -28,8 +28,12 @@ use Symfony\Component\Finder\Finder;
  */
 class FileFinderBuilder implements \IteratorAggregate
 {
-    const SORT_BY_NAME = 'n';
-    const SORT_BY_CTIME = 'c';
+    const SORT_BY_NAME = 'n',
+        SORT_BY_CHANGED_TIME = 'c',
+        SORT_BY_TYPE = 't',
+        SORT_BY_ACCESSED_TIME = 'a',
+        SORT_BY_MODIFIED_TIME = 'm';
+
     /**
      * @var \Symfony\Component\Finder\Finder
      */
@@ -84,21 +88,37 @@ class FileFinderBuilder implements \IteratorAggregate
     }
 
     /**
-     * @param string $by
+     * @param callable|string $by
      * @return $this
      */
     public function sortBy($by = self::SORT_BY_NAME)
     {
-        switch (strtolower($by)) {
-            case self::SORT_BY_NAME:
-            case 'name': {
-                $this->finder->sortByName();
-                break;
-            }
-            case self::SORT_BY_CTIME:
-            case 'ctime': {
-                $this->finder->sortByChangedTime();
-                break;
+        if (is_callable($by)) {
+            $this->finder->sort($by);
+        } else {
+            switch (strtolower($by)) {
+                case self::SORT_BY_NAME:
+                case 'name':
+                    $this->finder->sortByName();
+                    break;
+                case self::SORT_BY_CHANGED_TIME:
+                case 'ctime':
+                    $this->finder->sortByChangedTime();
+                    break;
+                case self::SORT_BY_ACCESSED_TIME:
+                case 'atime':
+                    $this->finder->sortByAccessedTime();
+                    break;
+                case self::SORT_BY_TYPE:
+                case 'type':
+                    $this->finder->sortByType();
+                    break;
+                case self::SORT_BY_MODIFIED_TIME:
+                case 'mtime':
+                    $this->finder->sortByModifiedTime();
+                    break;
+                default:
+                    throw new \InvalidArgumentException($by . ' is not a supported argument for sorting.');
             }
         }
 
