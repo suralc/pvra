@@ -18,6 +18,7 @@ namespace Pvra\Console\Commands\Debug;
 
 
 use PhpParser\Error;
+use PhpParser\NodeDumper;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
@@ -90,7 +91,9 @@ class DumpAstCommand extends Command
                 ini_set('xdebug.var_display_max_depth', $depth);
             }
         } else {
-            print_r($stmts);
+            echo (new NodeDumper)->dump($stmts);
         }
+
+        return 0;
     }
 }
