@@ -206,7 +206,7 @@ class FileCommandTest extends PvraBaseCommandTestBase
                 '--analyser' => ['NonExistingClass'],
             ])->getDisplay(true);
         } catch (\InvalidArgumentException $e) {
-            $this->assertStringMatchesFormat('"%s" (expanded to "%s") is not a class.', $e->getMessage());
+            $this->assertStringMatchesFormat('"%s" is not a class.', $e->getMessage());
             return;
         } catch (\Exception $e) {
             $this->fail('Unexpected exception with message: ' . $e->getMessage());
@@ -222,7 +222,7 @@ class FileCommandTest extends PvraBaseCommandTestBase
     {
         $this->execute([
             'target' => TEST_FILE_ROOT . '5.4/all54.php',
-            '--analyser' => ['NonImplementingNodeWalker'],
+            '--analyser' => ['Pvra\Analysers\NonImplementingNodeWalker'],
         ]);
     }
 
@@ -264,7 +264,7 @@ class FileCommandTest extends PvraBaseCommandTestBase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage "php-over-9000" (expanded to "Pvra\Analysers\php-over-9000") is not a class.
+     * @expectedExceptionMessage "php-over-9000" is not a class.
      */
     public function testErrorOnInvalidAnalyserAlias()
     {

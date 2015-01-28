@@ -52,7 +52,7 @@ class PvraBaseCommand extends Command
             ->addOption('preventNameExpansion', 'p', InputOption::VALUE_NONE,
                 'Prevent name expansion. May increase performance but sacrifices some functionality')
             ->addOption('analyser', 'a', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
-                'Analysers to run', array_keys($this->getDefaultAnalysers()))
+                'Analysers to run', array_values($this->getDefaultAnalysers()))
             ->addOption('libraryDataSource', 'l', InputOption::VALUE_REQUIRED, 'Source file of library data', false)
             ->addOption('messageFormatSourceFile', 'm', InputOption::VALUE_REQUIRED, 'File with message formats', false)
             ->addOption('saveFormat', null, InputOption::VALUE_REQUIRED, 'The format of the save file.', 'json')
@@ -62,6 +62,11 @@ class PvraBaseCommand extends Command
         $this->addArgument('target', InputArgument::REQUIRED, 'The target of this analysis');
     }
 
+    /**
+     * Array of default analysers and their aliases
+     *
+     * @return array
+     */
     protected function getDefaultAnalysers()
     {
         static $analysers = [
@@ -80,23 +85,27 @@ class PvraBaseCommand extends Command
         if (empty($analysers) || !is_array($analysers)) {
             throw new \InvalidArgumentException('The values given to the "analyser" parameter are not valid.');
         }
+        $defaultAnalysers = $this->getDefaultAnalysers();
         foreach ($analysers as $analyser) {
-            $keys = array_values(array_keys($this->getDefaultAnalysers(), $analyser, true));
+            $keys = array_values(array_keys($defaultAnalysers, $analyser, true));
             if (!empty($keys)) {
                 // @codeCoverageIgnoreStart
                 // this exception should never be triggerable and should only occur if ::getDefaultAnalysers was
                 // incorrectly overridden. There should be a test for that though.
                 if (isset($keys[1])) {
                     // aliases should be unique. If a second index is set the alias is not unique
-                    throw new \UnexpectedValueException('An alias should be unique.');
+                    throw new \UnexpectedValueException('An alias should be unique. ' . $keys[1] . ' is not.');
                 }
                 // @codeCoverageIgnoreEnd
                 $analyser = $keys[0];
             }
-            $analyserName = self::WALKER_DEFAULT_NAMESPACE_ROOT . $analyser;
+            if (isset($defaultAnalysers[ $analyser ])) {
+                $analyserName = self::WALKER_DEFAULT_NAMESPACE_ROOT . $analyser;
+            } else {
+                $analyserName = $analyser;
+            }
             if (!class_exists($analyserName)) {
-                throw new \InvalidArgumentException(sprintf('"%s" (expanded to "%s") is not a class.', $analyser,
-                    $analyserName));
+                throw new \InvalidArgumentException(sprintf('"%s" is not a class.', $analyser));
             } elseif (!in_array('Pvra\\AnalyserAwareInterface', class_implements($analyserName))
             ) {
                 throw new \InvalidArgumentException(sprintf('"%s" does not implement "%s"', $analyserName,
