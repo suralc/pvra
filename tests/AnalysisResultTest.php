@@ -40,7 +40,7 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         try {
             $r = new AnalysisResult();
 
-            $r->addRequirement(R::CLASS_PRESENCE_CHANGE);
+            $r->addRequirement(R::LIB_CLASS_ADDITION);
             $this->fail('Unreachable statement reached. Exception not triggered');
         } catch (\LogicException $ex) {
             $this->assertStringMatchesFormat('%s::%s requires a reason a version can be associated to.'
@@ -97,11 +97,11 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         $this->assertSame('5.5.1', $r->getRequiredVersion());
         $r->addRequirement(R::VARIADIC_ARGUMENT);
         $this->assertSame('5.6.0', $r->getRequiredVersion());
-        $r->addArbitraryRequirement('7.0.1', 544, 'Some msg', R::CLASS_PRESENCE_CHANGE);
+        $r->addArbitraryRequirement('7.0.1', 544, 'Some msg', R::LIB_CLASS_ADDITION);
         $this->assertSame('7.0.1', $r->getRequiredVersion());
         $this->assertSame(544, $r->getRequirementInfo('7.0.1')[0]['line']);
         $this->assertSame('Some msg', $r->getRequirementInfo('7.0.1')[0]['msg']);
-        $this->assertSame(R::CLASS_PRESENCE_CHANGE, $r->getRequirementInfo('7.0.1')[0]['reason']);
+        $this->assertSame(R::LIB_CLASS_ADDITION, $r->getRequirementInfo('7.0.1')[0]['reason']);
         $r->addArbitraryRequirement('4.3.0');
         $r->addRequirement(R::ARGUMENT_UNPACKING);
         $this->assertSame('7.0.1', $r->getRequiredVersion());

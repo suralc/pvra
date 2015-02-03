@@ -83,8 +83,8 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         if ($this->cachedRequiredVersionId === null) {
             $version = explode('.', $this->getRequiredVersion());
 
-            $c = count($version);
-            if ($c > 3 || $c < 2) {
+            $elements = count($version);
+            if ($elements > 3 || $elements < 2) {
                 throw new \Exception(sprintf('A version id has to be built from two or three segments. "%s" is not valid.',
                     $this->getRequiredVersion()));
             }
@@ -286,14 +286,14 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
-        $it = new \ArrayIterator();
+        $iterator = new \ArrayIterator();
         foreach ($this->getRequirements() as $requirementVersion => $values) {
             foreach ($values as $value) {
-                $it->append($value);
+                $iterator->append($value);
             }
         }
 
-        return $it;
+        return $iterator;
     }
 
     /**

@@ -20,7 +20,7 @@ class MessageFormatterTest extends \PHPUnit_Framework_TestCase
         $f = new MessageFormatter();
         $this->assertInstanceOf('\Pvra\Result\MessageLocator', $f->getLocator());
         $this->assertInternalType('string', $f->getLocator()[ Reason::ARRAY_FUNCTION_DEREFERENCING ]);
-        $this->assertTrue($f->getLocator()->messageExists(Reason::CLASS_PRESENCE_CHANGE));
+        $this->assertTrue($f->getLocator()->messageExists(Reason::LIB_CLASS_ADDITION));
     }
 
     public function testLocatorCreationByArray()

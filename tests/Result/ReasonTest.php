@@ -24,14 +24,14 @@ class ReasonTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('TRAIT_USE', R::getReasonNameFromValue(R::TRAIT_USE));
         $this->assertSame('UNKNOWN', R::getReasonNameFromValue(989898));
         $this->assertSame('UNKNOWN', R::getReasonNameFromValue(R::UNKNOWN));
-        $this->assertSame('FUNCTION_PRESENCE_CHANGE', R::getReasonNameFromValue(R::FUNCTION_PRESENCE_CHANGE));
+        $this->assertSame('LIB_FUNCTION_ADDITION', R::getReasonNameFromValue(R::LIB_FUNCTION_ADDITION));
     }
 
     public function testGetReasonNames()
     {
         // test regeneration
         $this->assertSame(R::getReasonNames(), $names = R::getReasonNames());
-        $this->assertCount(42, $names);
+        $this->assertCount(46, $names);
         $this->assertArrayHasKey('UNKNOWN', $names);
         R::clear();
         $this->assertSame($names, R::getReasonNames());
@@ -48,8 +48,8 @@ class ReasonTest extends \PHPUnit_Framework_TestCase
         R::clear();
         // make sure values are reinitialized
         $this->assertTrue(is_string(R::getRequiredVersionForReason(R::CONSTANT_IMPORT_USE)));
-        $this->assertFalse(R::getRequiredVersionForReason(R::FUNCTION_PRESENCE_CHANGE));
-        $this->assertFalse(R::getRequiredVersionForReason(R::CLASS_PRESENCE_CHANGE));
+        $this->assertFalse(R::getRequiredVersionForReason(R::LIB_FUNCTION_ADDITION));
+        $this->assertFalse(R::getRequiredVersionForReason(R::LIB_CLASS_ADDITION));
     }
 
     public function testGetRequirementForReasonException()
@@ -57,7 +57,7 @@ class ReasonTest extends \PHPUnit_Framework_TestCase
 
         $tests = [
             R::CONSTANT_IMPORT_USE => false,
-            R::CLASS_PRESENCE_CHANGE => false,
+            R::LIB_CLASS_ADDITION => false,
             8748 => true,
             -24 => true,
             'some string' => true,

@@ -23,11 +23,14 @@ namespace Pvra\Result;
  */
 abstract class Reason
 {
-    // These integers are arbitrary. They may appear to follow some system, but be aware
-    // they do not. Always use the constants.
+    // These integers are arbitrary. They may appear to follow some system, but they do not. Always use the constants.
     const UNKNOWN = 0x0,
-        CLASS_PRESENCE_CHANGE = 1,
-        FUNCTION_PRESENCE_CHANGE = 2,
+        LIB_CLASS_ADDITION = 1,
+        LIB_CLASS_REMOVAL = 3,
+        LIB_CLASS_DEPRECATION = 6,
+        LIB_FUNCTION_ADDITION = 2,
+        LIB_FUNCTION_REMOVAL = 4,
+        LIB_FUNCTION_DEPRECATION = 5,
         // 5.3
         GOTO_KEYWORD = 70,
         JUMP_LABEL = 71,

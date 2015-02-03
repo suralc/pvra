@@ -16,20 +16,20 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
         $res = $this->runInstanceFromScratch('libraryAdditions');
 
         $expected = [
-            [3, Reason::FUNCTION_PRESENCE_CHANGE],
-            [4, Reason::FUNCTION_PRESENCE_CHANGE],
-            [6, Reason::FUNCTION_PRESENCE_CHANGE],
-            [7, Reason::CLASS_PRESENCE_CHANGE],
-            [8, Reason::CLASS_PRESENCE_CHANGE],
-            [12, Reason::CLASS_PRESENCE_CHANGE],
-            [12, Reason::CLASS_PRESENCE_CHANGE],
-            [12, Reason::CLASS_PRESENCE_CHANGE],
-            [19, Reason::CLASS_PRESENCE_CHANGE],
-            [21, Reason::CLASS_PRESENCE_CHANGE],
-            [25, Reason::CLASS_PRESENCE_CHANGE],
-            [25, Reason::CLASS_PRESENCE_CHANGE],
-            [42, Reason::CLASS_PRESENCE_CHANGE],
-            [46, Reason::CLASS_PRESENCE_CHANGE],
+            [3, Reason::LIB_FUNCTION_ADDITION],
+            [4, Reason::LIB_FUNCTION_ADDITION],
+            [6, Reason::LIB_FUNCTION_ADDITION],
+            [7, Reason::LIB_CLASS_ADDITION],
+            [8, Reason::LIB_CLASS_ADDITION],
+            [12, Reason::LIB_CLASS_ADDITION],
+            [12, Reason::LIB_CLASS_ADDITION],
+            [12, Reason::LIB_CLASS_ADDITION],
+            [19, Reason::LIB_CLASS_ADDITION],
+            [21, Reason::LIB_CLASS_ADDITION],
+            [25, Reason::LIB_CLASS_ADDITION],
+            [25, Reason::LIB_CLASS_ADDITION],
+            [42, Reason::LIB_CLASS_ADDITION],
+            [46, Reason::LIB_CLASS_ADDITION],
         ];
 
         $this->assertCount(count($expected) + /* 5.6 below the foreach */
@@ -41,7 +41,7 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
         }
 
         $this->assertSame(4, $res->getRequirementInfo('5.6.0')[0]['line']);
-        $this->assertSame(Reason::FUNCTION_PRESENCE_CHANGE, $res->getRequirementInfo('5.6.0')[0]['reason']);
+        $this->assertSame(Reason::LIB_FUNCTION_ADDITION, $res->getRequirementInfo('5.6.0')[0]['reason']);
     }
 
     public function testPropertyOfNonObjectOnCountNamePartsInParameterTypeHint()

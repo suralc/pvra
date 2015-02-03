@@ -81,7 +81,7 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
                     $req,
                     $node->getLine(),
                     null,
-                    Reason::CLASS_PRESENCE_CHANGE,
+                    Reason::LIB_CLASS_ADDITION,
                     ['className' => $node->class->parts[0]]
                 );
             }
@@ -99,7 +99,7 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
                             $req,
                             $param->getLine(),
                             null,
-                            Reason::CLASS_PRESENCE_CHANGE,
+                            Reason::LIB_CLASS_ADDITION,
                             ['className' => $param->type->parts[0]]
                         );
                     }
@@ -126,7 +126,7 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
                         $req,
                         $node->getLine(),
                         null,
-                        Reason::CLASS_PRESENCE_CHANGE,
+                        Reason::LIB_CLASS_ADDITION,
                         ['className' => $name->getLast()]
                     );
                 }
@@ -138,7 +138,7 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
                     $req,
                     $node->getLine(),
                     null,
-                    Reason::FUNCTION_PRESENCE_CHANGE,
+                    Reason::LIB_FUNCTION_ADDITION,
                     ['functionName' => $node->name->getLast()]
                 );
             }

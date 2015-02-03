@@ -95,32 +95,34 @@ class FileFinderBuilder implements \IteratorAggregate
     {
         if (is_callable($by)) {
             $this->finder->sort($by);
-        } else {
-            switch (strtolower($by)) {
-                case self::SORT_BY_NAME:
-                case 'name':
-                    $this->finder->sortByName();
-                    break;
-                case self::SORT_BY_CHANGED_TIME:
-                case 'ctime':
-                    $this->finder->sortByChangedTime();
-                    break;
-                case self::SORT_BY_ACCESSED_TIME:
-                case 'atime':
-                    $this->finder->sortByAccessedTime();
-                    break;
-                case self::SORT_BY_TYPE:
-                case 'type':
-                    $this->finder->sortByType();
-                    break;
-                case self::SORT_BY_MODIFIED_TIME:
-                case 'mtime':
-                    $this->finder->sortByModifiedTime();
-                    break;
-                default:
-                    throw new \InvalidArgumentException($by . ' is not a supported argument for sorting.');
-            }
+            return $this;
         }
+
+        switch (strtolower($by)) {
+            case self::SORT_BY_NAME:
+            case 'name':
+                $this->finder->sortByName();
+                break;
+            case self::SORT_BY_CHANGED_TIME:
+            case 'ctime':
+                $this->finder->sortByChangedTime();
+                break;
+            case self::SORT_BY_ACCESSED_TIME:
+            case 'atime':
+                $this->finder->sortByAccessedTime();
+                break;
+            case self::SORT_BY_TYPE:
+            case 'type':
+                $this->finder->sortByType();
+                break;
+            case self::SORT_BY_MODIFIED_TIME:
+            case 'mtime':
+                $this->finder->sortByModifiedTime();
+                break;
+            default:
+                throw new \InvalidArgumentException($by . ' is not a supported argument for sorting.');
+        }
+
 
         return $this;
     }

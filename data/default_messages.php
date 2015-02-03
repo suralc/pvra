@@ -20,8 +20,12 @@ use Pvra\Result\Reason as R;
 
 return [
     R::UNKNOWN => 0x0,
-    R::CLASS_PRESENCE_CHANGE => 'The ":className:" class was introduced in PHP :version:',
-    R::FUNCTION_PRESENCE_CHANGE => 'The ":functionName:" function was introduced in PHP :version:',
+    R::LIB_CLASS_ADDITION => 'The ":className:" class was introduced in PHP :version:',
+    R::LIB_CLASS_DEPRECATION => 'The ":className:" class was deprecated in PHP :version: and should no longer be used',
+    R::LIB_CLASS_REMOVAL => 'The ":className:" class was removed in PHP :version:',
+    R::LIB_FUNCTION_ADDITION => 'The ":functionName:" function was introduced in PHP :version:',
+    R::LIB_FUNCTION_DEPRECATION => 'The ":functionName:" function was deprecated in PHP :version: and should no longer be used',
+    R::LIB_FUNCTION_REMOVAL => 'The ":functionName:" function was removed in PHP :version:',
     // 5.3
     R::GOTO_KEYWORD => 'The goto keyword (targeting :name:) was introduced in PHP :version:',
     R::JUMP_LABEL => 'The :name: Jump label is only usable with PHP :version: or above',
