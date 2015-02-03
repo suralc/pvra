@@ -38,7 +38,7 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
             $analyserMock->shouldReceive('getResult')->andReturn($result);
 
             $className = $this->classToTest;
-            return [new $className([], $analyserMock), $result];
+            return [(new $className())->setOwningAnalyser($analyserMock), $result];
         }
 
         $this->fail(sprintf('Could not build test instance of %s',

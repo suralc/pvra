@@ -18,7 +18,6 @@ class ReasonTest extends \PHPUnit_Framework_TestCase
         R::clear();
     }
 
-
     public function testGetReasonNameFromValue()
     {
         $this->assertSame('TRAIT_USE', R::getReasonNameFromValue(R::TRAIT_USE));

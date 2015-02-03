@@ -19,7 +19,6 @@ namespace Pvra\Analysers;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
-use Pvra\Analyser;
 use Pvra\AnalyserAwareInterface;
 use Pvra\Result\Reason;
 
@@ -31,42 +30,8 @@ use Pvra\Result\Reason;
  *
  * @package Pvra\PhpParser\Analysers
  */
-class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareInterface
+class LibraryAdditions extends LibraryChanges implements AnalyserAwareInterface
 {
-    const OPTIONS_DATA_KEY = 'libraryData';
-
-    /**
-     * @var array
-     */
-    private $data;
-
-    /**
-     * @inheritdoc
-     */
-    public function __construct(array $options = [], Analyser $analyser = null)
-    {
-        parent::__construct($options, $analyser);
-
-        if (($libraryData = $this->getOption(self::OPTIONS_DATA_KEY)) === null) {
-            $libraryData = __DIR__ . '/../../data/changes.php';
-        }
-        if (is_string($libraryData)) {
-            if (!file_exists($libraryData) || !is_readable($libraryData)) {
-                throw new \InvalidArgumentException(sprintf('The file "%s" does not exist or is not readable',
-                    $libraryData));
-            }
-
-            $this->data = include $libraryData;
-        } elseif (is_array($libraryData)) {
-            $this->data = $libraryData;
-        } else {
-            throw new \InvalidArgumentException(sprintf('The $libraryData parameter has to be a string or an array. %s given.',
-                gettype($libraryData) === 'object' ? get_class($libraryData) : gettype($libraryData)));
-        }
-
-        $this->ensureAdditionsDataIntegrity();
-    }
-
     /**
      * @inheritdoc
      */
@@ -75,7 +40,7 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
         // direct class calls
         if ($node instanceof Node\Expr\New_ || $node instanceof Node\Expr\StaticCall || $node instanceof Node\Expr\ClassConstFetch) {
             if (count($node->class->parts) === 1
-                && is_string($req = $this->getClassVersionRequirement($node->class->parts[0]))
+                && ($req = $this->getLibraryInformation()->getClassInfo($node->class->parts[0])['addition'])
             ) {
                 $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
                     $req,
@@ -93,7 +58,7 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
                 foreach ($node->params as $param) {
                     if (isset($param->type) && !is_string($param->type)
                         && count($param->type->parts) === 1
-                        && is_string(($req = $this->getClassVersionRequirement($param->type->getLast())))
+                        && ($req = $this->getLibraryInformation()->getClassInfo($param->type->getLast())['addition'])
                     ) {
                         $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
                             $req,
@@ -121,7 +86,7 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
             }
 
             foreach ($names as $name) {
-                if (count($name->parts) === 1 && is_string($req = $this->getClassVersionRequirement($name->getLast()))) {
+                if (count($name->parts) === 1 && ($req = $this->getLibraryInformation()->getClassInfo($name->getLast())['addition'])) {
                     $this->getOwningAnalyser()->getResult()->addArbitraryRequirement(
                         $req,
                         $node->getLine(),
@@ -133,7 +98,7 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
             }
         } elseif ($node instanceof Node\Expr\FuncCall) {
             // core functions are not namespaced, has to be redone to allow extension support
-            if (count($node->name->parts) === 1 && is_string(($req = $this->getFunctionVersionRequirement($node->name->getLast())))) {
+            if (count($node->name->parts) === 1 && ($req = $this->getLibraryInformation()->getFunctionInfo($node->name->getLast())['addition'])) {
                 $this->getResult()->addArbitraryRequirement(
                     $req,
                     $node->getLine(),
@@ -142,50 +107,6 @@ class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareI
                     ['functionName' => $node->name->getLast()]
                 );
             }
-        }
-    }
-
-    /**
-     * @param string $name
-     * @return bool
-     */
-    private function getFunctionVersionRequirement($name)
-    {
-        if (isset($this->data['functions-added'][ $name ])) {
-            return $this->data['functions-added'][ $name ];
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string $name
-     * @return bool
-     */
-    private function getClassVersionRequirement($name)
-    {
-        if (isset($this->data['classes-added'][ $name ])) {
-            return $this->data['classes-added'][ $name ];
-        }
-
-        return false;
-    }
-
-    /**
-     *
-     */
-    private function ensureAdditionsDataIntegrity()
-    {
-        if (empty($this->data)) {
-            throw new \LogicException('No valid, non-empty library information has been loaded. This should have happened in the constructor.');
-        }
-
-        if (!isset($this->data['classes-added']) || !is_array($this->data['classes-added'])) {
-            throw new \RuntimeException('Valid library data must have a "classes-added" list.');
-        }
-
-        if (!isset($this->data['functions-added']) || !is_array($this->data['functions-added'])) {
-            throw new \RuntimeException('Valid library data must have a "functions-added" list.');
         }
     }
 }

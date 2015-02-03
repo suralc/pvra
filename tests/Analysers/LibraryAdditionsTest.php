@@ -56,70 +56,24 @@ class LibraryAdditionsTest extends BaseNodeWalkerTestCase
      */
     public function testExpectedInvalidFileFormatException()
     {
-        new LibraryAdditions([LibraryAdditions::OPTIONS_DATA_KEY => TEST_FILE_ROOT . '/invalidNonExistingLibrarySource.php']);
+        new LibraryAdditions(TEST_FILE_ROOT . '/invalidNonExistingLibrarySource.php');
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Valid library data must have a "classes-added" list.
-     */
-    public function testExpectedClassKeyMissingException()
-    {
-        new LibraryAdditions([LibraryAdditions::OPTIONS_DATA_KEY => ['functions-added' => []]]);
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Valid library data must have a "classes-added" list.
-     */
-    public function testExpectedClassKeyListMissingException()
-    {
-        new LibraryAdditions([LibraryAdditions::OPTIONS_DATA_KEY => ['functions-added' => [], 'classes-added' => '']]);
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Valid library data must have a "functions-added" list.
-     */
-    public function testExpectedFunctionKeyMissingException()
-    {
-        new LibraryAdditions([LibraryAdditions::OPTIONS_DATA_KEY => ['classes-added' => []]]);
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Valid library data must have a "functions-added" list.
-     */
-    public function testExpectedFunctionKeyListMissingException()
-    {
-        new LibraryAdditions([LibraryAdditions::OPTIONS_DATA_KEY => ['classes-added' => [], 'functions-added' => '']]);
-    }
-
-    /**
-     * @expectedExceptionMessage No valid, non-empty library information has been loaded. This should have happened in
-     *     the constructor.
-     * @expectedException \LogicException
-     */
-    public function testExceptionOnEmptyData()
-    {
-        new LibraryAdditions([LibraryAdditions::OPTIONS_DATA_KEY => []]);
-    }
-
-    /**
+     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The $libraryData parameter has to be a string or an array. SplFileInfo given.
+     * @expectedExceptionMessage The $information parameter has to be an instance of LibraryInformation, string or an array. SplFileInfo given.
      */
     public function testExpectedExceptionOnObjectParameterTypeOnConstruct()
     {
-        new LibraryAdditions([LibraryAdditions::OPTIONS_DATA_KEY => new \SplFileInfo(TEST_FILE_ROOT . '/invalidNonExistingLibrarySource.php')]);
+        new LibraryAdditions(new \SplFileInfo(TEST_FILE_ROOT . '/invalidNonExistingLibrarySource.php'));
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The $libraryData parameter has to be a string or an array. resource given.
+     * @expectedExceptionMessage The $information parameter has to be an instance of LibraryInformation, string or an array. resource given.
      */
     public function testExpectedExceptionOnWrongParameterTypeOnConstruct()
     {
-        new LibraryAdditions([LibraryAdditions::OPTIONS_DATA_KEY => fopen('php://memory', 'rw')]);
+        new LibraryAdditions(fopen('php://memory', 'rw'));
     }
 }
