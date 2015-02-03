@@ -134,7 +134,6 @@ class MessageFormatter
         }
         $data += ['id' => $messageInfo['id']];
         if ($runUserFormatters) {
-            reset($this->messageFormatters);
             $this->inCallbackChain(true);
             /** @var callable $formatter */
             foreach ($this->messageFormatters as $formatter) {

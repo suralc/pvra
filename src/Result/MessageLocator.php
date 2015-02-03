@@ -114,7 +114,6 @@ class MessageLocator implements \ArrayAccess
             'fallbackHandler' => false,
         ];
 
-        reset($this->messageSearchers);
         $this->inCallbackChain(true);
         /** @var callable $searchCallback */
         foreach ($this->messageSearchers as $searchCallback) {
@@ -133,7 +132,6 @@ class MessageLocator implements \ArrayAccess
         if (empty($messageInfo['content'])) {
             if ($runMissingMessageHandlers) {
                 $this->inCallbackChain(true);
-                reset($this->missingMessageHandlers);
                 /** @var callable $handler */
                 foreach ($this->missingMessageHandlers as $handler) {
                     if ($this->isCallbackChainToBeTerminated()) {
