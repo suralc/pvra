@@ -33,20 +33,21 @@ use Pvra\Result\Reason;
  */
 class LibraryAdditions extends LanguageFeatureAnalyser implements AnalyserAwareInterface
 {
+    const OPTIONS_DATA_KEY = 'libraryData';
+
     /**
      * @var array
      */
     private $data;
 
     /**
-     * @param \Pvra\Analyser $requirementAnalyser
-     * @param string|array $libraryData
+     * @inheritdoc
      */
-    public function __construct(Analyser $requirementAnalyser = null, $libraryData = null)
+    public function __construct(array $options = [], Analyser $analyser = null)
     {
-        parent::__construct($requirementAnalyser);
+        parent::__construct($options, $analyser);
 
-        if ($libraryData === null) {
+        if (($libraryData = $this->getOption(self::OPTIONS_DATA_KEY)) === null) {
             $libraryData = __DIR__ . '/../../data/changes.php';
         }
         if (is_string($libraryData)) {

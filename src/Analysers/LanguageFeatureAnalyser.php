@@ -31,9 +31,14 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements An
 {
     /**
      * The `Analyser` representing the currently running operation.
+     *
      * @var Analyser
      */
     private $requirementAnalyser;
+    /**
+     * @var array
+     */
+    private $options;
 
     /**
      * Create an instance of the child Analyser
@@ -42,13 +47,15 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements An
      * When using this class in the context of an `Analyser` it will always be ensured
      * that this `Analyser` will be known to the instance before any node is traversed.
      *
-     * @param \Pvra\Analyser $requirementAnalyser
+     * @param array $options
+     * @param \Pvra\Analyser $analyser
      * @see setOwningAnalyser() Set the owning analyser
      */
-    public function __construct(Analyser $requirementAnalyser = null)
+    public function __construct(array $options = [], Analyser $analyser = null)
     {
-        if ($requirementAnalyser !== null) {
-            $this->setOwningAnalyser($requirementAnalyser);
+        $this->options = $options;
+        if($analyser !== null) {
+            $this->setOwningAnalyser($analyser);
         }
     }
 
@@ -58,6 +65,8 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements An
     public function setOwningAnalyser(Analyser $requirementAnalyser)
     {
         $this->requirementAnalyser = $requirementAnalyser;
+
+        return $this;
     }
 
     /**
@@ -77,6 +86,24 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements An
     protected function getResult()
     {
         return $this->getOwningAnalyser()->getResult();
+    }
+
+    /**
+     * @param string|int $name
+     * @param mixed $default
+     * @return mixed
+     */
+    protected function getOption($name, $default = null)
+    {
+        return isset($this->options[ $name ]) ? $this->options[ $name ] : $default;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return $this->options;
     }
 
     /**

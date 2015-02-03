@@ -54,8 +54,8 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     /**
      * @var int
      */
-
     private $cachedRequiredVersionId;
+
     /**
      * Number of attached reasonings.
      *

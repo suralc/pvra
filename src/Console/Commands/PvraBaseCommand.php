@@ -17,6 +17,7 @@
 namespace Pvra\Console\Commands;
 
 
+use Pvra\Analysers\LibraryAdditions;
 use Pvra\FileAnalyser;
 use Pvra\Result\MessageLocator;
 use Symfony\Component\Console\Command\Command;
@@ -153,7 +154,7 @@ class PvraBaseCommand extends Command
         $analysers = [];
         foreach ($this->expectedWalkers as $walker) {
             if (stripos($walker, 'Library') !== false && is_string($librarySourceOption)) {
-                $analysers[] = new $walker(null, $this->getArrayFromFile($librarySourceOption)[1]);
+                $analysers[] = new $walker([LibraryAdditions::OPTIONS_DATA_KEY => $this->getArrayFromFile($librarySourceOption)[1]]);
             } else {
                 $analysers[] = new $walker;
             }

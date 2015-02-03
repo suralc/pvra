@@ -68,7 +68,7 @@ class MessageFormatter
         } elseif (is_array($locator)) {
             $this->locator = MessageLocator::fromArray($locator);
         } else {
-            throw new \InvalidArgumentException('The $locator parameter needs to be an instance of ResultMessageLoator, null or an array containing messages');
+            throw new \InvalidArgumentException('The $locator parameter needs to be an instance of ResultMessageLocator, null or an array containing messages');
         }
 
         if ($addDefaultFormatter) {

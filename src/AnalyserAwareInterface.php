@@ -30,7 +30,7 @@ interface AnalyserAwareInterface extends NodeVisitor
      * Set or override the owning analyser
      *
      * @param \Pvra\Analyser $requirementAnalyser The owning analyser.
-     * @return void
+     * @return $this
      */
     public function setOwningAnalyser(Analyser $requirementAnalyser);
 
