@@ -2,8 +2,10 @@
 namespace Pvra\tests\Analysers;
 
 
+use Pvra\Analysers\Php53Features;
 use Pvra\Result\Reason as R;
 use Pvra\Result\Reason;
+use Pvra\StringAnalyser;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
 /**
@@ -168,5 +170,12 @@ class Php53FeaturesTest extends BaseNodeWalkerTestCase
         ];
 
         $this->runTestsAgainstExpectation($expected, '5.3/all53', '5.3.0');
+    }
+
+    public function testBaseConstructorAnalyserInjection()
+    {
+        $analyser = new StringAnalyser('<?php echo "hello world";');
+        $fa = new Php53Features([], $analyser);
+        $this->assertSame($analyser, $fa->getOwningAnalyser());
     }
 }

@@ -24,6 +24,12 @@ class LibraryInformation implements LibraryInformationInterface
     private $deprecations = [];
     private $removals = [];
 
+    /**
+     * Create a new instance and load default information
+     *
+     * This methods loads the changes.php file distributed with the library or phar.     *
+     * @return static
+     */
     public static function createWithDefaults()
     {
         $source = __DIR__ . '/../../data/library/php/changes.php';
@@ -115,7 +121,7 @@ class LibraryInformation implements LibraryInformationInterface
         return [
             'addition' => isset($this->additions['constant'][ $name ]) ? $this->additions['constant'][ $name ] : null,
             'deprecation' => isset($this->deprecations['constant'][ $name ]) ? $this->deprecations['constant'][ $name ] : null,
-            'removal' => isset($this->deprecations['constant'][ $name ]) ? $this->deprecations['constant'][ $name ] : null,
+            'removal' => isset($this->removals['constant'][ $name ]) ? $this->removals['constant'][ $name ] : null,
         ];
     }
 }

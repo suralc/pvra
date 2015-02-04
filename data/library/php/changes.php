@@ -246,4 +246,5 @@ return [
             'zend_logo_guid' => '5.5.0',
         ]
     ],
+    'deprecations' => [],
 ];
