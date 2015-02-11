@@ -154,8 +154,10 @@ class PvraBaseCommand extends Command
      * @param int $mode
      * @return \Pvra\Analysers\LanguageFeatureAnalyser[]
      */
-    protected function createNodeWalkerInstances($librarySourceOption = null, $mode = LanguageFeatureAnalyser::MODE_ALL)
-    {
+    protected function createNodeWalkerInstances(
+        $librarySourceOption = null,
+        $mode = LanguageFeatureAnalyser::MODE_ADDITION
+    ) {
         $analysers = [];
         foreach ($this->expectedWalkers as $walker) {
             if (in_array('Pvra\InformationProvider\LibraryInformationAwareInterface', class_implements($walker))) {
