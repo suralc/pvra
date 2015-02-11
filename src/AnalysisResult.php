@@ -354,7 +354,8 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return string
+     * Get the current analysis target id
+     * @return string Analysis target id
      */
     public function getAnalysisTargetId()
     {
@@ -401,6 +402,8 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     }
 
     /**
+     * Number of registered reasonings
+     *
      * @return int
      */
     public function count()

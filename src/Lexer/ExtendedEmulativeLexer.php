@@ -20,6 +20,14 @@ namespace Pvra\Lexer;
 use PhpParser\Lexer\Emulative;
 use PhpParser\Parser;
 
+/**
+ * Class ExtendedEmulativeLexer
+ *
+ * Extends the lexer to provide information about raw representations of numbers,
+ * detection of here- and nowdoc syntaxes and short echo statements.
+ *
+ * @package Pvra\Lexer
+ */
 class ExtendedEmulativeLexer extends Emulative
 {
     /**
@@ -44,7 +52,7 @@ class ExtendedEmulativeLexer extends Emulative
      * and produced ast. These modifications are required to ensure the correct behaviour of the binary number
      * detection, the detection of booth flavors of the doc syntax, short array syntax and short echo tags.
      *
-     * @param null|string $value
+     * @param null|string $value Value of the token
      * @param null|array $startAttributes
      * @param null|array $endAttributes
      * @return int Retrieved token id

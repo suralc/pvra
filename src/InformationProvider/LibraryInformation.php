@@ -17,11 +17,24 @@
 
 namespace Pvra\InformationProvider;
 
-
+/**
+ * Class LibraryInformation
+ *
+ * @package Pvra\InformationProvider
+ */
 class LibraryInformation implements LibraryInformationInterface
 {
+    /**
+     * @var array
+     */
     private $additions = [];
+    /**
+     * @var array
+     */
     private $deprecations = [];
+    /**
+     * @var array
+     */
     private $removals = [];
 
     /**
@@ -38,6 +51,14 @@ class LibraryInformation implements LibraryInformationInterface
         return static::createFromFile($source);
     }
 
+    /**
+     * Create a new instance based on a given file path
+     *
+     * The filepath given to this method has to represent a php file returning
+     * an array with a valid structure.
+     * @param string $source Valid path to data source
+     * @return static
+     */
     public static function createFromFile($source)
     {
         if (!is_file($source) || !is_readable($source)) {
@@ -49,6 +70,9 @@ class LibraryInformation implements LibraryInformationInterface
     }
 
 
+    /**
+     * @param array $data Array representation of data to represent
+     */
     public function __construct(array $data = [])
     {
         if (isset($data['additions'])) {
@@ -71,6 +95,10 @@ class LibraryInformation implements LibraryInformationInterface
         }
     }
 
+    /**
+     * Get the array representation of the instance
+     * @return array Array representation of the data stored in this object
+     */
     public function toArray()
     {
         return [
@@ -80,6 +108,11 @@ class LibraryInformation implements LibraryInformationInterface
         ];
     }
 
+    /**
+     * Merge another instance into this instance
+     * @param \Pvra\InformationProvider\LibraryInformationInterface $info
+     * @return $this
+     */
     public function mergeWith(LibraryInformationInterface $info)
     {
         $newInfo = $info->toArray();
@@ -90,7 +123,7 @@ class LibraryInformation implements LibraryInformationInterface
     }
 
     /**
-     * @param string $name
+     * @param string $name Function name
      * @return array
      */
     public function getFunctionInfo($name)
@@ -104,7 +137,7 @@ class LibraryInformation implements LibraryInformationInterface
     }
 
     /**
-     * @param string $name
+     * @param string $name Class name
      * @return array
      */
     public function getClassInfo($name)
@@ -118,7 +151,7 @@ class LibraryInformation implements LibraryInformationInterface
     }
 
     /**
-     * @param string $name
+     * @param string $name Constant name
      * @return array
      */
     public function getConstantInfo($name)

@@ -27,6 +27,11 @@ use Pvra\InformationProvider\LibraryInformationAwareInterface;
 use Pvra\InformationProvider\LibraryInformationInterface;
 use Pvra\Result\Reason;
 
+/**
+ * Class LibraryChanges
+ *
+ * @package Pvra\Analysers
+ */
 class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInterface, LibraryInformationAwareInterface
 {
     /**
@@ -85,7 +90,19 @@ class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInt
         return $this->information;
     }
 
-    private function prepareNameAndLine($name, $line)
+    /**
+     * Prepare a name
+     *
+     * If the first argument is an instance of `PhpParser\Node\Name` its string representation
+     * will be returned as first element of the result array. The value retrieved via `PhpParser\Node\Name::getLine()`
+     * will be used as second element.
+     * If the first parameter is not an instance of `PhpParser\Node\Name` it will be casted to string and returned alongside
+     * with the value given for the second parameter as line
+     * @param \PhpParser\Node\Name|string $name
+     * @param int $line Only used if the $name parameter is not an instance of `PhpParser\Node\Name`
+     * @return array
+     */
+    private function prepareNameAndLine($name, $line = -1)
     {
         if ($name instanceof Node\Name) {
             $line = $name->getLine();
@@ -97,6 +114,10 @@ class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInt
         return [$name, $line];
     }
 
+    /**
+     * @param \PhpParser\Node\Name|string $name
+     * @param int $line
+     */
     private function handleClassName($name, $line = -1)
     {
         list($name, $line) = $this->prepareNameAndLine($name, $line);
@@ -130,6 +151,10 @@ class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInt
         }
     }
 
+    /**
+     * @param \PhpParser\Node\Name|string $name
+     * @param int $line
+     */
     private function handleFunctionName($name, $line = -1)
     {
         list($name, $line) = $this->prepareNameAndLine($name, $line);
@@ -163,6 +188,10 @@ class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInt
         }
     }
 
+    /**
+     * @param \PhpParser\Node\Name|string $name
+     * @param int $line
+     */
     private function handleConstantName($name, $line = -1)
     {
         list($name, $line) = $this->prepareNameAndLine($name, $line);
@@ -196,6 +225,11 @@ class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInt
         }
     }
 
+    /**
+     * @inheritdoc
+     * @param \PhpParser\Node $node
+     * @return null|\PhpParser\Node|void
+     */
     public function enterNode(Node $node)
     {
         // direct class calls

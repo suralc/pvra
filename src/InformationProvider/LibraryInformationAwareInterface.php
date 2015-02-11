@@ -17,7 +17,11 @@
 
 namespace Pvra\InformationProvider;
 
-
+/**
+ * Interface LibraryInformationAwareInterface
+ *
+ * @package Pvra\InformationProvider
+ */
 interface LibraryInformationAwareInterface
 {
     /**
