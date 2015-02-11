@@ -53,7 +53,7 @@ class FileCommandTest extends PvraBaseCommandTestBase
     {
         $out = trim($this->execute([
             'target' => TEST_FILE_ROOT . '5.6/all56.php',
-            '--analyser' => ['php-5.3', 'lib-add', 'php-5.6'],
+            '--analyser' => ['php-5.3', 'lib-php', 'php-5.6'],
         ])->getDisplay(true));
 
         $this->assertTrue(stripos($out, 'PHP 5.6') !== false);
@@ -63,11 +63,11 @@ class FileCommandTest extends PvraBaseCommandTestBase
         $this->assertSame(16, substr_count($out, 'PHP 5.6'));
     }
 
-    public function testExclusiveLibraryAdditionsWalker()
+    public function testExclusiveLibraryChangesWalker()
     {
         $cmdt = $this->execute([
             'target' => TEST_FILE_ROOT . 'libraryAdditions.php',
-            '--analyser' => ['Php54Features', 'LibraryAdditions']
+            '--analyser' => ['Php54Features', 'LibraryChanges']
         ]);
         $out = trim($cmdt->getDisplay(true));
 
@@ -161,7 +161,7 @@ class FileCommandTest extends PvraBaseCommandTestBase
     {
         $out = trim($this->execute([
             'target' => TEST_FILE_ROOT . 'libraryAdditions.php',
-            '--analyser' => ['LibraryAdditions'],
+            '--analyser' => ['LibraryChanges'],
             '--libraryDataSource' => TEST_FILE_ROOT . 'simple_lib_data_source.php'
         ])->getDisplay(true));
 

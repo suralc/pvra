@@ -29,12 +29,25 @@ use Pvra\AnalyserAwareInterface;
  */
 abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements AnalyserAwareInterface
 {
+    const MODE_ADDITION = 0b0001,
+        MODE_DEPRECATION = 0b0010,
+        MODE_REMOVAL = 0b0100,
+        MODE_ALL = 0b0111;
+
+    /**
+     * Bitmap of operations to run.
+     *
+     * @var int
+     */
+    protected $mode;
+
     /**
      * The `Analyser` representing the currently running operation.
      *
      * @var Analyser
      */
     private $requirementAnalyser;
+
     /**
      * @var array
      */
@@ -54,7 +67,8 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements An
     public function __construct(array $options = [], Analyser $analyser = null)
     {
         $this->options = $options;
-        if($analyser !== null) {
+        $this->mode = $this->getOption('mode', self::MODE_ALL);
+        if ($analyser !== null) {
             $this->setOwningAnalyser($analyser);
         }
     }
@@ -96,14 +110,6 @@ abstract class LanguageFeatureAnalyser extends NodeVisitorAbstract implements An
     protected function getOption($name, $default = null)
     {
         return isset($this->options[ $name ]) ? $this->options[ $name ] : $default;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return $this->options;
     }
 
     /**

@@ -29,7 +29,7 @@ interface LibraryInformationInterface
      * @param \Pvra\InformationProvider\LibraryInformationInterface $info
      * @return $this
      */
-    public function mergeInformation(LibraryInformationInterface $info);
+    public function mergeWith(LibraryInformationInterface $info);
 
     /**
      * @param string $name

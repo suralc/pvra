@@ -29,6 +29,8 @@ use Pvra\Result\Reasoning;
 class AnalysisResult implements \IteratorAggregate, \Countable
 {
     const INITIAL_ANALYSIS_TARGET_ID = 'unknown';
+    const VERSION_CONSTRAINT_UPPER_LIMIT = 0;
+    const VERSION_CONSTRAINT_LOWER_LIMIT = 1;
     /**
      * The state of this instance
      *
@@ -45,6 +47,11 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      * @var array|Reasoning[]
      */
     private $requirements = [];
+
+    /**
+     * @var array|Reasoning[]
+     */
+    private $limits = [];
 
     /**
      * @var string|null
@@ -81,20 +88,30 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     public function getRequiredVersionId()
     {
         if ($this->cachedRequiredVersionId === null) {
-            $version = explode('.', $this->getRequiredVersion());
-
-            $elements = count($version);
-            if ($elements > 3 || $elements < 2) {
-                throw new \Exception(sprintf('A version id has to be built from two or three segments. "%s" is not valid.',
-                    $this->getRequiredVersion()));
-            }
-
-            $version += [2 => 0];
-
-            $this->cachedRequiredVersionId = $version[0] * 10000 + $version[1] * 100 + $version[2];
+            $this->cachedRequiredVersionId = $this->calculateVersionIdFromString($this->getRequiredVersion());
         }
 
         return $this->cachedRequiredVersionId;
+    }
+
+    /**
+     * @param string $version
+     * @return int
+     * @throws \Exception
+     */
+    private function calculateVersionIdFromString($version)
+    {
+        $versionComponents = explode('.', $version);
+
+        $elementCount = count($versionComponents);
+        if ($elementCount > 3 || $elementCount < 2) {
+            throw new \Exception(sprintf('A version id has to be built from two or three segments. "%s" is not valid.',
+                $version));
+        }
+
+        $versionComponents += [2 => 0];
+
+        return $versionComponents[0] * 10000 + $versionComponents[1] * 100 + $versionComponents[2];
     }
 
     /**
@@ -165,6 +182,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      * @param int $reason The reason for this requirement. Please be aware: Setting this parameter will **not**
      *     override the required version
      * @param array $data Additional data that should be passed to the message formatter.
+     * @return $this
      */
     public function addArbitraryRequirement(
         $version,
@@ -173,14 +191,10 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         $reason = Reason::UNKNOWN,
         array $data = []
     ) {
-        if ($this->isSealed()) {
-            throw new \RuntimeException('Impossible to write to already sealed result');
-        }
+        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_LOWER_LIMIT, $version, $line, $msg, $reason,
+            $data);
 
-        $this->clearInstanceCaches();
-
-        $this->requirements[ $version ][] = new Reasoning($reason, $line, $this, $version, $msg, $data);
-        $this->count++;
+        return $this;
     }
 
     /**
@@ -193,14 +207,11 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      * @param string $msg The message template that should be used. If `null` is passed the attached `MessageLocator`
      *     will be called to retrieve a template based on the `$reason` parameter.
      * @param array $data Additional data that should be passed to the message formatter.
+     * @return $this
      * @throws \LogicException Thrown if the reason is unknown or does not have a version requirement associated.
      */
     public function addRequirement($reason, $line = -1, $msg = null, array $data = [])
     {
-        if ($this->isSealed()) {
-            throw new \RuntimeException('Impossible to write to already sealed result');
-        }
-
         $version = Reason::getRequiredVersionForReason($reason);
 
         if ($version === false) {
@@ -208,10 +219,83 @@ class AnalysisResult implements \IteratorAggregate, \Countable
                 __CLASS__, __METHOD__, __CLASS__));
         }
 
+        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_LOWER_LIMIT, $version, $line, $msg, $reason,
+            $data);
+
+        return $this;
+    }
+
+    /**
+     * @param int $reason
+     * @param int $line
+     * @param null|string $msg
+     * @param array $data
+     * @return $this
+     */
+    public function addLimit($reason, $line = -1, $msg = null, array $data = [])
+    {
+        $version = Reason::getRequiredVersionForReason($reason);
+
+        if ($version === false) {
+            throw new \LogicException(sprintf('%s::%s requires a reason a version can be associated to. Use %s::addArbitraryLimit() to add any version with any reasoning to the result.',
+                __CLASS__, __METHOD__, __CLASS__));
+        }
+
+        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_UPPER_LIMIT, $version, $line, $msg, $reason,
+            $data);
+
+        return $this;
+    }
+
+    /**
+     * @param string $version
+     * @param int $line
+     * @param null|string $msg
+     * @param int $reason
+     * @param array $data
+     * @return $this
+     */
+    public function addArbitraryLimit(
+        $version,
+        $line = -1,
+        $msg = null,
+        $reason = Reason::UNKNOWN,
+        array $data = []
+    ) {
+        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_UPPER_LIMIT, $version, $line, $msg, $reason,
+            $data);
+
+        return $this;
+    }
+
+    /**
+     * @param int $type
+     * @param string $version
+     * @param int $line
+     * @param null|string $msg
+     * @param int $reason
+     * @param array $data
+     */
+    protected function addArbitraryVersionConstraint(
+        $type,
+        $version,
+        $line = -1,
+        $msg = null,
+        $reason = Reason::UNKNOWN,
+        array $data = []
+    ) {
+        if ($this->isSealed()) {
+            throw new \RuntimeException('Impossible to write to already sealed result');
+        }
+
         $this->clearInstanceCaches();
 
-        $this->requirements[ $version ][] = new Reasoning($reason, $line, $this, $version, $msg, $data);
-        $this->count++;
+        if ($type === self::VERSION_CONSTRAINT_LOWER_LIMIT) {
+            $this->requirements[ $version ][] = new Reasoning($reason, $line, $this, $version, $msg, $data);
+            $this->count++;
+        } elseif ($type === self::VERSION_CONSTRAINT_UPPER_LIMIT) {
+            $this->limits[ $version ][] = new Reasoning($reason, $line, $this, $version, $msg, $data);
+        }
     }
 
     /**
@@ -224,12 +308,19 @@ class AnalysisResult implements \IteratorAggregate, \Countable
 
 
     /**
-     * @return array
+     * @return array|\Pvra\Result\Reasoning[]
      */
     public function getRequirements()
     {
         return $this->requirements;
+    }
 
+    /**
+     * @return array|\Pvra\Result\Reasoning[]
+     */
+    public function getLimits()
+    {
+        return $this->limits;
     }
 
     /**
@@ -244,6 +335,19 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     {
         if (isset($this->requirements[ $version ])) {
             return $this->requirements[ $version ];
+        }
+
+        return [];
+    }
+
+    /**
+     * @param string $version
+     * @return array|\Pvra\Result\Reasoning[]
+     */
+    public function getLimitInfo($version)
+    {
+        if (isset($this->limits[ $version ])) {
+            return $this->limits[ $version ];
         }
 
         return [];
@@ -287,7 +391,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     public function getIterator()
     {
         $iterator = new \ArrayIterator();
-        foreach ($this->getRequirements() as $requirementVersion => $values) {
+        foreach ($this->getRequirements() as $values) {
             foreach ($values as $value) {
                 $iterator->append($value);
             }

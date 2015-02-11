@@ -53,7 +53,8 @@ class DirCommand extends PvraBaseCommand
             ->addOption('recursive', 'r', InputOption::VALUE_NONE, 'Iterate recursive over directory')
             ->addOption('groupBy', 'g', InputOption::VALUE_REQUIRED, 'Group output by name or required version.',
                 self::GROUP_BY_NAME)
-            ->addOption('sortBy', 'o', InputOption::VALUE_REQUIRED, 'Sort order of remaining files. Only takes effect while using --groupBy=n[ame]',
+            ->addOption('sortBy', 'o', InputOption::VALUE_REQUIRED,
+                'Sort order of remaining files. Only takes effect while using --groupBy=n[ame]',
                 FileFinderBuilder::SORT_BY_NAME)
             ->addOption('listFilesOnly', null, InputOption::VALUE_NONE,
                 'Only list matched files and do not run analysis.')
@@ -86,6 +87,7 @@ class DirCommand extends PvraBaseCommand
             }
             return;
         }
+
 
         $results = new Collection();
 

@@ -12,6 +12,15 @@ class LibraryInformationTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Pvra\\InformationProvider\\LibraryInformation', $info);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage does not exist or is not readable
+     */
+    public function testCreateFromFileError()
+    {
+        LibraryInformation::createFromFile(__DIR__ . '/non-existing-file.php');
+    }
+
     public function testToArrayFromEmpty()
     {
         $info = new LibraryInformation();
@@ -73,11 +82,11 @@ class LibraryInformationTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-        $base->mergeInformation($new);
+        $base->mergeWith($new);
         $this->assertArrayHasKey('abc', $base->toArray()['additions']['constant']);
         $this->assertSame('4.5.6', $base->toArray()['additions']['constant']['abc']);
         // empty array should not override existing value
-        $new->mergeInformation(new LibraryInformation(['additions' => ['constant' => []]]));
+        $new->mergeWith(new LibraryInformation(['additions' => ['constant' => []]]));
         $this->assertArrayHasKey('abc', $new->toArray()['additions']['constant']);
         $this->assertSame('4.5.6', $new->toArray()['additions']['constant']['abc']);
         // both with data
@@ -111,7 +120,7 @@ class LibraryInformationTest extends \PHPUnit_Framework_TestCase
             'deprecations' => []
         ]);
         $base2 = clone $base;
-        $base->mergeInformation($new);
+        $base->mergeWith($new);
         $this->assertEquals([
             'additions' => [
                 'function' => [
@@ -139,8 +148,8 @@ class LibraryInformationTest extends \PHPUnit_Framework_TestCase
                 'constant' => [],
             ],
         ], $ar = $base->toArray());
-        $this->assertEquals($base2->toArray(), $base2->mergeInformation($base2)->toArray());
-        $base2->mergeInformation($base2)->mergeInformation($new);
+        $this->assertEquals($base2->toArray(), $base2->mergeWith($base2)->toArray());
+        $base2->mergeWith($base2)->mergeWith($new);
         $this->assertEquals($ar, $base2->toArray());
     }
 
@@ -179,7 +188,7 @@ class LibraryInformationTest extends \PHPUnit_Framework_TestCase
             'addition' => null,
             'removal' => null,
             'deprecation' => '1.2.3'
-        ], $info->getFunctionInfo('depr'));
+        ], $info->getFunctionInfo('\\depr'));
     }
 
     public function testGetClassInfo()
@@ -217,7 +226,7 @@ class LibraryInformationTest extends \PHPUnit_Framework_TestCase
             'addition' => null,
             'removal' => null,
             'deprecation' => '1.2.3'
-        ], $info->getClassInfo('depr'));
+        ], $info->getClassInfo('\\depr'));
     }
 
     public function testGetConstantInfo()
@@ -255,6 +264,6 @@ class LibraryInformationTest extends \PHPUnit_Framework_TestCase
             'addition' => null,
             'removal' => null,
             'deprecation' => '1.2.3'
-        ], $info->getConstantInfo('depr'));
+        ], $info->getConstantInfo('\\depr'));
     }
 }

@@ -51,10 +51,10 @@ class FileCommand extends PvraBaseCommand
 
         $output->writeln(sprintf('<info>Running analysis for "%s"</info>', realpath($file)));
 
-        if (in_array('Pvra\\Analysers\\LibraryAdditions',
-                $this->expectedWalkers) && $input->getOption('preventNameExpansion')
-        ) {
-            $output->writeln('<warn>Warning: Detection of newly introduced functions and classes may not work in namespaced contexts if you prevent name expansions</warn>');
+
+        if ($input->getOption('preventNameExpansion') && $this->hasNameDependentAnalyser()) {
+            $output->writeln('<warn>Warning: Detection of newly introduced functions and classes may not work or produce'
+                . ' false positives in namespaced contexts if you prevent name expansions</warn>');
         }
 
         $req = $this->createFileAnalyserInstance($input);

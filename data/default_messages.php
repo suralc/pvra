@@ -26,6 +26,9 @@ return [
     R::LIB_FUNCTION_ADDITION => 'The ":functionName:" function was introduced in PHP :version:',
     R::LIB_FUNCTION_DEPRECATION => 'The ":functionName:" function was deprecated in PHP :version: and should no longer be used',
     R::LIB_FUNCTION_REMOVAL => 'The ":functionName:" function was removed in PHP :version:',
+    R::LIB_CONSTANT_ADDITION => 'The ":constantName:" constant was introduced in PHP :version:',
+    R::LIB_CONSTANT_DEPRECATION => 'The ":constantName:" constant was deprecated in PHP :version:',
+    R::LIB_CONSTANT_REMOVAL => 'The ":constantName:" constant was removed in PHP :version:',
     // 5.3
     R::GOTO_KEYWORD => 'The goto keyword (targeting :name:) was introduced in PHP :version:',
     R::JUMP_LABEL => 'The :name: Jump label is only usable with PHP :version: or above',

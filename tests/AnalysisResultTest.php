@@ -32,7 +32,7 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         $r = new AnalysisResult();
 
         $r->seal();
-        $r->addRequirement('5.5.5');
+        $r->addArbitraryRequirement('5.5.5');
     }
 
     public function testAddRequirementUnreasonedException()
@@ -244,5 +244,44 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         $r = new AnalysisResult();
         $r->seal();
         $r->setAnalysisTargetId('new id');
+    }
+
+    public function testAddLimitSimple()
+    {
+        $r = new AnalysisResult();
+        $r->addLimit(R::ARGUMENT_UNPACKING);
+        $this->assertSame('5.6.0', $r->getLimitInfo('5.6.0')[0]->get('version'));
+    }
+
+    public function testGetLimitInfoOnEmptyLimits()
+    {
+        $r = new AnalysisResult();
+        $this->assertSame([], $r->getLimits());
+        $this->assertSame([], $r->getLimitInfo('5.6.0'));
+    }
+
+    public function testAddArbitraryLimit()
+    {
+        $r = new AnalysisResult();
+        $this->assertSame($r, $r->addArbitraryLimit('5.5.0'));
+        $this->assertCount(1, $r->getLimitInfo('5.5.0'));
+        $this->assertSame('5.5.0', $r->getLimitInfo('5.5.0')[0]->get('version'));
+        $r->addArbitraryLimit('5.6.0', 12, 'Hello', R::LIB_FUNCTION_REMOVAL, ['functionName' => 'abc']);
+        $reasoning = $r->getLimitInfo('5.6.0')[0];
+        $this->assertSame('5.6.0', $reasoning['version']);
+        $this->assertSame(12, $reasoning['line']);
+        $this->assertSame('Hello', $reasoning['raw_msg']);
+        $this->assertSame(R::LIB_FUNCTION_REMOVAL, $reasoning['reason']);
+        $this->assertSame(['functionName' => 'abc'], $reasoning['data']);
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage addArbitraryLimit() to add any version with any reasoning to the result.
+     */
+    public function testAddLimitInvalidReasonException()
+    {
+        $r = new AnalysisResult();
+        $r->addLimit(R::LIB_CLASS_ADDITION);
     }
 }

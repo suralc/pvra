@@ -28,12 +28,18 @@ class LibraryInformation implements LibraryInformationInterface
      * Create a new instance and load default information
      *
      * This methods loads the changes.php file distributed with the library or phar.     *
+     *
      * @return static
      */
     public static function createWithDefaults()
     {
         $source = __DIR__ . '/../../data/library/php/changes.php';
 
+        return static::createFromFile($source);
+    }
+
+    public static function createFromFile($source)
+    {
         if (!is_file($source) || !is_readable($source)) {
             throw new \InvalidArgumentException(sprintf('The file "%s" does not exist or is not readable',
                 $source));
@@ -74,7 +80,7 @@ class LibraryInformation implements LibraryInformationInterface
         ];
     }
 
-    public function mergeInformation(LibraryInformationInterface $info)
+    public function mergeWith(LibraryInformationInterface $info)
     {
         $newInfo = $info->toArray();
         $this->additions = array_replace_recursive($this->additions, $newInfo['additions']);

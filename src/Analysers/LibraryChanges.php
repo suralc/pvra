@@ -18,13 +18,16 @@
 namespace Pvra\Analysers;
 
 
+use PhpParser\Node;
+use PhpParser\Node\Name;
 use Pvra\Analyser;
 use Pvra\AnalyserAwareInterface;
 use Pvra\InformationProvider\LibraryInformation;
 use Pvra\InformationProvider\LibraryInformationAwareInterface;
 use Pvra\InformationProvider\LibraryInformationInterface;
+use Pvra\Result\Reason;
 
-abstract class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInterface, LibraryInformationAwareInterface
+class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInterface, LibraryInformationAwareInterface
 {
     /**
      * @var LibraryInformation
@@ -33,36 +36,37 @@ abstract class LibraryChanges extends LanguageFeatureAnalyser implements Analyse
 
     /**
      * @inheritdoc
+     * @param array $options
+     * @param \Pvra\Analyser $analyser
+     * @param \Pvra\InformationProvider\LibraryInformation $information
      */
-    public function __construct($information = null, array $options = [], Analyser $analyser = null)
+    public function __construct(array $options = [], Analyser $analyser = null, LibraryInformation $information = null)
     {
         parent::__construct($options, $analyser);
 
-        if ($information instanceof LibraryInformation) {
+        if ($information !== null) {
             $this->information = $information;
-        } elseif ($information === null) {
-            $this->information = LibraryInformation::createWithDefaults();
-        } else {
-            if (is_string($information)) {
-                if (!file_exists($information) || !is_readable($information)) {
-                    throw new \InvalidArgumentException(sprintf('The file "%s" does not exist or is not readable',
-                        $information));
-                }
-
-                $this->information = new LibraryInformation(include $information);
-            } elseif (is_array($information)) {
-                $this->information = new LibraryInformation($information);
-            } else {
-                throw new \InvalidArgumentException(sprintf('The $information parameter has to be an instance of LibraryInformation, string or an array. %s given.',
-                    gettype($information) === 'object' ? get_class($information) : gettype($information)));
-            }
         }
     }
 
-    // todo remove LibraryAdditions, move logic to LibraryInformation and only match names in this class
+    /**
+     * @param \Pvra\InformationProvider\LibraryInformationInterface $libInfo
+     * @return $this
+     */
     public function setLibraryInformation(LibraryInformationInterface $libInfo)
     {
         $this->information = $libInfo;
+
+        return $this;
+    }
+
+    /**
+     * @param \Pvra\InformationProvider\LibraryInformationInterface $libInfo
+     * @return $this
+     */
+    public function addLibraryInformation(LibraryInformationInterface $libInfo)
+    {
+        $this->getLibraryInformation()->mergeWith($libInfo);
 
         return $this;
     }
@@ -72,7 +76,171 @@ abstract class LibraryChanges extends LanguageFeatureAnalyser implements Analyse
      */
     public function getLibraryInformation()
     {
+        if ($this->information === null) {
+            if (($path = $this->getOption('libraryDataPath')) !== null) {
+                return $this->information = LibraryInformation::createFromFile($path);
+            }
+            $this->information = LibraryInformation::createWithDefaults();
+        }
         return $this->information;
     }
 
+    private function prepareNameAndLine($name, $line)
+    {
+        if ($name instanceof Node\Name) {
+            $line = $name->getLine();
+            $name = $name->toString();
+        } else {
+            $name = (string)$name;
+        }
+
+        return [$name, $line];
+    }
+
+    private function handleClassName($name, $line = -1)
+    {
+        list($name, $line) = $this->prepareNameAndLine($name, $line);
+        $info = $this->getLibraryInformation()->getClassInfo($name);
+        if ($this->mode & self::MODE_ADDITION && $info['addition'] !== null) {
+            $this->getResult()->addArbitraryRequirement(
+                $info['addition'],
+                $line,
+                null,
+                Reason::LIB_CLASS_ADDITION,
+                ['className' => $name]
+            );
+        }
+        if ($this->mode & self::MODE_DEPRECATION && $info['deprecation'] !== null) {
+            $this->getResult()->addArbitraryLimit(
+                $info['deprecation'],
+                $line,
+                null,
+                Reason::LIB_CLASS_DEPRECATION,
+                ['className' => $name]
+            );
+        }
+        if ($this->mode & self::MODE_REMOVAL && $info['removal'] !== null) {
+            $this->getResult()->addArbitraryLimit(
+                $info['removal'],
+                $line,
+                null,
+                Reason::LIB_CLASS_REMOVAL,
+                ['className' => $name]
+            );
+        }
+    }
+
+    private function handleFunctionName($name, $line = -1)
+    {
+        list($name, $line) = $this->prepareNameAndLine($name, $line);
+        $info = $this->getLibraryInformation()->getFunctionInfo($name);
+        if ($this->mode & self::MODE_ADDITION && $info['addition'] !== null) {
+            $this->getResult()->addArbitraryRequirement(
+                $info['addition'],
+                $line,
+                null,
+                Reason::LIB_FUNCTION_ADDITION,
+                ['functionName' => $name]
+            );
+        }
+        if ($this->mode & self::MODE_DEPRECATION && $info['deprecation'] !== null) {
+            $this->getResult()->addArbitraryLimit(
+                $info['deprecation'],
+                $line,
+                null,
+                Reason::LIB_FUNCTION_DEPRECATION,
+                ['functionName' => $name]
+            );
+        }
+        if ($this->mode & self::MODE_REMOVAL && $info['removal'] !== null) {
+            $this->getResult()->addArbitraryLimit(
+                $info['removal'],
+                $line,
+                null,
+                Reason::LIB_FUNCTION_REMOVAL,
+                ['functionName' => $name]
+            );
+        }
+    }
+
+    private function handleConstantName($name, $line = -1)
+    {
+        list($name, $line) = $this->prepareNameAndLine($name, $line);
+        $info = $this->getLibraryInformation()->getConstantInfo($name);
+        if (($this->mode & self::MODE_ADDITION) && $info['addition'] !== null) {
+            $this->getResult()->addArbitraryRequirement(
+                $info['addition'],
+                $line,
+                null,
+                Reason::LIB_CONSTANT_ADDITION,
+                ['constantName' => $name]
+            );
+        }
+        if (($this->mode & self::MODE_DEPRECATION) && $info['deprecation'] !== null) {
+            $this->getResult()->addArbitraryLimit(
+                $info['deprecation'],
+                $line,
+                null,
+                Reason::LIB_CONSTANT_DEPRECATION,
+                ['constantName' => $name]
+            );
+        }
+        if (($this->mode & self::MODE_REMOVAL) && $info['removal'] !== null) {
+            $this->getResult()->addArbitraryLimit(
+                $info['removal'],
+                $line,
+                null,
+                Reason::LIB_CONSTANT_REMOVAL,
+                ['constantName' => $name]
+            );
+        }
+    }
+
+    public function enterNode(Node $node)
+    {
+        // direct class calls
+        if ($node instanceof Node\Expr\New_ || $node instanceof Node\Expr\StaticCall
+            || $node instanceof Node\Expr\ClassConstFetch || $node instanceof Node\Expr\StaticPropertyFetch
+        ) {
+            if ($node->class instanceof Node\Name) {
+                $this->handleClassName($node->class);
+            }
+            if ($node instanceof Node\Expr\ClassConstFetch) {
+                $this->handleConstantName($node->name, $node->getLine());
+            }
+        } elseif ($node instanceof Node\Stmt\Function_
+            || $node instanceof Node\Stmt\ClassMethod
+            || $node instanceof Node\Expr\Closure
+        ) {
+            if (!empty($node->params)) {
+                foreach ($node->params as $param) {
+                    if (isset($param->type) && !is_string($param->type)) {
+                        $this->handleClassName($param->type);
+                    }
+                }
+            }
+        } elseif ($node instanceof Node\Stmt\Class_
+            || $node instanceof Node\Stmt\Interface_
+        ) {
+            $names = [];
+            if (!empty($node->implements)) {
+                $names += $node->implements;
+            }
+            if (!empty($node->extends)) {
+                if ($node->extends instanceof Name) {
+                    $names[] = $node->extends;
+                } else {
+                    $names += $node->extends;
+                }
+            }
+
+            foreach ($names as $name) {
+                $this->handleClassName($name);
+            }
+        } elseif ($node instanceof Node\Expr\FuncCall) {
+            $this->handleFunctionName($node->name);
+        } elseif ($node instanceof Node\Expr\ConstFetch) {
+            $this->handleConstantName($node->name);
+        }
+    }
 }

@@ -41,8 +41,8 @@ class ExtendedEmulativeLexer extends Emulative
      *
      * This method override ensures that the original value of tokens that would be transformed is stored
      * besides them in the result ast. Depending on the token type various attributes will be added to the token
-     * and produced ast. These modifications are required to ensure the correct behaviour of the binary number detection,
-     * the detection of booth flavors of the doc syntax, short array syntax and short echo tags.
+     * and produced ast. These modifications are required to ensure the correct behaviour of the binary number
+     * detection, the detection of booth flavors of the doc syntax, short array syntax and short echo tags.
      *
      * @param null|string $value
      * @param null|array $startAttributes
@@ -59,18 +59,19 @@ class ExtendedEmulativeLexer extends Emulative
             $endAttributes['originalValue'] = $value;
         } elseif ($tokenId === Parser::T_START_HEREDOC) {
             $startAttributes['isDocSyntax'] = true;
-            if(substr($this->code, $startAttributes['startFilePos'] + 3, 1) === '\'') {
+            if (substr($this->code, $startAttributes['startFilePos'] + 3, 1) === '\'') {
                 $startAttributes['isNowDoc'] = true;
-            } else{
+            } else {
                 $startAttributes['isHereDoc'] = true;
             }
         } elseif ($tokenId === Parser::T_ARRAY) {
             $startAttributes['traditionalArray'] = true;
         } elseif ($tokenId === Parser::T_ECHO) {
-            if(substr($this->code, $startAttributes['startFilePos'], 3) === '<?=') {
+            if (substr($this->code, $startAttributes['startFilePos'], 3) === '<?=') {
                 $startAttributes['isShortEchoTag'] = true;
             }
         }
+
         return $tokenId;
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+// this list is currently incomplete.
 return [
     'additions' => [
         'class' => [
@@ -246,5 +247,4 @@ return [
             'zend_logo_guid' => '5.5.0',
         ]
     ],
-    'deprecations' => [],
 ];

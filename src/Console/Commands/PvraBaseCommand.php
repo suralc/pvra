@@ -17,9 +17,12 @@
 namespace Pvra\Console\Commands;
 
 
+use Pvra\Analysers\LanguageFeatureAnalyser;
 use Pvra\FileAnalyser;
+use Pvra\InformationProvider\LibraryInformation;
 use Pvra\Result\MessageLocator;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -50,7 +53,7 @@ class PvraBaseCommand extends Command
     {
         $this
             ->addOption('preventNameExpansion', 'p', InputOption::VALUE_NONE,
-                'Prevent name expansion. May increase performance but sacrifices some functionality')
+                'Prevent name expansion. May increase performance but breaks name based detections in namespaces.')
             ->addOption('analyser', 'a', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
                 'Analysers to run', array_values($this->getDefaultAnalysers()))
             ->addOption('libraryDataSource', 'l', InputOption::VALUE_REQUIRED, 'Source file of library data', false)
@@ -74,13 +77,15 @@ class PvraBaseCommand extends Command
             'Php54Features' => 'php-5.4',
             'Php55Features' => 'php-5.5',
             'Php56Features' => 'php-5.6',
-            'LibraryAdditions' => 'lib-add',
+            'LibraryChanges' => 'lib-php',
         ];
         return $analysers;
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
+        $style = new OutputFormatterStyle('red', 'yellow', ['bold', 'blink']);
+        $output->getFormatter()->setStyle('warn', $style);
         $analysers = $input->getOption('analyser');
         if (empty($analysers) || !is_array($analysers)) {
             throw new \InvalidArgumentException('The values given to the "analyser" parameter are not valid.');
@@ -146,16 +151,22 @@ class PvraBaseCommand extends Command
 
     /**
      * @param string $librarySourceOption
+     * @param int $mode
      * @return \Pvra\Analysers\LanguageFeatureAnalyser[]
      */
-    protected function createNodeWalkerInstances($librarySourceOption = null)
+    protected function createNodeWalkerInstances($librarySourceOption = null, $mode = LanguageFeatureAnalyser::MODE_ALL)
     {
         $analysers = [];
         foreach ($this->expectedWalkers as $walker) {
-            if (stripos($walker, 'Library') !== false && is_string($librarySourceOption)) {
-                $analysers[] = new $walker($this->getArrayFromFile($librarySourceOption)[1]);
+            if (in_array('Pvra\InformationProvider\LibraryInformationAwareInterface', class_implements($walker))) {
+                if (is_string($librarySourceOption)) {
+                    $info = new LibraryInformation($this->getArrayFromFile($librarySourceOption)[1]);
+                } else {
+                    $info = LibraryInformation::createWithDefaults();
+                }
+                $analysers[] = (new $walker(['mode' => $mode]))->setLibraryInformation($info);
             } else {
-                $analysers[] = new $walker;
+                $analysers[] = new $walker(['mode' => $mode]);
             }
         }
 
@@ -190,5 +201,17 @@ class PvraBaseCommand extends Command
         }
 
         throw new \InvalidArgumentException(sprintf('The file "%s" is not readable or does not exist.', $filePath));
+    }
+
+    protected function hasNameDependentAnalyser()
+    {
+        foreach ($this->expectedWalkers as $walker) {
+            if (in_array('Pvra\InformationProvider\LibraryInformationAwareInterface',
+                class_implements($walker))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

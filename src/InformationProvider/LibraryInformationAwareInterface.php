@@ -20,7 +20,17 @@ namespace Pvra\InformationProvider;
 
 interface LibraryInformationAwareInterface
 {
+    /**
+     * @param \Pvra\InformationProvider\LibraryInformationInterface $libInfo
+     * @return $this
+     */
     public function setLibraryInformation(LibraryInformationInterface $libInfo);
+
+    /**
+     * @param \Pvra\InformationProvider\LibraryInformationInterface $libInfo
+     * @return $this
+     */
+    public function addLibraryInformation(LibraryInformationInterface $libInfo);
 
     /**
      * @return LibraryInformationInterface
