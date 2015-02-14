@@ -72,7 +72,7 @@ Version 5.6.0
 |---------------------------	|-------------	|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | --extensive 	| -x 	|  	|
 | --preventNameExpansion 	| -p 	| Prevent the expansion of names. This may improve performance. Some detections might not work. 	|
-| --analyser 	| --a 	| Name an analyser to attach. If this option is not set the default ones will be used. Possible values: * Php54Features * Php55Features * Php56Features * LibraryAdditions 	|
+| --analyser 	| --a 	| Name of an analyser to attach. If this option is not set, all default analysers will be loaded. Possible values include: * php-5.4 * php-5.5 * php-5.6 * lib-php 	|
 | --libraryDataSource 	| -l 	|  	|
 | --messageFormatSourceFile 	| -m 	|  	|
 | --saveFormat 	|  	| Format of the export. Only json is supported at this time. 	|
@@ -98,7 +98,7 @@ $analyser = new \Pvra\StringAnalyser('<?php trait abc{}');
 $analyser->attachRequirementVisitor(new Php54Features);
 $analyser->attachRequirementVisitor(new Php55Features);
 $analyser->attachRequirementVisitor(new Php56Features);
-$analyser->attachRequirementVisitor(new LibraryAdditions);
+$analyser->attachRequirementVisitor(new LibraryChanges);
 
 $result = $analyser->run();
 
