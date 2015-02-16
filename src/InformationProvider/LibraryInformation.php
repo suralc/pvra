@@ -85,14 +85,10 @@ class LibraryInformation implements LibraryInformationInterface
             $this->removals = $data['removals'];
         }
 
-        $keys = ['class', 'function', 'constant'];
-        foreach (['additions', 'deprecations', 'removals'] as $propName) {
-            foreach ($keys as $key) {
-                if (!isset($this->{$propName}[ $key ])) {
-                    $this->{$propName}[ $key ] = [];
-                }
-            }
-        }
+        $baseArray = ['class' => [], 'function' => [], 'constant' => []];
+        $this->additions += $baseArray;
+        $this->deprecations += $baseArray;
+        $this->removals += $baseArray;
     }
 
     /**
