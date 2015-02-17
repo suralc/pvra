@@ -52,10 +52,7 @@ class Php53Features extends LanguageFeatureAnalyser
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\Class_
-            || $node instanceof Node\Stmt\Interface_
-            || $node instanceof Node\Stmt\Trait_
-        ) {
+        if ($this->isClassDeclarationStatement($node)) {
             $this->inClass = true;
         } /*elseif ($node instanceof Node\Stmt\Use_) { // required in ::detectNamespaceSeperator
             foreach ($node->uses as $use) {
@@ -79,12 +76,18 @@ class Php53Features extends LanguageFeatureAnalyser
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\Class_
-            || $node instanceof Node\Stmt\Interface_
-            || $node instanceof Node\Stmt\Trait_
-        ) {
+        if ($this->isClassDeclarationStatement($node)) {
             $this->inClass = false;
         }
+    }
+
+    /**
+     * @param \PhpParser\Node $node
+     * @return bool
+     */
+    private function isClassDeclarationStatement(Node $node)
+    {
+        return $node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_ || $node instanceof Node\Stmt\Trait_;
     }
 
     /**
