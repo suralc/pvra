@@ -1,10 +1,10 @@
-*If you are looking for a battle-tested library with a cleaner architecture and more functionality you may find your library of choice at [llaville/php-compat-info](https://github.com/llaville/php-compat-info) for now.*
+*If you are looking for a battle-tested library with a possibly cleaner architecture and similar features you may find your app of choice at [llaville/php-compat-info](https://github.com/llaville/php-compat-info) for now.*
 
 
 # Php Version Requirement Analyser
 
 This repository contains a library and a console application to validate your php files' version requirements.
-The library makes heavy use of [the PHP-Parser library](https://github.com/nikic/PHP-Parser). Everything here is quite moving, 
+The library makes heavy use of [the PHP-Parser library](https://github.com/nikic/PHP-Parser). The api is not yet final, 
 if you want to use the library component yourself you may want to lock your dependencies on a specific tag. 
 
 [![Build Status](https://travis-ci.org/suralc/pvra.svg?branch=master)](https://travis-ci.org/suralc/pvra)
@@ -13,18 +13,11 @@ if you want to use the library component yourself you may want to lock your depe
 
 
 ## Index
-1. [Api](#api-doc)
-2. [Installation and usage of the cli app](#cli-usage)
-3. [Installation and usage of the library](#lib-usage)
-4. [Build the phar](#build)
+1. [Installation and usage of the cli app](#cli-usage)
+2. [Installation and usage of the library](#lib-usage)
+3. [Build the phar](#build)
+4. [Library Api Docs](#api-doc)
 5. [Todo](#todo)
-
-
-
-## <a name="api-doc"></a>Api - Documentation
-
-You may find the incomplete API-documentation [here](http://suralc.github.io/pvra/docs). Please be aware that at this time it is
-incomplete.
 
 
 ## <a name="cli-usage"></a> Installation and usage of the cli app
@@ -65,24 +58,20 @@ Version 5.6.0
 
 #### CLI - Options
 
-
-**Note:** The analysers listed below can be alias using `php-5.x`.
-
 | Name 	| Short  name 	| Description 	|
 |---------------------------	|-------------	|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-| --extensive 	| -x 	|  	|
 | --preventNameExpansion 	| -p 	| Prevent the expansion of names. This may improve performance. Some detections might not work. 	|
-| --analyser 	| --a 	| Name of an analyser to attach. If this option is not set, all default analysers will be loaded. Possible values include: * php-5.4 * php-5.5 * php-5.6 * lib-php 	|
-| --libraryDataSource 	| -l 	|  	|
-| --messageFormatSourceFile 	| -m 	|  	|
+| --analyser 	| -a 	| Name of an analyser to attach. If this option is not set, all default analysers will be loaded. Possible values include: * php-5.4 * php-5.5 * php-5.6 * lib-php 	|
+| --libraryDataSource 	| -l 	| Path to a file containing library information. Defaults to the file shipped with the library/phar.	|
+| --messageFormatSourceFile 	| -m 	| Path to a file containing message templates. Defaults to the file shipped with the library/phar.	|
 | --saveFormat 	|  	| Format of the export. Only json is supported at this time. 	|
-| --saveAsFile 	|  	| If this option is set the results will be saved to the given file. 	|
+| --saveAsFile 	|  	| If this option is set the results will be saved to the file specified as value. 	|
 
 *Note: Classes within the src/Console directory are not part of the public API*
 
 ## <a name="lib-usage"></a>Installation and usage of the library.
 
-Run `composer require <package-name> --prefer-dist` in the root of your project and include the composer autoloader.
+Run `composer require suralc/pvra --prefer-dist` in the root of your project and include the composer autoloader.
 
 Please be aware that `--prefer-dist` will reduce the download size of the loaded package by removing the `tests` directory
 and other unused files.
@@ -113,6 +102,16 @@ foreach($result as $r) {
 
 [Box](http://box-project.org/) is required to build the phar. Run `box build` in the repository root. Box requires the code to be inside a git
 repository.
+
+
+
+## <a name="api-doc"></a>Api - Documentation
+
+You may find the incomplete API-documentation [here](http://suralc.github.io/pvra/docs). Please be aware that at this time it is
+incomplete.
+
+
+
 
 ## <a name="todo"></a>Todo
 
