@@ -12,14 +12,14 @@ matrix:
 
 before_script:
   - composer selfupdate && composer --version
-  - composer require satooshi/php-coveralls --dev --prefer-dist
   - composer update --dev --prefer-dist
 
 script:
-  - phpunit --coverage-clover=clover.xml
+  - ./vendor/bin/phpunit --coverage-clover=clover.xml
 
 after_script:
-  - php vendor/bin/coveralls
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.xml
 
 cache:
   directories:
