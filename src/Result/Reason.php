@@ -79,11 +79,11 @@ abstract class Reason
         CONSTANT_IMPORT_USE = 55;
 
     /**
-     * @var array
+     * @var array|null
      */
     private static $reasonToRequirement;
     /**
-     * @var array
+     * @var array|null
      */
     private static $constantsCache;
 
@@ -101,13 +101,13 @@ abstract class Reason
      */
     public static function getRequiredVersionForReason($reason)
     {
-        if (static::$reasonToRequirement === null) {
-            static::$reasonToRequirement = static::getReasonToRequirementBaseValues();
+        if (self::$reasonToRequirement === null) {
+            self::$reasonToRequirement = static::getReasonToRequirementBaseValues();
         }
 
-        if (isset(static::$reasonToRequirement[ $reason ])) {
-            return static::$reasonToRequirement[ $reason ];
-        } elseif ($reason > static::UNKNOWN && $reason < static::TRAIT_DEFINITION) {
+        if (isset(self::$reasonToRequirement[ $reason ])) {
+            return self::$reasonToRequirement[ $reason ];
+        } elseif ($reason > self::UNKNOWN && $reason < self::TRAIT_DEFINITION) {
             return false;
         } else {
             throw new \InvalidArgumentException(sprintf('There is no required version defined for this reason(id: "%s").',
@@ -161,8 +161,8 @@ abstract class Reason
      */
     public static function clear()
     {
-        static::$reasonToRequirement = null;
-        static::$constantsCache = null;
+        self::$reasonToRequirement = null;
+        self::$constantsCache = null;
     }
 
     /**
@@ -176,50 +176,50 @@ abstract class Reason
     protected static function getReasonToRequirementBaseValues()
     {
         return [
-            static::UNKNOWN => '7.0.0',
+            self::UNKNOWN => '7.0.0',
             // 5.4
-            static::GOTO_KEYWORD => '5.3.0',
-            static::JUMP_LABEL => '5.3.0',
-            static::NAMESPACE_DECLERATION => '5.3.0',
-            static::NAMESPACE_MAGIC_CONSTANT => '5.3.0',
-            static::NAMESPACE_IMPORT => '5.3.0',
-            static::NAMESPACE_SEPARATOR => '5.3.0',
-            static::NOWDOC_LITERAL => '5.3.0',
-            static::CALLSTATIC_MAGIC_METHOD => '5.3.0',
-            static::INVOKE_MAGIC_METHOD => '5.3.0',
-            static::CONST_KEYWORD_OUTSIDE_CLASS => '5.3.0',
-            static::CONST_KEYWORD_DOC_SYNTAX => '5.3.0',
-            static::SHORT_TERNARY => '5.3.0',
-            static::CLOSURE_DECLARATION => '5.3.0',
-            static::DYNAMIC_ACCESS_TO_STATIC => '5.3.0',
-            static::LATE_STATE_BINDING_USING_STATIC => '5.3.0',
-            static::DIR_MAGIC_CONSTANT => '5.3.0',
+            self::GOTO_KEYWORD => '5.3.0',
+            self::JUMP_LABEL => '5.3.0',
+            self::NAMESPACE_DECLERATION => '5.3.0',
+            self::NAMESPACE_MAGIC_CONSTANT => '5.3.0',
+            self::NAMESPACE_IMPORT => '5.3.0',
+            self::NAMESPACE_SEPARATOR => '5.3.0',
+            self::NOWDOC_LITERAL => '5.3.0',
+            self::CALLSTATIC_MAGIC_METHOD => '5.3.0',
+            self::INVOKE_MAGIC_METHOD => '5.3.0',
+            self::CONST_KEYWORD_OUTSIDE_CLASS => '5.3.0',
+            self::CONST_KEYWORD_DOC_SYNTAX => '5.3.0',
+            self::SHORT_TERNARY => '5.3.0',
+            self::CLOSURE_DECLARATION => '5.3.0',
+            self::DYNAMIC_ACCESS_TO_STATIC => '5.3.0',
+            self::LATE_STATE_BINDING_USING_STATIC => '5.3.0',
+            self::DIR_MAGIC_CONSTANT => '5.3.0',
             // 5.4
-            static::TRAIT_DEFINITION => '5.4.0',
-            static::TRAIT_USE => '5.4.0',
-            static::TRAIT_MAGIC_CONST => '5.4.0',
-            static::ARRAY_FUNCTION_DEREFERENCING => '5.4.0',
-            static::THIS_IN_CLOSURE => '5.4.0',
-            static::TYPEHINT_CALLABLE => '5.4.0',
-            static::INSTANT_CLASS_MEMBER_ACCESS => '5.4.0',
-            static::BINARY_NUMBER_DECLARATION => '5.4.0',
-            static::SHORT_ARRAY_DECLARATION => '5.4.0',
-            static::STATIC_CALL_BY_EXPRESSION => '5.4.0',
-            static::SHORT_ECHO_TAG => '5.4.0',
+            self::TRAIT_DEFINITION => '5.4.0',
+            self::TRAIT_USE => '5.4.0',
+            self::TRAIT_MAGIC_CONST => '5.4.0',
+            self::ARRAY_FUNCTION_DEREFERENCING => '5.4.0',
+            self::THIS_IN_CLOSURE => '5.4.0',
+            self::TYPEHINT_CALLABLE => '5.4.0',
+            self::INSTANT_CLASS_MEMBER_ACCESS => '5.4.0',
+            self::BINARY_NUMBER_DECLARATION => '5.4.0',
+            self::SHORT_ARRAY_DECLARATION => '5.4.0',
+            self::STATIC_CALL_BY_EXPRESSION => '5.4.0',
+            self::SHORT_ECHO_TAG => '5.4.0',
             // 5.5
-            static::GENERATOR_DEFINITION => '5.5.0',
-            static::TRY_CATCH_FINALLY => '5.5.0',
-            static::LIST_IN_FOREACH => '5.5.0',
-            static::EXPR_IN_EMPTY => '5.5.0',
-            static::ARRAY_OR_STRING_DEREFERENCING => '5.5.0',
-            static::CLASS_NAME_RESOLUTION => '5.5.0',
+            self::GENERATOR_DEFINITION => '5.5.0',
+            self::TRY_CATCH_FINALLY => '5.5.0',
+            self::LIST_IN_FOREACH => '5.5.0',
+            self::EXPR_IN_EMPTY => '5.5.0',
+            self::ARRAY_OR_STRING_DEREFERENCING => '5.5.0',
+            self::CLASS_NAME_RESOLUTION => '5.5.0',
             // 5.6
-            static::VARIADIC_ARGUMENT => '5.6.0',
-            static::ARGUMENT_UNPACKING => '5.6.0',
-            static::CONSTANT_SCALAR_EXPRESSION => '5.6.0',
-            static::POW_OPERATOR => '5.6.0',
-            static::FUNCTION_IMPORT_USE => '5.6.0',
-            static::CONSTANT_IMPORT_USE => '5.6.0',
+            self::VARIADIC_ARGUMENT => '5.6.0',
+            self::ARGUMENT_UNPACKING => '5.6.0',
+            self::CONSTANT_SCALAR_EXPRESSION => '5.6.0',
+            self::POW_OPERATOR => '5.6.0',
+            self::FUNCTION_IMPORT_USE => '5.6.0',
+            self::CONSTANT_IMPORT_USE => '5.6.0',
         ];
     }
 
