@@ -135,7 +135,6 @@ class PvraBaseCommand extends Command
     protected function createMessageLocatorInstance(InputInterface $input)
     {
         $file = $input->getOption('messageFormatSourceFile');
-        $locator = null;
         if (is_string($file)) {
             $locator = MessageLocator::fromArray($this->getArrayFromFile($file)[1]);
         } else {

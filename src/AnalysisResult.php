@@ -31,6 +31,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     const INITIAL_ANALYSIS_TARGET_ID = 'unknown';
     const VERSION_CONSTRAINT_UPPER_LIMIT = 0;
     const VERSION_CONSTRAINT_LOWER_LIMIT = 1;
+
     /**
      * The state of this instance
      *
@@ -64,7 +65,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     private $cachedRequiredVersionId;
 
     /**
-     * Number of attached reasonings.
+     * Number of attached `Reasonings` instances.
      *
      * @var int
      */
