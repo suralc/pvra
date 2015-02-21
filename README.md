@@ -9,8 +9,7 @@ if you want to use the library component yourself you may want to lock your depe
 
 [![Build Status](https://travis-ci.org/suralc/pvra.svg?branch=master)](https://travis-ci.org/suralc/pvra)
 [![Dependency Status](https://www.versioneye.com/user/projects/546643934de5ef5022000056/badge.svg?style=flat)](https://www.versioneye.com/user/projects/546643934de5ef5022000056)
-[![Coverage Status](https://img.shields.io/coveralls/suralc/pvra.svg)](https://coveralls.io/r/suralc/pvra?branch=master)
-
+[![Code Coverage](https://scrutinizer-ci.com/g/suralc/pvra/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/suralc/pvra/?branch=master)
 
 ## Index
 1. [Installation and usage of the cli app](#cli-usage)
