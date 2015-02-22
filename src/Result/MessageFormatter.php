@@ -64,7 +64,7 @@ class MessageFormatter
         if ($locator instanceof MessageLocator) {
             $this->locator = $locator;
         } elseif ($locator === null) {
-            $this->locator = MessageLocator::fromPhpFile(__DIR__ . '/../../data/default_messages.php');
+            $this->locator = MessageLocator::fromJsonFile(__DIR__ . '/../../data/default_messages.json');
         } elseif (is_array($locator)) {
             $this->locator = MessageLocator::fromArray($locator);
         } else {

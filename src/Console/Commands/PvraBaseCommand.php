@@ -138,7 +138,7 @@ class PvraBaseCommand extends Command
         if (is_string($file)) {
             $locator = MessageLocator::fromArray($this->getArrayFromFile($file)[1]);
         } else {
-            $locator = MessageLocator::fromPhpFile(__DIR__ . '/../../../data/default_messages.php');
+            $locator = MessageLocator::fromJsonFile(__DIR__ . '/../../../data/default_messages.json');
         }
 
         $locator->addMissingMessageHandler(function () {
