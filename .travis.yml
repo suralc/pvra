@@ -3,24 +3,39 @@ php:
   - 5.4
   - 5.5
   - 5.6
+  - 7.0
   - hhvm
   - hhvm-nightly
 matrix:
   allow_failures:
-    - php: hhvm-nightly
+    - php:
+      - hhvm-nightly
+      - 7.0
   fast_finish: true
 
 before_script:
   - composer selfupdate && composer --version
-  - composer update --dev --prefer-dist
+  - composer update --prefer-dist
+  - |
+      if (php --version | grep -i "7.0" > /dev/null); then
+          PHPUNIT_FLAGS=""
+      else
+          PHPUNIT_FLAGS="--coverage-clover=coverage.xml"
+      fi
 
 script:
-  - ./vendor/bin/phpunit --coverage-clover=clover.xml
+  - ./vendor/bin/phpunit $PHPUNIT_FLAGS
 
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover clover.xml
+  - |
+      if (php --version | grep -i "7.0" > /dev/null); then
+        echo "No coverage generated on 7.0"
+      else
+        wget https://scrutinizer-ci.com/ocular.phar
+        php ocular.phar code-coverage:upload --format=php-clover coverage.xml
+      fi
 
 cache:
   directories:
     - vendor
+    - $HOME/.composer/cache
