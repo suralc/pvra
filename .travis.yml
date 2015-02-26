@@ -8,9 +8,8 @@ php:
   - hhvm-nightly
 matrix:
   allow_failures:
-    - php:
-      - hhvm-nightly
-      - 7.0
+    - php: hhvm-nightly
+    - php: 7.0
   fast_finish: true
 
 before_script:
