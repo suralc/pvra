@@ -86,7 +86,7 @@ class Reasoning implements ArrayAccess, JsonSerializable
         $this->result = $result;
         $this->data = $data;
         if ($version === null) {
-            $this->version = Reason::getRequiredVersionForReason($reasonId);
+            $this->version = Reason::getVersionFromReason($reasonId);
         } else {
             $this->version = $version;
         }

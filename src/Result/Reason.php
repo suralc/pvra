@@ -81,16 +81,16 @@ abstract class Reason
     /**
      * @var array|null
      */
-    private static $reasonToRequirement;
+    private static $reasonToVersion;
     /**
      * @var array|null
      */
     private static $constantsCache;
 
     /**
-     * Get the required version for a reason.
+     * Get version information from a reason.
      *
-     * This static method may be used to get the required version of a reason constant defined in RequirementReason.
+     * This static method may be used to get version information of a reason constant defined in Reason.
      * If no matching version for a constant can be found an InvalidArgumentException will be thrown.
      *
      * This method may return a falseable string or bool(false). Use !== false to check for a valid returned version.
@@ -99,14 +99,14 @@ abstract class Reason
      * @param int $reason One of the constants defined in RequirementReason
      * @return string|bool The required version or bool(false)
      */
-    public static function getRequiredVersionForReason($reason)
+    public static function getVersionFromReason($reason)
     {
-        if (self::$reasonToRequirement === null) {
-            self::$reasonToRequirement = static::getReasonToRequirementBaseValues();
+        if (self::$reasonToVersion === null) {
+            self::$reasonToVersion = static::getReasonToVersionBaseValues();
         }
 
-        if (isset(self::$reasonToRequirement[ $reason ])) {
-            return self::$reasonToRequirement[ $reason ];
+        if (isset(self::$reasonToVersion[ $reason ])) {
+            return self::$reasonToVersion[ $reason ];
         } elseif ($reason > self::UNKNOWN && $reason < self::TRAIT_DEFINITION) {
             return false;
         } else {
@@ -161,7 +161,7 @@ abstract class Reason
      */
     public static function clear()
     {
-        self::$reasonToRequirement = null;
+        self::$reasonToVersion = null;
         self::$constantsCache = null;
     }
 
@@ -173,7 +173,7 @@ abstract class Reason
      *
      * @return array
      */
-    protected static function getReasonToRequirementBaseValues()
+    protected static function getReasonToVersionBaseValues()
     {
         return [
             self::UNKNOWN => '7.0.0',

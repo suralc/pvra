@@ -213,7 +213,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      */
     public function addRequirement($reason, $line = -1, $msg = null, array $data = [])
     {
-        $version = Reason::getRequiredVersionForReason($reason);
+        $version = Reason::getVersionFromReason($reason);
 
         if ($version === false) {
             throw new \LogicException(sprintf('%s::%s requires a reason a version can be associated to. Use %s::addArbitraryRequirement() to add any version with any reasoning to the result.',
@@ -235,7 +235,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      */
     public function addLimit($reason, $line = -1, $msg = null, array $data = [])
     {
-        $version = Reason::getRequiredVersionForReason($reason);
+        $version = Reason::getVersionFromReason($reason);
 
         if ($version === false) {
             throw new \LogicException(sprintf('%s::%s requires a reason a version can be associated to. Use %s::addArbitraryLimit() to add any version with any reasoning to the result.',

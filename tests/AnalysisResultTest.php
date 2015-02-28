@@ -92,7 +92,7 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
     {
         $r = new AnalysisResult();
         $r->addRequirement(R::EXPR_IN_EMPTY);
-        $this->assertSame(R::getRequiredVersionForReason(R::EXPR_IN_EMPTY), $r->getRequiredVersion());
+        $this->assertSame(R::getVersionFromReason(R::EXPR_IN_EMPTY), $r->getRequiredVersion());
         $r->addArbitraryRequirement('5.5.1');
         $this->assertSame('5.5.1', $r->getRequiredVersion());
         $r->addRequirement(R::VARIADIC_ARGUMENT);
