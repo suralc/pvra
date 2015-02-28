@@ -307,7 +307,6 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         return $this->isSealed;
     }
 
-
     /**
      * @return array|\Pvra\Result\Reasoning[]
      */
@@ -400,6 +399,42 @@ class AnalysisResult implements \IteratorAggregate, \Countable
                 $iterator->append($value);
             }
         });
+
+        return $iterator;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getLimitIterator()
+    {
+        $iterator = new \ArrayIterator();
+        foreach ($this->getLimits() as $version) {
+            /** @var Reasoning $item */
+            foreach ($version as $item) {
+                if ($item instanceof Reasoning) {
+                    $iterator->append($item);
+                }
+            }
+        }
+
+        return $iterator;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getRequirementIterator()
+    {
+        $iterator = new \ArrayIterator();
+        foreach ($this->getRequirements() as $version) {
+            /** @var Reasoning $item */
+            foreach ($version as $item) {
+                if ($item instanceof Reasoning) {
+                    $iterator->append($item);
+                }
+            }
+        }
 
         return $iterator;
     }

@@ -174,7 +174,7 @@ class DirCommand extends PvraBaseCommand
                     "\n"
                 ]));
                 /** @var $reason Reasoning */
-                foreach ($result as $reason) {
+                foreach ($result->getRequirementIterator() as $reason) {
                     $out->write("\t");
                     $out->write($reason['msg'], true);
                 }

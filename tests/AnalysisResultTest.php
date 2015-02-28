@@ -219,6 +219,36 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testGetLimitIterator()
+    {
+        $r = new AnalysisResult();
+        $it = $r->getLimitIterator();
+        $this->assertInstanceOf('\Iterator', $it);
+        $this->assertInstanceOf('\Traversable', $it);
+        $this->assertCount(0, $it);
+        $r->addArbitraryRequirement('5.6.7');
+        $this->assertCount(0, $r->getLimitIterator());
+        $r->addArbitraryLimit('5.6.7');
+        $this->assertCount(1, $r->getLimitIterator());
+        $ar = iterator_to_array($r->getLimitIterator());
+        $this->assertInstanceOf('\Pvra\Result\Reasoning', $ar[0]);
+    }
+
+    public function testGetRequirementIterator()
+    {
+        $r = new AnalysisResult();
+        $it = $r->getRequirementIterator();
+        $this->assertInstanceOf('\Iterator', $it);
+        $this->assertInstanceOf('\Traversable', $it);
+        $this->assertCount(0, $it);
+        $r->addArbitraryLimit('5.6.7');
+        $this->assertCount(0, $r->getRequirementIterator());
+        $r->addArbitraryRequirement('5.6.7');
+        $this->assertCount(1, $r->getRequirementIterator());
+        $ar = iterator_to_array($r->getRequirementIterator());
+        $this->assertInstanceOf('\Pvra\Result\Reasoning', $ar[0]);
+    }
+
     public function testSetAnalysisTargetId()
     {
         $r = new AnalysisResult();
