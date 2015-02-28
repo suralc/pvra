@@ -57,12 +57,22 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     /**
      * @var string|null
      */
-    private $cachedRequiredVersion;
+    private $cachedVersionRequirement;
+
+    /**
+     * @var string|null
+     */
+    private $cachedVersionLimit;
 
     /**
      * @var int
      */
     private $cachedRequiredVersionId;
+
+    /**
+     * @var int
+     */
+    private $cachedLimitedVersionId;
 
     /**
      * Number of attached `Reasonings` instances.
@@ -93,6 +103,15 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         }
 
         return $this->cachedRequiredVersionId;
+    }
+
+    public function getVersionLimitId()
+    {
+        if ($this->cachedLimitedVersionId === null) {
+            $this->cachedLimitedVersionId = $this->calculateVersionIdFromString($this->getVersionLimit());
+        }
+
+        return $this->cachedLimitedVersionId;
     }
 
     /**
@@ -143,7 +162,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Retrieve the determined required version
+     * Retrieve the required version
      *
      * This method calculates the highest required version of all known requirements.
      * If no changes were made between the calls to this method the version requirement will
@@ -154,8 +173,8 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      */
     public function getRequiredVersion()
     {
-        if ($this->cachedRequiredVersion !== null) {
-            return $this->cachedRequiredVersion;
+        if ($this->cachedVersionRequirement !== null) {
+            return $this->cachedVersionRequirement;
         }
 
         $keys = array_keys($this->requirements);
@@ -165,10 +184,39 @@ class AnalysisResult implements \IteratorAggregate, \Countable
                 return version_compare($b, $a);
             });
 
-            return $this->cachedRequiredVersion = $keys[0];
+            return $this->cachedVersionRequirement = $keys[0];
         }
 
         return '5.3.0';
+    }
+
+    /**
+     * Retrieve the upper version limit
+     *
+     * This method calculates the upper version limit of all known reasonings.
+     * If no changes were made between the calls to this method the version limit will
+     * not be recalculated.
+     *
+     * @return string The version limit in the format `Major.Minor[.Patch]`
+     * @see http://php.net/manual/en/function.version-compare.php version_compare()
+     */
+    public function getVersionLimit()
+    {
+        if ($this->cachedVersionLimit !== null) {
+            return $this->cachedVersionLimit;
+        }
+
+        $keys = array_keys($this->limits);
+
+        if (!empty($keys)) {
+            usort($keys, function ($a, $b) {
+                return version_compare($a, $b);
+            });
+
+            return $this->cachedVersionRequirement = $keys[0];
+        }
+
+        return '7.0.0';
     }
 
     /**
@@ -454,7 +502,9 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      */
     private function clearInstanceCaches()
     {
-        $this->cachedRequiredVersion = null;
+        $this->cachedVersionRequirement = null;
         $this->cachedRequiredVersionId = null;
+        $this->cachedLimitedVersionId = null;
+        $this->cachedVersionLimit = null;
     }
 }

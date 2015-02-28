@@ -73,6 +73,19 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         $this->assertSame('5.6.0', $r->getRequiredVersion());
     }
 
+    public function testGetVersionLimit()
+    {
+        $r = new AnalysisResult();
+        $this->assertSame('7.0.0', $r->getVersionLimit());
+        $r->addArbitraryLimit('5.5.5');
+        $this->assertSame('5.5.5', $r->getVersionLimit());
+        $this->assertSame('5.5.5', $r->getVersionLimit());
+        $r->addArbitraryLimit('7.0.0');
+        $this->assertSame('5.5.5', $r->getVersionLimit());
+        $r->addArbitraryLimit('4.0.0');
+        $this->assertSame('4.0.0', $r->getVersionLimit());
+    }
+
     public function testGetRequiredVersionWithReasonedRequirements()
     {
         $r = new AnalysisResult();
@@ -130,6 +143,16 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
 
         $r->addArbitraryRequirement(PHP_VERSION);
         $this->assertSame(PHP_VERSION_ID, $r->getRequiredVersionId());
+    }
+
+    public function testGetVersionLimitId()
+    {
+        $r = new AnalysisResult();
+
+        $r->addArbitraryLimit('5.4.0');
+        $this->assertSame(50400, $r->getVersionLimitId());
+        $r->addArbitraryLimit('5.3.1');
+        $this->assertSame(50301, $r->getVersionLimitId());
     }
 
     /**
