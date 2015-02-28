@@ -166,6 +166,8 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         $this->assertCount(2, $r);
         $r->addRequirement(R::VARIADIC_ARGUMENT);
         $this->assertCount(3, $r);
+        $r->addArbitraryLimit('5.6.7');
+        $this->assertCount(4, $r);
     }
 
     public function testGetIterator()
@@ -198,6 +200,22 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('msg', $item);
             $this->assertArrayHasKey('reason', $item);
             $this->assertTrue($item['version'] === '5.5.0' || $item['version'] === '5.4.0');
+        }
+    }
+
+    public function testGetIteratorWithLimits()
+    {
+        $r = new AnalysisResult();
+        $r->addArbitraryLimit('5.5.0');
+        $this->assertCount(1, $r->getIterator());
+        $r->addArbitraryLimit('5.5.0');
+        $this->assertCount(2, $r->getIterator());
+        $r->addArbitraryRequirement('5.5.0');
+        $this->assertCount(3, $r->getIterator());
+        /** @var \Pvra\Result\Reasoning $item */
+        foreach($r as $item) {
+            $this->assertInstanceOf('\Pvra\Result\Reasoning', $item);
+            $this->assertSame('5.5.0', $item->get('version'));
         }
     }
 

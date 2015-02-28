@@ -290,10 +290,10 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         }
 
         $this->clearInstanceCaches();
+        $this->count++;
 
         if ($type === self::VERSION_CONSTRAINT_LOWER_LIMIT) {
             $this->requirements[ $version ][] = new Reasoning($reason, $line, $this, $version, $msg, $data);
-            $this->count++;
         } elseif ($type === self::VERSION_CONSTRAINT_UPPER_LIMIT) {
             $this->limits[ $version ][] = new Reasoning($reason, $line, $this, $version, $msg, $data);
         }
