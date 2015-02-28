@@ -356,6 +356,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
 
     /**
      * Get the current analysis target id
+     *
      * @return string Analysis target id
      */
     public function getAnalysisTargetId()
@@ -393,11 +394,12 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     public function getIterator()
     {
         $iterator = new \ArrayIterator();
-        foreach ($this->getRequirements() as $values) {
-            foreach ($values as $value) {
+        $data = [$this->getRequirements(), $this->getLimits()];
+        array_walk_recursive($data, function ($value) use ($iterator) {
+            if ($value instanceof Reasoning) {
                 $iterator->append($value);
             }
-        }
+        });
 
         return $iterator;
     }
