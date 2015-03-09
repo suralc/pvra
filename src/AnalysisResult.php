@@ -213,7 +213,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
                 return version_compare($a, $b);
             });
 
-            return $this->cachedVersionRequirement = $keys[0];
+            return $this->cachedVersionLimit = $keys[0];
         }
 
         return '7.0.0';

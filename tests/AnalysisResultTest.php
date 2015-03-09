@@ -84,6 +84,7 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         $this->assertSame('5.5.5', $r->getVersionLimit());
         $r->addArbitraryLimit('4.0.0');
         $this->assertSame('4.0.0', $r->getVersionLimit());
+        $this->assertNotEquals('4.0.0', $r->getRequiredVersion());
     }
 
     public function testGetRequiredVersionWithReasonedRequirements()
