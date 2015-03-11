@@ -29,8 +29,8 @@ use Pvra\Result\Reasoning;
 class AnalysisResult implements \IteratorAggregate, \Countable
 {
     const INITIAL_ANALYSIS_TARGET_ID = 'unknown';
-    const VERSION_CONSTRAINT_UPPER_LIMIT = 0;
-    const VERSION_CONSTRAINT_LOWER_LIMIT = 1;
+    const VERSION_LIMIT_MIN = 0;
+    const VERSION_LIMIT_MAX = 1;
 
     /**
      * The state of this instance
@@ -240,7 +240,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         $reason = Reason::UNKNOWN,
         array $data = []
     ) {
-        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_LOWER_LIMIT, $version, $line, $msg, $reason,
+        $this->addArbitraryVersionConstraint(self::VERSION_LIMIT_MAX, $version, $line, $msg, $reason,
             $data);
 
         return $this;
@@ -268,7 +268,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
                 __CLASS__, __METHOD__, __CLASS__));
         }
 
-        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_LOWER_LIMIT, $version, $line, $msg, $reason,
+        $this->addArbitraryVersionConstraint(self::VERSION_LIMIT_MAX, $version, $line, $msg, $reason,
             $data);
 
         return $this;
@@ -290,7 +290,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
                 __CLASS__, __METHOD__, __CLASS__));
         }
 
-        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_UPPER_LIMIT, $version, $line, $msg, $reason,
+        $this->addArbitraryVersionConstraint(self::VERSION_LIMIT_MIN, $version, $line, $msg, $reason,
             $data);
 
         return $this;
@@ -311,7 +311,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         $reason = Reason::UNKNOWN,
         array $data = []
     ) {
-        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_UPPER_LIMIT, $version, $line, $msg, $reason,
+        $this->addArbitraryVersionConstraint(self::VERSION_LIMIT_MIN, $version, $line, $msg, $reason,
             $data);
 
         return $this;
@@ -340,9 +340,9 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         $this->clearInstanceCaches();
         $this->count++;
 
-        if ($type === self::VERSION_CONSTRAINT_LOWER_LIMIT) {
+        if ($type === self::VERSION_LIMIT_MAX) {
             $this->requirements[ $version ][] = new Reasoning($reason, $line, $this, $version, $msg, $data);
-        } elseif ($type === self::VERSION_CONSTRAINT_UPPER_LIMIT) {
+        } elseif ($type === self::VERSION_LIMIT_MIN) {
             $this->limits[ $version ][] = new Reasoning($reason, $line, $this, $version, $msg, $data);
         }
     }
