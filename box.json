@@ -20,6 +20,9 @@
         "doctrine",
         "sebastian",
         "mockery",
+        "phpdocumentor",
+        "phpspec",
+        "yaml",
         "satooshi"
       ],
       "in": "vendor"
