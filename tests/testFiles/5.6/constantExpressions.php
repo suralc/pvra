@@ -11,4 +11,6 @@ class ConstTestExample
     const B = 10 + 10;
     const D = self::A + 10;
     const E = self::A + self::A;
+    const F = ConstTestExample::B;
+    const G = \D;
 }

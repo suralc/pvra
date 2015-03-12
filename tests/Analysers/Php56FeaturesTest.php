@@ -3,6 +3,15 @@
 namespace Pvra\tests\Analysers;
 
 
+use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassConst;
+use Pvra\Analysers\Php56Features;
+use Pvra\AnalysisResult;
 use Pvra\Result\Reason as R;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
@@ -61,5 +70,20 @@ class Php56FeaturesTest extends BaseNodeWalkerTestCase
         ];
 
         $this->runTestsAgainstExpectation($expected, '5.6/constantExpressions', '5.6.0');
+    }
+
+    public function testConstantFetchIsNotMarkedAsUnsupportedBelow56()
+    {
+        $analyserMock = \Mockery::mock('\Pvra\StringAnalyser');
+        $result = new AnalysisResult();
+        $analyserMock->shouldReceive('getResult')->andReturn($result);
+        $analyser = new Php56Features();
+        $analyser->setOwningAnalyser($analyserMock);
+        $analyser->enterNode(new ClassConst([
+            new Node\Const_('STR', new LNumber()),
+            new Node\Const_('DEF', new ConstFetch(new Name('abc'))),
+            new Node\Const_('CONSTANTS', new ClassConstFetch(new Name('abc'), 'myConst'))
+        ]));
+        $this->assertCount(0, $result);
     }
 }
