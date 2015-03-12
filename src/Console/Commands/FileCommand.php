@@ -19,6 +19,7 @@ namespace Pvra\Console\Commands;
 
 use Pvra\AnalysisResult;
 use Pvra\Result\MessageFormatter;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -63,8 +64,8 @@ class FileCommand extends PvraBaseCommand
 
         $result = (new AnalysisResult())
             ->setMsgFormatter(new MessageFormatter(
-                $this->createMessageLocatorInstance($input)
-            ), true, true);
+                $this->createMessageLocatorInstance($input), false
+            ));
 
         $req->setResultInstance($result);
 
@@ -72,14 +73,17 @@ class FileCommand extends PvraBaseCommand
 
         $output->writeln(sprintf('<info>Required version: %s</info>', $result->getRequiredVersion()));
 
+        $tableData = [];
         foreach (array_reverse($result->getRequirements()) as $version => $reasons) {
-            $output->writeln('Version ' . $version);
             foreach ($reasons as $reason) {
-                $output->write("\t");
-                $output->write('Reason: ');
-                $output->write($reason['msg'], true);
+                $tableData[] = [$reason['version'], $reason['msg'], $reason['line']];
             }
         }
+
+        (new Table($output))
+            ->setHeaders(['Version', 'Message', 'Line'])
+            ->setRows($tableData)
+            ->render();
 
         if ($file = $input->getOption('saveAsFile')) {
             if (file_exists($file)) {

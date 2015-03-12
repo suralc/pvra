@@ -20,8 +20,10 @@ namespace Pvra\Console\Commands;
 use Pvra\AnalysisResult;
 use Pvra\Console\Services\FileFinderBuilder;
 use Pvra\Result\Collection;
+use Pvra\Result\MessageFormatter;
 use Pvra\Result\Reasoning;
 use RuntimeException;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -94,7 +96,12 @@ class DirCommand extends PvraBaseCommand
         /** @var \SplFileInfo $file */
         foreach ($files as $file) {
             if ($file->isFile()) {
+                $result = (new AnalysisResult())
+                    ->setMsgFormatter(new MessageFormatter(
+                        $this->createMessageLocatorInstance($input), false
+                    ));
                 $req = $this->createFileAnalyserInstance($file->getPathname());
+                $req->setResultInstance($result);
                 $req->attachRequirementVisitors($this->createNodeWalkerInstances($input->getOption('libraryDataSource')));
                 $results->add($req->run());
             }
@@ -141,12 +148,18 @@ class DirCommand extends PvraBaseCommand
             $highestRequirement->getAnalysisTargetId()));
 
         if ($highestRequirement->count() !== 0) {
-            foreach ($highestRequirement->getRequirements() as $version => $reasons) {
+            $tableData = [];
+            // order by version->descending. Might want to implement ordering by line later.
+            foreach (array_reverse($highestRequirement->getRequirements()) as $version => $reasons) {
                 foreach ($reasons as $reason) {
-                    $out->write("\t");
-                    $out->write($reason['msg'], true);
+                    $tableData[] = [$reason['version'], $reason['msg'], $reason['line']];
                 }
             }
+
+            (new Table($out))
+                ->setHeaders(['Version', 'Message', 'Line'])
+                ->setRows($tableData)
+                ->render();
         } else {
             $out->writeln("\t<info>No requirements beyond the default version (5.3) could be found.</info>");
         }
@@ -173,11 +186,16 @@ class DirCommand extends PvraBaseCommand
                     ' for the following reasons:',
                     "\n"
                 ]));
+                $tableData = [];
                 /** @var $reason Reasoning */
                 foreach ($result->getRequirementIterator() as $reason) {
-                    $out->write("\t");
-                    $out->write($reason['msg'], true);
+                    $tableData[] = [$reason['version'], $reason['msg'], $reason['line']];
                 }
+
+                (new Table($out))
+                    ->setHeaders(['Version', 'Message', 'Line'])
+                    ->setRows($tableData)
+                    ->render();
             }
         }
     }

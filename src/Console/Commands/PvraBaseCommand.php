@@ -72,6 +72,7 @@ class PvraBaseCommand extends Command
      */
     protected function getDefaultAnalysers()
     {
+        // should be const DEFAULT_ANALYSERS = [...] on php 5.6/7+
         static $analysers = [
             'Php53Features' => 'php-5.3',
             'Php54Features' => 'php-5.4',
@@ -111,8 +112,7 @@ class PvraBaseCommand extends Command
             }
             if (!class_exists($analyserName)) {
                 throw new \InvalidArgumentException(sprintf('"%s" is not a class.', $analyser));
-            } elseif (!in_array('Pvra\\AnalyserAwareInterface', class_implements($analyserName))
-            ) {
+            } elseif (!in_array('Pvra\\AnalyserAwareInterface', class_implements($analyserName))) {
                 throw new \InvalidArgumentException(sprintf('"%s" does not implement "%s"', $analyserName,
                     'Pvra\\AnalyserAwareInterface'));
             }
