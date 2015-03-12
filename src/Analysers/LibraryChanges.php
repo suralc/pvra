@@ -271,7 +271,7 @@ class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInt
             foreach ($names as $name) {
                 $this->handleClassName($name);
             }
-        } elseif ($node instanceof Node\Expr\FuncCall) {
+        } elseif ($node instanceof Node\Expr\FuncCall && !($node->name instanceof Node\Expr)) {
             $this->handleFunctionName($node->name);
         } elseif ($node instanceof Node\Expr\ConstFetch) {
             $this->handleConstantName($node->name);

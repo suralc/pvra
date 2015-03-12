@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use Pvra\Analysers\LibraryChanges;
 use Pvra\AnalysisResult;
@@ -269,6 +270,13 @@ class LibraryChangesTest extends BaseNodeWalkerTestCase
         $chg->enterNode(new FuncCall(new Name('a')));
         $this->assertCount(0, $result->getLimits());
         $this->assertCount(0, $result->getRequirements());
+    }
+
+    public function testNoFatalOnDynamicFunctionCall()
+    {
+        $analyser = new LibraryChanges(['mode' => LibraryChanges::MODE_ADDITION & ~LibraryChanges::MODE_ADDITION]);
+        $ast = new FuncCall(new Variable('abc'));
+        $analyser->enterNode($ast);
     }
 
     /**
