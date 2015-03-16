@@ -94,7 +94,7 @@ class DirCommand extends PvraBaseCommand
         /** @var \SplFileInfo $file */
         foreach ($files as $file) {
             if ($file->isFile()) {
-                $req = $this->createFileAnalyserInstance($file->getPathname());
+                $req = $this->createFileAnalyserInstance($file->getRealPath());
                 $req->attachRequirementVisitors($this->createNodeWalkerInstances($input->getOption('libraryDataSource')));
                 $results->add($req->run());
             }
