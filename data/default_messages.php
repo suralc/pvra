@@ -71,4 +71,6 @@ return [
     R::CONSTANT_SCALAR_EXPRESSION => 'Constant scalar expressions require PHP :version:',
     R::POW_OPERATOR => 'The "pow" operator requires PHP :version:',
     R::CONSTANT_IMPORT_USE => 'Constant import via use requires PHP :version:',
+    // 7.0
+    R::PHP4_CONSTRUCTOR => 'Php 4 ctors have been deprecated in PHP :version:'
 ];

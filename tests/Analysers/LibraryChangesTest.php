@@ -69,7 +69,7 @@ class LibraryChangesTest extends BaseNodeWalkerTestCase
 
     public function testMixedDetection()
     {
-        $res = $this->runInstanceFromScratch('libraryAdditions');
+        $res = $this->runInstanceFromScratch('libraryAdditions', LibraryChanges::MODE_ALL);
 
         $expected = [
             [3, Reason::LIB_FUNCTION_ADDITION],
@@ -103,7 +103,7 @@ class LibraryChangesTest extends BaseNodeWalkerTestCase
     public function testPropertyOfNonObjectOnCountNamePartsInParameterTypeHint()
     {
         // this triggered a notice before the fix in 44f16c2bd9
-        $result = $this->runInstanceFromScratch('libAdditionsPropOnNonObjInParamHint');
+        $result = $this->runInstanceFromScratch('libAdditionsPropOnNonObjInParamHint', LibraryChanges::MODE_ALL);
         $this->assertCount(0, $result);
     }
 
