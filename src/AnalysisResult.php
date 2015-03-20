@@ -187,7 +187,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
             return $this->cachedVersionRequirement = $keys[0];
         }
 
-        return '5.3.0';
+        return '5.2.0';
     }
 
     /**
@@ -216,7 +216,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
             return $this->cachedVersionLimit = $keys[0];
         }
 
-        return '7.0.0';
+        return '8.0.0';
     }
 
     /**
