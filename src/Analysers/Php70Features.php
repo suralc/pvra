@@ -69,7 +69,7 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
         if ($this->mode & self::MODE_REMOVAL && $node instanceof Expr\FuncCall && $node->name instanceof Node\Name
             && strcasecmp('class_alias', self::getLastPartFromName($node->name)) === 0
         ) {
-            if (isset($node->args[1]) && $node->args[1]->value instanceof Node\Scalar\String
+            if (isset($node->args[1]) && $node->args[1]->value instanceof Node\Scalar\String_
                 && $this->isClassNameReserved($node->args[1]->value->value)
             ) {
                 $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $node->getLine(), null,

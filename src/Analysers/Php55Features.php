@@ -69,7 +69,7 @@ class Php55Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             );
         } elseif ($node instanceof Node\Expr\ArrayDimFetch
             && ($node->var instanceof Node\Expr\Array_
-                || $node->var instanceof Node\Scalar\String
+                || $node->var instanceof Node\Scalar\String_
             )
         ) {
             $this->getResult()->addRequirement(
