@@ -71,4 +71,10 @@ return [
     R::CONSTANT_SCALAR_EXPRESSION => 'Constant scalar expressions require PHP :version:',
     R::POW_OPERATOR => 'The "pow" operator requires PHP :version:',
     R::CONSTANT_IMPORT_USE => 'Constant import via use requires PHP :version:',
+    // 7.0
+    R::RESERVED_CLASS_NAME => 'The ":class:" class contains a name that has been reserved in PHP :version:',
+    R::PHP4_CONSTRUCTOR => 'The PHP 4 ctor :name: has been deprecated in PHP :version:',
+    R::COALESCE_OPERATOR => 'The coalesce operator (??) has been added in PHP :version:',
+    R::SPACESHIP_OPERATOR => 'The spaceship operator (<=>) has been added in PHP :version:',
+    R::RETURN_TYPE => 'Formal declarations of return types have been added in PHP :version:',
 ];

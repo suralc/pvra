@@ -77,6 +77,7 @@ class PvraBaseCommand extends Command
             'Php54Features' => 'php-5.4',
             'Php55Features' => 'php-5.5',
             'Php56Features' => 'php-5.6',
+            'Php70Features' => 'php-7.0',
             'LibraryChanges' => 'lib-php',
         ];
         return $analysers;

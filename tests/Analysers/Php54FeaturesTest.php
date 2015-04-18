@@ -59,7 +59,7 @@ class Php54FeaturesTest extends BaseNodeWalkerTestCase
 
     public function testShortEchoOpenDetection()
     {
-        $result = $this->runInstanceFromScratch('5.4/short_echo_tags');
+        $result = $this->runInstanceFromScratch('5.4/short_echo_tags', Php54Features::MODE_ALL);
 
         $this->assertCount(1, $result);
 

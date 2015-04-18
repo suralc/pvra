@@ -136,7 +136,7 @@ class Php53Features extends LanguageFeatureAnalyser
      */
     private function detectNowDoc(Node $node)
     {
-        if ($node->hasAttribute('isNowDoc') && $node instanceof Node\Scalar\String) {
+        if ($node->hasAttribute('isNowDoc') && $node instanceof Node\Scalar\String_) {
             $this->getResult()->addRequirement(Reason::NOWDOC_LITERAL, $node->getLine());
         }
     }
