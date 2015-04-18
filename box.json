@@ -31,5 +31,6 @@
   "git-version": "package_version",
   "main": "bin/pvra",
   "output": "pvra.phar",
+  "compression": "GZ",
   "stub": true
 }
