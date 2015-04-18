@@ -47,6 +47,18 @@ class PvraBaseCommand extends Command
     protected $expectedWalkers = [];
 
     /**
+     * @var array
+     */
+    private static $defaultAnalysers = [
+        'Php53Features' => 'php-5.3',
+        'Php54Features' => 'php-5.4',
+        'Php55Features' => 'php-5.5',
+        'Php56Features' => 'php-5.6',
+//        'Php70Features' => 'php-7.0', // do not default-enable 7.0 yet as support is onl partial
+        'LibraryChanges' => 'lib-php',
+    ];
+
+    /**
      * @inheritdoc
      */
     protected function configure()
@@ -72,15 +84,7 @@ class PvraBaseCommand extends Command
      */
     protected function getDefaultAnalysers()
     {
-        static $analysers = [
-            'Php53Features' => 'php-5.3',
-            'Php54Features' => 'php-5.4',
-            'Php55Features' => 'php-5.5',
-            'Php56Features' => 'php-5.6',
-            'Php70Features' => 'php-7.0',
-            'LibraryChanges' => 'lib-php',
-        ];
-        return $analysers;
+        return self::$defaultAnalysers;
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
