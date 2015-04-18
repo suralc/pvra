@@ -96,13 +96,11 @@ class FileCommand extends PvraBaseCommand
                     $outData[] = $r;
                 }
                 switch ($input->getOption('saveFormat')) {
-                    case 'json': {
+                    case 'json':
                         file_put_contents($file, json_encode($outData));
                         break;
-                    }
-                    default: {
+                    default:
                         $output->writeln('<error>Invalid save format</error>');
-                    }
                 }
             }
         }

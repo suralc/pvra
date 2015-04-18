@@ -45,7 +45,6 @@ class Php53Features extends LanguageFeatureAnalyser
      * @var bool
      */
     private $inClass = false;
-    private $importedNames = [];
 
     /**
      * @inheritdoc
