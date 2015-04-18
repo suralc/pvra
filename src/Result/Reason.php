@@ -103,7 +103,7 @@ abstract class Reason
      * If false is returned refer to the corresponding method on the class that returned the constant.
      *
      * @param int $reason One of the constants defined in RequirementReason
-     * @return string|bool The required version or bool(false)
+     * @return string|false The required version or bool(false)
      */
     public static function getVersionFromReason($reason)
     {

@@ -115,13 +115,11 @@ class DirCommand extends PvraBaseCommand
             } else {
                 $output->writeln(sprintf('<info>Generating output file at %s</info>', $file));
                 switch ($input->getOption('saveFormat')) {
-                    case 'json': {
+                    case 'json':
                         file_put_contents($file, json_encode($results));
                         break;
-                    }
-                    default: {
+                    default:
                         $output->writeln('<error>Invalid save format.</error>');
-                    }
                 }
             }
         }

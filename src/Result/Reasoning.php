@@ -115,8 +115,9 @@ class Reasoning implements ArrayAccess, JsonSerializable
     }
 
     /**
-	 * Get the data this instance represents in a format understood by json_encode.
-	 * @return array Data to be encoded as json
+     * Get the data this instance represents in a format understood by json_encode.
+     *
+     * @return array Data to be encoded as json
      */
     public function jsonSerialize()
     {
@@ -175,16 +176,14 @@ class Reasoning implements ArrayAccess, JsonSerializable
                 return $this->reasonId;
             case 'reasonName':
                 return Reason::getReasonNameFromValue($this->reasonId);
-            case 'raw_msg': {
+            case 'raw_msg':
                 if ($this->msg !== null) {
                     return $this->msg;
                 }
                 return $this->getResult()->getMsgFormatter()->getLocator()->getMessage($this->reasonId);
-            }
-            case 'targetId': {
+            case 'targetId':
                 return $this->getResult()->getAnalysisTargetId();
-            }
-            case 'msg': {
+            case 'msg':
                 if ($this->msg !== null) {
                     return $this->msg;
                 }
@@ -196,7 +195,6 @@ class Reasoning implements ArrayAccess, JsonSerializable
                         MessageFormatter::FORMAT_KEY_VERSION => $this->version,
                         MessageFormatter::FORMAT_KEY_REASON_NAME => $this->offsetGet('reasonName'),
                     ]));
-            }
         }
 
         return null;

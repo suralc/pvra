@@ -188,21 +188,18 @@ class PvraBaseCommand extends Command
         if (is_file($filePath) && is_readable($filePath)) {
             $type = pathinfo($filePath, PATHINFO_EXTENSION);
             switch ($type) {
-                case 'php': {
+                case 'php':
                     return [$type, include $filePath];
-                }
-                case 'json': {
+                case 'json':
                     if (($data = json_decode(file_get_contents($filePath), true)) === null) {
                         throw new \RuntimeException(sprintf('Json decoding of file "%s" failed with notice: "%s"',
                             $filePath,
                             version_compare(PHP_VERSION, '5.5.0', '>=') ? json_last_error_msg() : json_last_error()));
                     }
                     return [$type, $data];
-                }
-                default: {
+                default:
                     throw new \InvalidArgumentException(sprintf('The %s filetype is not supported. Only php and json files are supported for this operation.',
                         $type));
-                }
             }
         }
 
