@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 namespace Pvra;
@@ -77,7 +77,9 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     /**
      * Number of attached `Reasonings` instances.
      *
+     * Related to the `\Countable` interface.
      * @var int
+     * @see Pvra\AnalysisResult::count Accessable through count
      */
     private $count = 0;
 
