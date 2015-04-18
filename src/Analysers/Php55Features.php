@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 namespace Pvra\Analysers;
@@ -69,7 +69,7 @@ class Php55Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             );
         } elseif ($node instanceof Node\Expr\ArrayDimFetch
             && ($node->var instanceof Node\Expr\Array_
-                || $node->var instanceof Node\Scalar\String
+                || $node->var instanceof Node\Scalar\String_
             )
         ) {
             $this->getResult()->addRequirement(

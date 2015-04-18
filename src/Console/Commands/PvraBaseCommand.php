@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 namespace Pvra\Console\Commands;
@@ -47,6 +47,18 @@ class PvraBaseCommand extends Command
     protected $expectedWalkers = [];
 
     /**
+     * @var array
+     */
+    private static $defaultAnalysers = [
+        'Php53Features' => 'php-5.3',
+        'Php54Features' => 'php-5.4',
+        'Php55Features' => 'php-5.5',
+        'Php56Features' => 'php-5.6',
+//        'Php70Features' => 'php-7.0', // do not default-enable 7.0 yet as support is onl partial
+        'LibraryChanges' => 'lib-php',
+    ];
+
+    /**
      * @inheritdoc
      */
     protected function configure()
@@ -72,15 +84,7 @@ class PvraBaseCommand extends Command
      */
     protected function getDefaultAnalysers()
     {
-        // should be const DEFAULT_ANALYSERS = [...] on php 5.6/7+
-        static $analysers = [
-            'Php53Features' => 'php-5.3',
-            'Php54Features' => 'php-5.4',
-            'Php55Features' => 'php-5.5',
-            'Php56Features' => 'php-5.6',
-            'LibraryChanges' => 'lib-php',
-        ];
-        return $analysers;
+        return self::$defaultAnalysers;
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)

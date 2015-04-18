@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 namespace Pvra\Result;
@@ -76,7 +76,13 @@ abstract class Reason
         CONSTANT_SCALAR_EXPRESSION = 52,
         POW_OPERATOR = 53,
         FUNCTION_IMPORT_USE = 54,
-        CONSTANT_IMPORT_USE = 55;
+        CONSTANT_IMPORT_USE = 55,
+        // 7.0
+        RESERVED_CLASS_NAME = 100,
+        PHP4_CONSTRUCTOR = 101,
+        COALESCE_OPERATOR = 102,
+        SPACESHIP_OPERATOR = 103,
+        RETURN_TYPE = 104;
 
     /**
      * @var array|null
@@ -110,8 +116,8 @@ abstract class Reason
         } elseif ($reason > self::UNKNOWN && $reason < self::TRAIT_DEFINITION) {
             return false;
         } else {
-            throw new \InvalidArgumentException(sprintf('There is no required version defined for this reason(id: "%s").',
-                $reason));
+            throw new \InvalidArgumentException(sprintf('There is no required version defined for this reason(id: "%s", name: "%s").',
+                $reason, static::getReasonNameFromValue($reason)));
         }
     }
 
@@ -220,6 +226,12 @@ abstract class Reason
             self::POW_OPERATOR => '5.6.0',
             self::FUNCTION_IMPORT_USE => '5.6.0',
             self::CONSTANT_IMPORT_USE => '5.6.0',
+            // 7.0
+            self::RESERVED_CLASS_NAME => '7.0.0',
+            self::PHP4_CONSTRUCTOR => '7.0.0',
+            self::COALESCE_OPERATOR => '7.0.0',
+            self::SPACESHIP_OPERATOR => '7.0.0',
+            self::RETURN_TYPE => '7.0.0',
         ];
     }
 

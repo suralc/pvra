@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 namespace Pvra\Analysers;
@@ -71,7 +71,8 @@ class Php56Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
 
         } elseif ($node instanceof Node\Stmt\Const_ || $node instanceof Node\Stmt\ClassConst) {
             foreach ($node->consts as $const) {
-                if (!($const->value instanceof Node\Scalar)) {
+                if (!($const->value instanceof Node\Scalar)
+                    && !($const->value instanceof Node\Expr\ClassConstFetch || $const->value instanceof Node\Expr\ConstFetch)) {
                     $this->getResult()->addRequirement(
                         Reason::CONSTANT_SCALAR_EXPRESSION,
                         $const->getLine()

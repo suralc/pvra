@@ -16,10 +16,12 @@ before_script:
   - composer selfupdate && composer --version
   - composer update --prefer-dist
   - |
-      if (php --version | grep -i "7.0" > /dev/null); then
-          PHPUNIT_FLAGS=""
-      else
+      if [[ $TRAVIS_PHP_VERSION = '5.6' || $TRAVIS_PHP_VERSION = '5.5' || $TRAVIS_PHP_VERSION = '5.4' ]]; then
+          echo "Fine to generate coverage."
           PHPUNIT_FLAGS="--coverage-clover=coverage.xml"
+      else
+          echo "Don't generate coverage."
+          PHPUNIT_FLAGS=""
       fi
 
 script:
@@ -27,11 +29,12 @@ script:
 
 after_script:
   - |
-      if (php --version | grep -i "7.0" > /dev/null); then
-        echo "No coverage generated on 7.0"
-      else
+      if [[ $TRAVIS_PHP_VERSION = '5.6' || $TRAVIS_PHP_VERSION = '5.5' || $TRAVIS_PHP_VERSION = '5.4' ]]; then
+        echo "Fine to generate coverage."
         wget https://scrutinizer-ci.com/ocular.phar
         php ocular.phar code-coverage:upload --format=php-clover coverage.xml
+      else
+        echo "Don't generate coverage."
       fi
 
 cache:

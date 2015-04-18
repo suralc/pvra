@@ -63,7 +63,7 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
     public function testGetRequiredVersion()
     {
         $r = new AnalysisResult();
-        $this->assertSame('5.3.0', $r->getRequiredVersion());
+        $this->assertSame('5.2.0', $r->getRequiredVersion());
         $r->addArbitraryRequirement('5.5.5');
         $r->addArbitraryRequirement('5.4.3');
         $this->assertSame('5.5.5', $r->getRequiredVersion());
@@ -76,7 +76,7 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
     public function testGetVersionLimit()
     {
         $r = new AnalysisResult();
-        $this->assertSame('7.0.0', $r->getVersionLimit());
+        $this->assertSame('8.0.0', $r->getVersionLimit());
         $r->addArbitraryLimit('5.5.5');
         $this->assertSame('5.5.5', $r->getVersionLimit());
         $this->assertSame('5.5.5', $r->getVersionLimit());
