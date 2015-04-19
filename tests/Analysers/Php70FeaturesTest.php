@@ -84,7 +84,7 @@ class Php70FeaturesTest extends BaseNodeWalkerTestCase
             [108, R::SOFT_RESERVED_NAME],
             [112, R::SOFT_RESERVED_NAME],
             [116, R::SOFT_RESERVED_NAME],
-            [122, R::SOFT_RESERVED_NAME],
+            [122, R::SOFT_RESERVED_NAME, ['fqn' => '\\SoftReserve\\Bool\\Resource', 'class' => 'Resource']],
         ];
         $this->runTestsAgainstExpectation($expected, '7.0/reserved_names', '-7.0.0', Php70Features::MODE_ALL);
     }

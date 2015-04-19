@@ -66,13 +66,7 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
 
     private function detectAndHandleReservedNames(Node\Stmt\ClassLike $cls)
     {
-        if ($this->mode & self::MODE_REMOVAL && $this->isNameReserved($cls->name)) {
-            $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $cls->getLine(), null,
-                ['class' => $cls->name]);
-        } elseif ($this->mode & self::MODE_DEPRECATION && $this->isNameSoftReserved($cls->name)) {
-            $this->getResult()->addLimit(Reason::SOFT_RESERVED_NAME, $cls->getLine(), null,
-                ['class' => $cls->name]);
-        }
+        $this->handleClassName($cls->name, $cls->getLine());
     }
 
     private function isFunctionLike(Node $node)
@@ -95,13 +89,7 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
         ) {
             if (isset($call->args[1]) && $call->args[1]->value instanceof Node\Scalar\String_) {
                 $value = $call->args[1]->value->value;
-                if ($this->mode & self::MODE_DEPRECATION && $this->isNameSoftReserved($value)) {
-                    $this->getResult()->addLimit(Reason::SOFT_RESERVED_NAME, $call->getLine(), null,
-                        ['class' => $value]);
-                } elseif ($this->mode & self::MODE_REMOVAL && $this->isNameReserved($value)) {
-                    $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $call->getLine(), null,
-                        ['class' => $value]);
-                }
+                $this->handleClassName($value, $call->args[1]->value->getLine());
             }
         }
     }
@@ -118,10 +106,22 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
         }
     }
 
-    private function isNameReserved($name)
+    private function handleClassName($name, $line = -1)
     {
-        return in_array(strtolower(basename(str_replace('\\', '/', $name))),
-            array_map('strtolower', $this->reservedNames));
+        $baseName = baseName(str_replace('\\', '/', $name));
+        if ($this->mode & self::MODE_DEPRECATION && $this->isNameSoftReserved($name)) {
+            $this->getResult()->addLimit(Reason::SOFT_RESERVED_NAME, $line, null,
+                ['fqn' => $name, 'class' => $baseName]);
+        } elseif ($this->mode & self::MODE_REMOVAL && $this->isNameReserved($name)) {
+            $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $line, null,
+                ['fqn' => $name, 'class' => $baseName]);
+        }
+    }
+
+    private static function getLastPartFromName(Node\Name $name)
+    {
+        $parts = $name->parts;
+        return end($parts);
     }
 
     private function isNameSoftReserved($name)
@@ -130,9 +130,9 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             array_map('strtolower', $this->softReservedNames));
     }
 
-    private static function getLastPartFromName(Node\Name $name)
+    private function isNameReserved($name)
     {
-        $parts = $name->parts;
-        return end($parts);
+        return in_array(strtolower(basename(str_replace('\\', '/', $name))),
+            array_map('strtolower', $this->reservedNames));
     }
 }
