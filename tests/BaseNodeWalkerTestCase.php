@@ -53,14 +53,24 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
         m::close();
     }
 
-    protected function runTestsAgainstExpectation(array $expected, $file, $version = null, $mode = LanguageFeatureAnalyser::MODE_ALL)
-    {
+    /**
+     * @param array $expected
+     * @param string $file
+     * @param null|string $version
+     * @param int $mode
+     */
+    protected function runTestsAgainstExpectation(
+        array $expected,
+        $file,
+        $version = null,
+        $mode = LanguageFeatureAnalyser::MODE_ALL
+    ) {
         $result = $this->runInstanceFromScratch($file, $mode);
 
         $this->assertCount(count($expected), $result);
 
-        if($version !== null) {
-            if($version{0} === '-') {
+        if ($version !== null) {
+            if ($version{0} === '-') {
                 $this->assertSame(ltrim($version, '-'), $result->getVersionLimit());
             } else {
                 $this->assertSame($version, $result->getRequiredVersion());
@@ -70,11 +80,14 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
         $resultIt = $result->getIterator();
 
         foreach ($expected as $expectation) {
-            if(!$resultIt->valid()){
+            if (!$resultIt->valid()) {
                 $this->fail('Unexpected end of iterator.');
             }
             $this->assertSame($expectation[0], $resultIt->current()['line']);
             $this->assertSame($expectation[1], $resultIt->current()['reason']);
+            if (isset($expectation[2])) {
+                $this->assertArraySubset($expectation[2], $resultIt->current()['data']);
+            }
             $resultIt->next();
         }
     }
@@ -106,7 +119,8 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $file
+     * @param string $file
+     * @param int $mode
      * @return AnalysisResult
      */
     protected function runInstanceFromScratch($file, $mode)
