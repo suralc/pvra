@@ -64,7 +64,7 @@ class FileCommand extends PvraBaseCommand
         $result = (new AnalysisResult())
             ->setMsgFormatter(new MessageFormatter(
                 $this->createMessageLocatorInstance($input)
-            ), true, true);
+            ));
 
         $req->setResultInstance($result);
 
