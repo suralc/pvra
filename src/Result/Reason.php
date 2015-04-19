@@ -79,6 +79,7 @@ abstract class Reason
         CONSTANT_IMPORT_USE = 55,
         // 7.0
         RESERVED_CLASS_NAME = 100,
+        SOFT_RESERVED_NAME = 105,
         PHP4_CONSTRUCTOR = 101,
         COALESCE_OPERATOR = 102,
         SPACESHIP_OPERATOR = 103,
@@ -228,6 +229,7 @@ abstract class Reason
             self::CONSTANT_IMPORT_USE => '5.6.0',
             // 7.0
             self::RESERVED_CLASS_NAME => '7.0.0',
+            self::SOFT_RESERVED_NAME => '7.0.0',
             self::PHP4_CONSTRUCTOR => '7.0.0',
             self::COALESCE_OPERATOR => '7.0.0',
             self::SPACESHIP_OPERATOR => '7.0.0',

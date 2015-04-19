@@ -72,7 +72,8 @@ return [
     R::POW_OPERATOR => 'The "pow" operator requires PHP :version:',
     R::CONSTANT_IMPORT_USE => 'Constant import via use requires PHP :version:',
     // 7.0
-    R::RESERVED_CLASS_NAME => 'The ":class:" class contains a name that has been reserved in PHP :version:',
+    R::RESERVED_CLASS_NAME => 'The ":class:" name has been reserved and can no longer be used in PHP :version:',
+    R::SOFT_RESERVED_NAME => 'The ":class:" name has been soft reserved in PHP :version:',
     R::PHP4_CONSTRUCTOR => 'The PHP 4 ctor :name: has been deprecated in PHP :version:',
     R::COALESCE_OPERATOR => 'The coalesce operator (??) has been added in PHP :version:',
     R::SPACESHIP_OPERATOR => 'The spaceship operator (<=>) has been added in PHP :version:',

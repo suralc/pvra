@@ -86,4 +86,39 @@ namespace Foo3\String {
     class BazBar
     {
     }
+
+    class True
+    {
+    }
+
+    class False
+    {
+    }
+
+    class Null
+    {
+    }
+}
+
+namespace SoftReserveTests {
+    class Object
+    {
+    }
+
+    interface Resource
+    {
+    }
+
+    trait miXed
+    {
+    }
+
+    class NuMeRiC
+    {
+    }
+
+    function softy(\SoftReserveTests\NuMeRiC $num, Object $obj)
+    {
+        class_alias('SoapClient', '\\SoftReserve\\Bool\\Resource'); // should fail on Resource not bool
+    }
 }

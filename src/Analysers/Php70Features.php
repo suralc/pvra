@@ -31,7 +31,8 @@ use Pvra\Result\Reason;
 class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInterface
 {
     // move both to be const once 5.6+ is mandatory
-    private $reservedNames = ['string', 'int', 'float', 'bool'];
+    private $reservedNames = ['string', 'int', 'float', 'bool', 'null', 'false', 'true'];
+    private $softReservedNames = ['object', 'resource', 'mixed', 'numeric'];
 
     public function enterNode(Node $node)
     {
@@ -68,6 +69,9 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
         if ($this->mode & self::MODE_REMOVAL && $this->isNameReserved($cls->name)) {
             $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $cls->getLine(), null,
                 ['class' => $cls->name]);
+        } elseif ($this->mode & self::MODE_DEPRECATION && $this->isNameSoftReserved($cls->name)) {
+            $this->getResult()->addLimit(Reason::SOFT_RESERVED_NAME, $cls->getLine(), null,
+                ['class' => $cls->name]);
         }
     }
 
@@ -91,7 +95,10 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
         ) {
             if (isset($call->args[1]) && $call->args[1]->value instanceof Node\Scalar\String_) {
                 $value = $call->args[1]->value->value;
-                if ($this->mode & self::MODE_REMOVAL && $this->isNameReserved($value)) {
+                if ($this->mode & self::MODE_DEPRECATION && $this->isNameSoftReserved($value)) {
+                    $this->getResult()->addLimit(Reason::SOFT_RESERVED_NAME, $call->getLine(), null,
+                        ['class' => $value]);
+                } elseif ($this->mode & self::MODE_REMOVAL && $this->isNameReserved($value)) {
                     $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $call->getLine(), null,
                         ['class' => $value]);
                 }
@@ -115,6 +122,12 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
     {
         return in_array(strtolower(basename(str_replace('\\', '/', $name))),
             array_map('strtolower', $this->reservedNames));
+    }
+
+    private function isNameSoftReserved($name)
+    {
+        return in_array(strtolower(basename(str_replace('\\', '/', $name))),
+            array_map('strtolower', $this->softReservedNames));
     }
 
     private static function getLastPartFromName(Node\Name $name)

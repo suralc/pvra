@@ -77,18 +77,23 @@ class Php70FeaturesTest extends BaseNodeWalkerTestCase
             [72, R::RESERVED_CLASS_NAME],
             [76, R::RESERVED_CLASS_NAME],
             [82, R::RESERVED_CLASS_NAME],
+            [90, R::RESERVED_CLASS_NAME],
+            [94, R::RESERVED_CLASS_NAME],
+            [98, R::RESERVED_CLASS_NAME],
+            [104, R::SOFT_RESERVED_NAME],
+            [108, R::SOFT_RESERVED_NAME],
+            [112, R::SOFT_RESERVED_NAME],
+            [116, R::SOFT_RESERVED_NAME],
+            [122, R::SOFT_RESERVED_NAME],
         ];
         $this->runTestsAgainstExpectation($expected, '7.0/reserved_names', '-7.0.0', Php70Features::MODE_ALL);
     }
 
-    /**
-     * @dataProvider nonRemovalFlagProvider
-     */
-    public function testReservedNamesAreNotMarkedWithoutRemovalFlag($mode)
+    public function testReservedNamesAreNotMarkedWithoutDeprecationOrRemovalFlag()
     {
         $expected = [];
 
-        $this->runTestsAgainstExpectation($expected, '7.0/reserved_names', null, $mode);
+        $this->runTestsAgainstExpectation($expected, '7.0/reserved_names', null, Php70Features::MODE_ADDITION);
     }
 
     public function testOperatorDetection()
