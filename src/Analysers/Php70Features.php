@@ -30,27 +30,77 @@ use Pvra\Result\Reason;
  */
 class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInterface
 {
+    // move both to be const once 5.6+ is mandatory
     private $reservedNames = ['string', 'int', 'float', 'bool'];
 
     public function enterNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_ || $node instanceof Node\Stmt\Trait_) {
-            if ($this->mode & self::MODE_DEPRECATION) {
-                $name = isset($node->namespacedName) ? $node->namespacedName->toString() : $node->name;
-                /** @var Node\Stmt\ClassMethod $method */
-                foreach ($node->getMethods() as $method) {
-                    if (strcasecmp($method->name, $name) === 0) {
-                        $this->getResult()->addLimit(Reason::PHP4_CONSTRUCTOR, $method->getLine(), null,
-                            ['name' => $method->name]);
-                        break;
-                    }
+        if ($node instanceof Node\Stmt\ClassLike) {
+            if ($node instanceof Node\Stmt\Class_) {
+                $this->detectAndHandlePhp4Ctor($node);
+            }
+            $this->detectAndHandleReservedNames($node);
+        } elseif ($this->isFunctionLike($node)) {
+            $this->detectAndHandleReturnTypeDeclaration($node);
+        } elseif ($node instanceof Expr\FuncCall) {
+            $this->detectAndHandleClassAliasCallToReservedName($node);
+        }
+        $this->detectAndHandleOperatorAdditions($node);
+    }
+
+    private function detectAndHandlePhp4Ctor(Node\Stmt\Class_ $cls)
+    {
+        if ($this->mode & self::MODE_DEPRECATION) {
+            $name = isset($cls->namespacedName) ? $cls->namespacedName->toString() : $cls->name;
+            /** @var Node\Stmt\ClassMethod $method */
+            foreach ($cls->getMethods() as $method) {
+                if (strcasecmp($method->name, $name) === 0) {
+                    $this->getResult()->addLimit(Reason::PHP4_CONSTRUCTOR, $method->getLine(), null,
+                        ['name' => $method->name]);
+                    break;
                 }
             }
-            if ($this->mode & self::MODE_REMOVAL && $this->isClassNameReserved($node->name)) {
-                $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $node->getLine(), null,
-                    ['class' => $node->name]);
+        }
+    }
+
+    private function detectAndHandleReservedNames(Node\Stmt\ClassLike $cls)
+    {
+        if ($this->mode & self::MODE_REMOVAL && $this->isNameReserved($cls->name)) {
+            $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $cls->getLine(), null,
+                ['class' => $cls->name]);
+        }
+    }
+
+    private function isFunctionLike(Node $node)
+    {
+        return $node instanceof Node\Stmt\ClassMethod
+        || $node instanceof Node\Stmt\Function_
+        || $node instanceof Expr\Closure;
+    }
+
+    private function detectAndHandleReturnTypeDeclaration(Node $node)
+    {
+        if ($this->mode & self::MODE_ADDITION && $node->returnType !== null) {
+            $this->getResult()->addRequirement(Reason::RETURN_TYPE, $node->getLine());
+        }
+    }
+
+    private function detectAndHandleClassAliasCallToReservedName(Expr\FuncCall $call)
+    {
+        if ($call->name instanceof Node\Name && strcasecmp('class_alias', self::getLastPartFromName($call->name)) === 0
+        ) {
+            if (isset($call->args[1]) && $call->args[1]->value instanceof Node\Scalar\String_) {
+                $value = $call->args[1]->value->value;
+                if ($this->mode & self::MODE_REMOVAL && $this->isNameReserved($value)) {
+                    $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $call->getLine(), null,
+                        ['class' => $value]);
+                }
             }
         }
+    }
+
+    private function detectAndHandleOperatorAdditions(Node $node)
+    {
         if ($this->mode & self::MODE_ADDITION) {
             if ($node instanceof Expr\BinaryOp\Coalesce) {
                 $this->getResult()->addRequirement(Reason::COALESCE_OPERATOR, $node->getLine());
@@ -58,27 +108,10 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             if ($node instanceof Expr\BinaryOp\Spaceship) {
                 $this->getResult()->addRequirement(Reason::SPACESHIP_OPERATOR, $node->getLine());
             }
-            if (($node instanceof Node\Stmt\ClassMethod
-                    || $node instanceof Node\Stmt\Function_
-                    || $node instanceof Expr\Closure)
-                && $node->returnType !== null
-            ) {
-                $this->getResult()->addRequirement(Reason::RETURN_TYPE, $node->getLine());
-            }
-        }
-        if ($this->mode & self::MODE_REMOVAL && $node instanceof Expr\FuncCall && $node->name instanceof Node\Name
-            && strcasecmp('class_alias', self::getLastPartFromName($node->name)) === 0
-        ) {
-            if (isset($node->args[1]) && $node->args[1]->value instanceof Node\Scalar\String_
-                && $this->isClassNameReserved($node->args[1]->value->value)
-            ) {
-                $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $node->getLine(), null,
-                    ['class' => $node->args[1]->value->value]);
-            }
         }
     }
 
-    private function isClassNameReserved($name)
+    private function isNameReserved($name)
     {
         return in_array(strtolower(basename(str_replace('\\', '/', $name))),
             array_map('strtolower', $this->reservedNames));
