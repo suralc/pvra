@@ -47,14 +47,24 @@ class PvraBaseCommand extends Command
     protected $expectedWalkers = [];
 
     /**
+     * List of analysers that are loaded if the --analyser option is not set
      * @var array
      */
     private static $defaultAnalysers = [
+        'Php53Features',
+        'Php54Features',
+        'Php55Features',
+        'Php56Features',
+//        'Php70Features', // do not default-enable 7.0 yet as support is only partial
+        'LibraryChanges',
+    ];
+
+    private static $analyserAliasMap = [
         'Php53Features' => 'php-5.3',
         'Php54Features' => 'php-5.4',
         'Php55Features' => 'php-5.5',
         'Php56Features' => 'php-5.6',
-//        'Php70Features' => 'php-7.0', // do not default-enable 7.0 yet as support is onl partial
+        'Php70Features' => 'php-7.0',
         'LibraryChanges' => 'lib-php',
     ];
 
@@ -67,7 +77,7 @@ class PvraBaseCommand extends Command
             ->addOption('preventNameExpansion', 'p', InputOption::VALUE_NONE,
                 'Prevent name expansion. May increase performance but breaks name based detections in namespaces.')
             ->addOption('analyser', 'a', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
-                'Analysers to run', array_values($this->getDefaultAnalysers()))
+                'Analysers to run', $this->getDefaultAnalysersAliases())
             ->addOption('libraryDataSource', 'l', InputOption::VALUE_REQUIRED, 'Source file of library data', false)
             ->addOption('messageFormatSourceFile', 'm', InputOption::VALUE_REQUIRED, 'File with message formats', false)
             ->addOption('saveFormat', null, InputOption::VALUE_REQUIRED, 'The format of the save file.', 'json')
@@ -77,14 +87,24 @@ class PvraBaseCommand extends Command
         $this->addArgument('target', InputArgument::REQUIRED, 'The target of this analysis');
     }
 
-    /**
-     * Array of default analysers and their aliases
-     *
-     * @return array
-     */
-    protected function getDefaultAnalysers()
+    private function getDefaultAnalysersAliases()
     {
-        return self::$defaultAnalysers;
+        $aliasNameMap = [];
+        foreach(self::$defaultAnalysers as $analyser) {
+            if(isset(self::$analyserAliasMap[$analyser])) {
+                $aliasNameMap[] = self::$analyserAliasMap[$analyser];
+            }
+        }
+
+        return $aliasNameMap;
+    }
+
+    private function resolveAnalyserName($name)
+    {
+        if(($resolved = array_search($name, self::$analyserAliasMap)) !== false) {
+            return $resolved;
+        }
+        return in_array($name, array_keys(self::$analyserAliasMap)) ? $name : false;
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -95,22 +115,9 @@ class PvraBaseCommand extends Command
         if (empty($analysers) || !is_array($analysers)) {
             throw new \InvalidArgumentException('The values given to the "analyser" parameter are not valid.');
         }
-        $defaultAnalysers = $this->getDefaultAnalysers();
         foreach ($analysers as $analyser) {
-            $keys = array_values(array_keys($defaultAnalysers, $analyser, true));
-            if (!empty($keys)) {
-                // @codeCoverageIgnoreStart
-                // this exception should never be triggerable and should only occur if ::getDefaultAnalysers was
-                // incorrectly overridden. There should be a test for that though.
-                if (isset($keys[1])) {
-                    // aliases should be unique. If a second index is set the alias is not unique
-                    throw new \UnexpectedValueException('An alias should be unique. ' . $keys[1] . ' is not.');
-                }
-                // @codeCoverageIgnoreEnd
-                $analyser = $keys[0];
-            }
-            if (isset($defaultAnalysers[ $analyser ])) {
-                $analyserName = self::WALKER_DEFAULT_NAMESPACE_ROOT . $analyser;
+            if(($name = $this->resolveAnalyserName($analyser)) !== false) {
+                $analyserName = self::WALKER_DEFAULT_NAMESPACE_ROOT . $name;
             } else {
                 $analyserName = $analyser;
             }
