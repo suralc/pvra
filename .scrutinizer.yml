@@ -11,7 +11,7 @@ checks:
 tools:
     external_code_coverage:
         timeout: 1000 # travis.org may have long queues to work until coverage is sent
-        runs: 3 # wait for results from all 4 travis jobs as hhvm reports different coverage stats
+        runs: 2
 coding_style:
     php:
         spaces:
@@ -21,4 +21,3 @@ coding_style:
                 brackets: true
             other:
                 after_type_cast: false
-
