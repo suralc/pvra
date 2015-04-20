@@ -77,5 +77,5 @@ return [
     R::PHP4_CONSTRUCTOR => 'The PHP 4 ctor :name: has been deprecated in PHP :version:',
     R::COALESCE_OPERATOR => 'The coalesce operator (??) has been added in PHP :version:',
     R::SPACESHIP_OPERATOR => 'The spaceship operator (<=>) has been added in PHP :version:',
-    R::RETURN_TYPE => 'Formal declarations of return types have been added in PHP :version:',
+    R::RETURN_TYPE => 'Return type declarations require PHP :version:',
 ];

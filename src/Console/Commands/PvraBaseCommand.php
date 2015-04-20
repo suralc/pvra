@@ -48,6 +48,7 @@ class PvraBaseCommand extends Command
 
     /**
      * List of analysers that are loaded if the --analyser option is not set
+     *
      * @var array
      */
     private static $defaultAnalysers = [
@@ -90,9 +91,9 @@ class PvraBaseCommand extends Command
     private function getDefaultAnalysersAliases()
     {
         $aliasNameMap = [];
-        foreach(self::$defaultAnalysers as $analyser) {
-            if(isset(self::$analyserAliasMap[$analyser])) {
-                $aliasNameMap[] = self::$analyserAliasMap[$analyser];
+        foreach (self::$defaultAnalysers as $analyser) {
+            if (isset(self::$analyserAliasMap[ $analyser ])) {
+                $aliasNameMap[] = self::$analyserAliasMap[ $analyser ];
             }
         }
 
@@ -101,7 +102,7 @@ class PvraBaseCommand extends Command
 
     private function resolveAnalyserName($name)
     {
-        if(($resolved = array_search($name, self::$analyserAliasMap)) !== false) {
+        if (($resolved = array_search($name, self::$analyserAliasMap)) !== false) {
             return $resolved;
         }
         return in_array($name, array_keys(self::$analyserAliasMap)) ? $name : false;
@@ -116,7 +117,7 @@ class PvraBaseCommand extends Command
             throw new \InvalidArgumentException('The values given to the "analyser" parameter are not valid.');
         }
         foreach ($analysers as $analyser) {
-            if(($name = $this->resolveAnalyserName($analyser)) !== false) {
+            if (($name = $this->resolveAnalyserName($analyser)) !== false) {
                 $analyserName = self::WALKER_DEFAULT_NAMESPACE_ROOT . $name;
             } else {
                 $analyserName = $analyser;

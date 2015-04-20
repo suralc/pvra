@@ -20,6 +20,7 @@ namespace Pvra\Analysers;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\NodeTraverser;
 use Pvra\AnalyserAwareInterface;
 use Pvra\Result\Reason;
 
@@ -31,12 +32,15 @@ use Pvra\Result\Reason;
 class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInterface
 {
     // move both to be const once 5.6+ is mandatory
-    private $reservedNames = ['string', 'int', 'float', 'bool', 'null', 'false', 'true'];
-    private $softReservedNames = ['object', 'resource', 'mixed', 'numeric'];
+    private static $reservedNames = ['string', 'int', 'float', 'bool', 'null', 'false', 'true'];
+    private static $softReservedNames = ['object', 'resource', 'mixed', 'numeric'];
 
     public function enterNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\ClassLike) {
+        if ($node instanceof Node\Stmt\Use_) {
+            $this->detectAndHandleReservedNamesInUse($node);
+            return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        } elseif ($node instanceof Node\Stmt\ClassLike) {
             if ($node instanceof Node\Stmt\Class_) {
                 $this->detectAndHandlePhp4Ctor($node);
             }
@@ -47,6 +51,20 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             $this->detectAndHandleClassAliasCallToReservedName($node);
         }
         $this->detectAndHandleOperatorAdditions($node);
+        return null;
+    }
+
+    private function detectAndHandleReservedNamesInUse(Node\Stmt\Use_ $node)
+    {
+        if($node->type === Node\Stmt\Use_::TYPE_NORMAL) {
+            foreach($node->uses as $use) {
+                if($use->alias !== $use->name->getLast()) {
+                    $this->handleClassName($use->alias, $use->getLine());
+                } else {
+                    $this->handleClassName($use->name->toString(), $use->name->getLine());
+                }
+            }
+        }
     }
 
     private function detectAndHandlePhp4Ctor(Node\Stmt\Class_ $cls)
@@ -85,7 +103,7 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
 
     private function detectAndHandleClassAliasCallToReservedName(Expr\FuncCall $call)
     {
-        if ($call->name instanceof Node\Name && strcasecmp('class_alias', self::getLastPartFromName($call->name)) === 0
+        if ($call->name instanceof Node\Name && strcasecmp('class_alias', $call->name->getLast()) === 0
         ) {
             if (isset($call->args[1]) && $call->args[1]->value instanceof Node\Scalar\String_) {
                 $value = $call->args[1]->value->value;
@@ -118,21 +136,15 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
         }
     }
 
-    private static function getLastPartFromName(Node\Name $name)
-    {
-        $parts = $name->parts;
-        return end($parts);
-    }
-
     private function isNameSoftReserved($name)
     {
         return in_array(strtolower(basename(str_replace('\\', '/', $name))),
-            array_map('strtolower', $this->softReservedNames));
+            array_map('strtolower', self::$softReservedNames));
     }
 
     private function isNameReserved($name)
     {
         return in_array(strtolower(basename(str_replace('\\', '/', $name))),
-            array_map('strtolower', $this->reservedNames));
+            array_map('strtolower', self::$reservedNames));
     }
 }
