@@ -109,19 +109,7 @@ class DirCommand extends PvraBaseCommand
         }
 
         if ($file = $input->getOption('saveAsFile')) {
-            if (file_exists($file)) {
-                $output->writeln(sprintf('<error>%s already exists. Cannot override an already existing file!</error>',
-                    $file));
-            } else {
-                $output->writeln(sprintf('<info>Generating output file at %s</info>', $file));
-                switch ($input->getOption('saveFormat')) {
-                    case 'json':
-                        file_put_contents($file, json_encode($results));
-                        break;
-                    default:
-                        $output->writeln('<error>Invalid save format.</error>');
-                }
-            }
+            $this->writeToFile($file, $input->getOption('saveFormat'), $results, $output);
         }
     }
 

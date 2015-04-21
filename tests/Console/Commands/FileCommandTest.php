@@ -121,10 +121,11 @@ class FileCommandTest extends PvraBaseCommandTestBase
             '--saveFormat' => 'json'
         ])->getDisplay(true));
 
-        $this->assertTrue(strpos($out, 'Generating output file') !== false);
+        $this->assertTrue(strpos($out, 'Preparing to write results to') !== false);
         $this->assertFileExists($outFile);
         $outContent = json_decode(file_get_contents($outFile), true);
-        foreach ($outContent as $reason) {
+        $this->assertArrayHasKey($rootKey = realpath(TEST_FILE_ROOT . '5.4/all54.php'), $outContent);
+        foreach ($outContent[ $rootKey ] as $reason) {
             foreach (['data', 'reason', 'reasonName', 'line', 'msg', 'raw_msg', 'version', 'targetId'] as $key) {
                 $this->assertArrayHasKey($key, $reason);
             }
@@ -140,7 +141,7 @@ class FileCommandTest extends PvraBaseCommandTestBase
             '--saveFormat' => 'arcanist'
         ])->getDisplay(true));
 
-        $this->assertTrue(strpos($out, 'Invalid save format') !== false);
+        $this->assertTrue(strpos($out, 'arcanist is not a supported') !== false);
     }
 
     public function testMessageOnAlreadyExistingSaveFile()
@@ -153,8 +154,8 @@ class FileCommandTest extends PvraBaseCommandTestBase
             '--saveFormat' => 'json'
         ])->getDisplay(true));
 
-        $this->assertTrue(strpos($out, 'already exists. Cannot override an already existing file!') !== false);
-        $this->assertTrue(strpos($out, 'Generating output file') === false);
+        $this->assertTrue(strpos($out, 'out.json already exists. Cannot override an already existing file!') !== false);
+        $this->assertFalse(strpos($out, 'Generated output file'));
     }
 
     public function testImportFromCustomLibraryDataFile()

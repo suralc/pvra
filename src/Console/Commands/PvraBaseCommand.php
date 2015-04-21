@@ -20,7 +20,11 @@ namespace Pvra\Console\Commands;
 use Pvra\Analysers\LanguageFeatureAnalyser;
 use Pvra\FileAnalyser;
 use Pvra\InformationProvider\LibraryInformation;
+use Pvra\Result\Collection;
+use Pvra\Result\CollectionWriter;
+use Pvra\Result\Exceptions\ResultFileWriterException;
 use Pvra\Result\MessageLocator;
+use Pvra\Result\ResultFormatter\Json;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputArgument;
@@ -224,5 +228,30 @@ class PvraBaseCommand extends Command
         }
 
         return false;
+    }
+
+    /**
+     * @param string $target
+     * @param string $format
+     * @param \Pvra\Result\Collection $result
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function writeToFile($target, $format, Collection $result, OutputInterface $output)
+    {
+        $output->writeln('Preparing to write results to ' . $target);
+        try {
+            $fileWriter = new CollectionWriter($result);
+            switch ($format) {
+                case 'json':
+                    $formatter = new Json();
+                    break;
+                default:
+                    throw new ResultFileWriterException($format . ' is not a supported save format');
+            }
+            $fileWriter->write($target, $formatter);
+            $output->writeln(sprintf('<info>Generated output file at %s</info>', $target));
+        } catch (ResultFileWriterException $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+        }
     }
 }

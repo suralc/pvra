@@ -18,6 +18,7 @@ namespace Pvra\Console\Commands;
 
 
 use Pvra\AnalysisResult;
+use Pvra\Result\Collection as ResultCollection;
 use Pvra\Result\MessageFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -80,25 +81,8 @@ class FileCommand extends PvraBaseCommand
                 $output->write($reason['msg'], true);
             }
         }
-
         if ($file = $input->getOption('saveAsFile')) {
-            if (file_exists($file)) {
-                $output->writeln(sprintf('<error>%s already exists. Cannot override an already existing file!</error>',
-                    $file));
-            } else {
-                $output->writeln(sprintf('<info>Generating output file at %s</info>', $file));
-                $outData = [];
-                foreach ($result->getIterator() as $r) {
-                    $outData[] = $r;
-                }
-                switch ($input->getOption('saveFormat')) {
-                    case 'json':
-                        file_put_contents($file, json_encode($outData));
-                        break;
-                    default:
-                        $output->writeln('<error>Invalid save format</error>');
-                }
-            }
+            $this->writeToFile($file, $input->getOption('saveFormat'), (new ResultCollection())->add($result), $output);
         }
     }
 }
