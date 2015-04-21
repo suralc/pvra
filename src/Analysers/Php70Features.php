@@ -56,12 +56,12 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
 
     private function detectAndHandleReservedNamesInUse(Node\Stmt\Use_ $node)
     {
-        if($node->type === Node\Stmt\Use_::TYPE_NORMAL) {
-            foreach($node->uses as $use) {
-                if($use->alias !== $use->name->getLast()) {
-                    $this->handleClassName($use->alias, $use->getLine());
-                } else {
+        if ($node->type === Node\Stmt\Use_::TYPE_NORMAL) {
+            foreach ($node->uses as $use) {
+                if ($use->alias === null || $use->alias === $use->name->getLast()) {
                     $this->handleClassName($use->name->toString(), $use->name->getLine());
+                } else {
+                    $this->handleClassName($use->alias, $use->getLine());
                 }
             }
         }
