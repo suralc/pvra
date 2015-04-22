@@ -12,18 +12,17 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     {
         $formatter = new Json();
         $collection = $this->getMock('Pvra\\Result\\Collection');
-        $collection->expects($this->once())->method('jsonSerialize')->willReturn($str = fopen('php://temp', 'r+'));
+        $collection->expects($this->once())->method('jsonSerialize')->willReturn(pack("H*" ,'c32e'));
         try {
             $formatter->makePrintable($collection);
             $this->fail('Expected exception was not thrown.');
         } catch (ResultFileWriterException $e) {
             if (PHP_VERSION_ID >= 50500) {
-                $this->assertSame('Json Encoding failed with error: 8: Type is not supported', $e->getMessage());
+                $this->assertSame('Json Encoding failed with error: 5: Malformed UTF-8 characters, possibly incorrectly encoded', $e->getMessage());
             } else {
-                $this->assertSame('Json Encoding failed with error: 8', $e->getMessage());
+                $this->assertSame('Json Encoding failed with error: 5', $e->getMessage());
             }
         }
-        fclose($str);
     }
 
     public function testThatOptionsArePassed()
@@ -40,10 +39,24 @@ class JsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testThatDepthIsPassed()
     {
+        if(PHP_VERSION_ID < 50500) {
+            $this->markTestSkipped('The depth parameter requires php >= 5.5');
+        }
         $j1 = new Json(['depth' => 2]);
         $c1 = $this->getMock('Pvra\\Result\\Collection');
         $c1->expects($this->once())->method('jsonSerialize')->willReturn(['a' => [[[[[[[[[[[[['hello']]]]]]]]]]]]]]);
         $j1->makePrintable($c1);
+    }
+
+    public function testThatSettingDepthOptionDoesNotTriggerAnErrorAndIsIgnoredOnPre55()
+    {
+        if(PHP_VERSION_ID >= 50500) {
+            $this->markTestSkipped('The depth parameter is always valid on php >= 5.5');
+        }
+        $j1 = new Json(['depth' => 2]);
+        $c1 = $this->getMock('Pvra\\Result\\Collection');
+        $c1->expects($this->once())->method('jsonSerialize')->willReturn(['a' => [[[[[[[[[[[[['hello']]]]]]]]]]]]]]);
+        $this->assertSame(json_encode(['a' => [[[[[[[[[[[[['hello']]]]]]]]]]]]]]), $j1->makePrintable($c1));
     }
 
     public function testThatPreviousJsonErrorDoesNotInterfereWithCurrentJsonGeneration()
@@ -51,8 +64,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $formatter = new Json();
         $collection = $this->getMock('Pvra\\Result\\Collection');
         $collection->expects($this->once())->method('jsonSerialize')->willReturn('working');
-        json_encode($str = fopen('php://temp', 'r+'));
+        json_encode(pack("H*" ,'c32e'));
         $this->assertSame('"working"', $formatter->makePrintable($collection));
-        fclose($str);
     }
 }

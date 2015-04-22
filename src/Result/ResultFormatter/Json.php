@@ -30,6 +30,9 @@ class Json implements ResultFormatter
     private $options = 0;
     private $depth = 512;
 
+    /**
+     * @param array $options
+     */
     public function __construct(array $options = [])
     {
         $this->options = isset($options['options']) ? $options['options'] : 0;
@@ -43,10 +46,12 @@ class Json implements ResultFormatter
      */
     public function makePrintable(ResultCollection $collection)
     {
-        // there might be a json error before this one occurs.
-        $lastError = json_last_error();
-        $json = json_encode($collection, $this->options, $this->depth);
-        if (json_last_error() !== 0 && $lastError !== json_last_error()) {
+        if(PHP_VERSION_ID >= 50500) {
+            $json = json_encode($collection, $this->options, $this->depth);
+        } else {
+            $json = json_encode($collection, $this->options);
+        }
+        if (json_last_error() !== 0) {
             $msg = 'Json Encoding failed with error: ' . json_last_error();
             if (PHP_VERSION_ID >= 50500) {
                 $msg .= ': ' . json_last_error_msg();
