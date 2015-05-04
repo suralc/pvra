@@ -79,11 +79,12 @@ abstract class Reason
         CONSTANT_IMPORT_USE = 55,
         // 7.0
         RESERVED_CLASS_NAME = 100,
-        SOFT_RESERVED_NAME = 105,
-        PHP4_CONSTRUCTOR = 101,
-        COALESCE_OPERATOR = 102,
-        SPACESHIP_OPERATOR = 103,
-        RETURN_TYPE = 104;
+        SOFT_RESERVED_NAME = 101,
+        PHP4_CONSTRUCTOR = 103,
+        COALESCE_OPERATOR = 104,
+        SPACESHIP_OPERATOR = 105,
+        RETURN_TYPE = 106,
+        YIELD_FROM = 107;
 
     /**
      * @var array|null
@@ -234,6 +235,7 @@ abstract class Reason
             self::COALESCE_OPERATOR => '7.0.0',
             self::SPACESHIP_OPERATOR => '7.0.0',
             self::RETURN_TYPE => '7.0.0',
+            self::YIELD_FROM => '7.0.0',
         ];
     }
 

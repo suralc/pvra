@@ -49,6 +49,8 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             $this->detectAndHandleReturnTypeDeclaration($node);
         } elseif ($node instanceof Expr\FuncCall) {
             $this->detectAndHandleClassAliasCallToReservedName($node);
+        } elseif ($node instanceof Expr\YieldFrom) {
+            $this->handleYieldFrom($node);
         }
         $this->detectAndHandleOperatorAdditions($node);
         return null;
@@ -121,6 +123,13 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             if ($node instanceof Expr\BinaryOp\Spaceship) {
                 $this->getResult()->addRequirement(Reason::SPACESHIP_OPERATOR, $node->getLine());
             }
+        }
+    }
+
+    private function handleYieldFrom(Expr\YieldFrom $node)
+    {
+        if ($this->mode & self::MODE_ADDITION) {
+            $this->getResult()->addRequirement(Reason::YIELD_FROM, $node->getLine());
         }
     }
 

@@ -124,6 +124,8 @@ class Php70FeaturesTest extends BaseNodeWalkerTestCase
             [13, R::COALESCE_OPERATOR],
             [14, R::COALESCE_OPERATOR],
             [15, R::SPACESHIP_OPERATOR],
+            [42, R::YIELD_FROM],
+            [52, R::YIELD_FROM],
         ];
 
         $this->runTestsAgainstExpectation($expected, '7.0/all70', '7.0.0', Php70Features::MODE_ADDITION);

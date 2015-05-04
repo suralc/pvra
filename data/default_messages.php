@@ -78,4 +78,5 @@ return [
     R::COALESCE_OPERATOR => 'The coalesce operator (??) has been added in PHP :version:',
     R::SPACESHIP_OPERATOR => 'The spaceship operator (<=>) has been added in PHP :version:',
     R::RETURN_TYPE => 'Return type declarations require PHP :version:',
+    R::YIELD_FROM => 'Generator delegation (yield from) was not available before PHP :version:',
 ];

@@ -27,6 +27,9 @@ use Pvra\Result\Collection as ResultCollection;
  */
 interface ResultFormatter
 {
+    /**
+     * @param array $options
+     */
     public function __construct(array $options = []);
 
     /**
