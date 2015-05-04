@@ -42,6 +42,9 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         } elseif ($node instanceof Node\Stmt\ClassLike) {
             if ($node instanceof Node\Stmt\Class_) {
+                if($node->isAnonymous()) {
+                    $this->handleAnonymousClass($node);
+                }
                 $this->detectAndHandlePhp4Ctor($node);
             }
             $this->detectAndHandleReservedNames($node);
@@ -71,7 +74,7 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
 
     private function detectAndHandlePhp4Ctor(Node\Stmt\Class_ $cls)
     {
-        if ($this->mode & self::MODE_DEPRECATION) {
+        if ($this->mode & self::MODE_DEPRECATION && !$cls->isAnonymous()) {
             $name = isset($cls->namespacedName) ? $cls->namespacedName->toString() : $cls->name;
             /** @var Node\Stmt\ClassMethod $method */
             foreach ($cls->getMethods() as $method) {
@@ -133,15 +136,24 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
         }
     }
 
+    private function handleAnonymousClass(Node $node)
+    {
+        if ($this->mode & self::MODE_ADDITION) {
+            $this->getResult()->addRequirement(Reason::ANON_CLASS, $node->getLine());
+        }
+    }
+
     private function handleClassName($name, $line = -1)
     {
-        $baseName = baseName(str_replace('\\', '/', $name));
-        if ($this->mode & self::MODE_DEPRECATION && $this->isNameSoftReserved($name)) {
-            $this->getResult()->addLimit(Reason::SOFT_RESERVED_NAME, $line, null,
-                ['fqn' => $name, 'class' => $baseName]);
-        } elseif ($this->mode & self::MODE_REMOVAL && $this->isNameReserved($name)) {
-            $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $line, null,
-                ['fqn' => $name, 'class' => $baseName]);
+        if ($name !== null) {
+            $baseName = baseName(str_replace('\\', '/', $name));
+            if ($this->mode & self::MODE_DEPRECATION && $this->isNameSoftReserved($name)) {
+                $this->getResult()->addLimit(Reason::SOFT_RESERVED_NAME, $line, null,
+                    ['fqn' => $name, 'class' => $baseName]);
+            } elseif ($this->mode & self::MODE_REMOVAL && $this->isNameReserved($name)) {
+                $this->getResult()->addLimit(Reason::RESERVED_CLASS_NAME, $line, null,
+                    ['fqn' => $name, 'class' => $baseName]);
+            }
         }
     }
 

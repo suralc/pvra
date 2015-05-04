@@ -84,7 +84,8 @@ abstract class Reason
         COALESCE_OPERATOR = 104,
         SPACESHIP_OPERATOR = 105,
         RETURN_TYPE = 106,
-        YIELD_FROM = 107;
+        YIELD_FROM = 107,
+        ANON_CLASS = 108;
 
     /**
      * @var array|null
@@ -236,6 +237,7 @@ abstract class Reason
             self::SPACESHIP_OPERATOR => '7.0.0',
             self::RETURN_TYPE => '7.0.0',
             self::YIELD_FROM => '7.0.0',
+            self::ANON_CLASS => '7.0.0',
         ];
     }
 

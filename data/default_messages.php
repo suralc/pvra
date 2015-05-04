@@ -79,4 +79,5 @@ return [
     R::SPACESHIP_OPERATOR => 'The spaceship operator (<=>) has been added in PHP :version:',
     R::RETURN_TYPE => 'Return type declarations require PHP :version:',
     R::YIELD_FROM => 'Generator delegation (yield from) was not available before PHP :version:',
+    R::ANON_CLASS => 'Anonymous classes require PHP :version:',
 ];

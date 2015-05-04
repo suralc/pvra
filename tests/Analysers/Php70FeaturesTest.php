@@ -131,6 +131,17 @@ class Php70FeaturesTest extends BaseNodeWalkerTestCase
         $this->runTestsAgainstExpectation($expected, '7.0/all70', '7.0.0', Php70Features::MODE_ADDITION);
     }
 
+    public function testAnonClassDetectionWithoutNameCheck()
+    {
+        $expected = [
+            [3, R::ANON_CLASS],
+            [4, R::ANON_CLASS],
+            [5, R::ANON_CLASS],
+        ];
+
+        $this->runTestsAgainstExpectation($expected, '7.0/anon_class', '7.0.0', Php70Features::MODE_ADDITION);
+    }
+
     public function testAll70RemovalAndDeprecation()
     {
         $expected = [
