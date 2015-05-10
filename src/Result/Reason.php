@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 namespace Pvra\Result;
@@ -76,42 +76,51 @@ abstract class Reason
         CONSTANT_SCALAR_EXPRESSION = 52,
         POW_OPERATOR = 53,
         FUNCTION_IMPORT_USE = 54,
-        CONSTANT_IMPORT_USE = 55;
+        CONSTANT_IMPORT_USE = 55,
+        // 7.0
+        RESERVED_CLASS_NAME = 100,
+        SOFT_RESERVED_NAME = 101,
+        PHP4_CONSTRUCTOR = 103,
+        COALESCE_OPERATOR = 104,
+        SPACESHIP_OPERATOR = 105,
+        RETURN_TYPE = 106,
+        YIELD_FROM = 107,
+        ANON_CLASS = 108;
 
     /**
      * @var array|null
      */
-    private static $reasonToRequirement;
+    private static $reasonToVersion;
     /**
      * @var array|null
      */
     private static $constantsCache;
 
     /**
-     * Get the required version for a reason.
+     * Get version information from a reason.
      *
-     * This static method may be used to get the required version of a reason constant defined in RequirementReason.
+     * This static method may be used to get version information of a reason constant defined in Reason.
      * If no matching version for a constant can be found an InvalidArgumentException will be thrown.
      *
      * This method may return a falseable string or bool(false). Use !== false to check for a valid returned version.
      * If false is returned refer to the corresponding method on the class that returned the constant.
      *
      * @param int $reason One of the constants defined in RequirementReason
-     * @return string|bool The required version or bool(false)
+     * @return string|false The required version or bool(false)
      */
-    public static function getRequiredVersionForReason($reason)
+    public static function getVersionFromReason($reason)
     {
-        if (self::$reasonToRequirement === null) {
-            self::$reasonToRequirement = static::getReasonToRequirementBaseValues();
+        if (self::$reasonToVersion === null) {
+            self::$reasonToVersion = static::getReasonToVersionBaseValues();
         }
 
-        if (isset(self::$reasonToRequirement[ $reason ])) {
-            return self::$reasonToRequirement[ $reason ];
+        if (isset(self::$reasonToVersion[ $reason ])) {
+            return self::$reasonToVersion[ $reason ];
         } elseif ($reason > self::UNKNOWN && $reason < self::TRAIT_DEFINITION) {
             return false;
         } else {
-            throw new \InvalidArgumentException(sprintf('There is no required version defined for this reason(id: "%s").',
-                $reason));
+            throw new \InvalidArgumentException(sprintf('There is no required version defined for this reason(id: "%s", name: "%s").',
+                $reason, static::getReasonNameFromValue($reason)));
         }
     }
 
@@ -161,7 +170,7 @@ abstract class Reason
      */
     public static function clear()
     {
-        self::$reasonToRequirement = null;
+        self::$reasonToVersion = null;
         self::$constantsCache = null;
     }
 
@@ -173,7 +182,7 @@ abstract class Reason
      *
      * @return array
      */
-    protected static function getReasonToRequirementBaseValues()
+    protected static function getReasonToVersionBaseValues()
     {
         return [
             self::UNKNOWN => '7.0.0',
@@ -220,6 +229,15 @@ abstract class Reason
             self::POW_OPERATOR => '5.6.0',
             self::FUNCTION_IMPORT_USE => '5.6.0',
             self::CONSTANT_IMPORT_USE => '5.6.0',
+            // 7.0
+            self::RESERVED_CLASS_NAME => '7.0.0',
+            self::SOFT_RESERVED_NAME => '7.0.0',
+            self::PHP4_CONSTRUCTOR => '7.0.0',
+            self::COALESCE_OPERATOR => '7.0.0',
+            self::SPACESHIP_OPERATOR => '7.0.0',
+            self::RETURN_TYPE => '7.0.0',
+            self::YIELD_FROM => '7.0.0',
+            self::ANON_CLASS => '7.0.0',
         ];
     }
 

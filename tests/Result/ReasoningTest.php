@@ -95,7 +95,7 @@ class ReasoningTest extends \PHPUnit_Framework_TestCase
     {
         $reasoning = new Reasoning(Reason::ARGUMENT_UNPACKING, -1,
             new AnalysisResult());
-        $this->assertSame(Reason::getRequiredVersionForReason(Reason::ARGUMENT_UNPACKING),
+        $this->assertSame(Reason::getVersionFromReason(Reason::ARGUMENT_UNPACKING),
             $reasoning['version']);
     }
 

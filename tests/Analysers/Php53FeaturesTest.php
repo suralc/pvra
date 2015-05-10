@@ -122,27 +122,6 @@ class Php53FeaturesTest extends BaseNodeWalkerTestCase
         $this->runTestsAgainstExpectation($expected, '5.3/lsb', '5.3.0');
     }
 
-    /**
-     * @covers Pvra\PhpParser\AnalysingNodeWalkers\Php53LanguageFeatureNodeWalker::detectNamespaceSeparator
-     */
-    public function testNamespaceSeparatorDetection()
-    {
-        $this->markTestIncomplete('Refactoring of Library Walker(s) required.');
-        $expected = [
-            [3, Reason::NAMESPACE_DECLERATION],
-            [5, Reason::NAMESPACE_IMPORT],
-            [6, Reason::NAMESPACE_IMPORT],
-            [8, Reason::NAMESPACE_SEPARATOR],
-            [9, Reason::NAMESPACE_SEPARATOR],
-            [10, Reason::NAMESPACE_SEPARATOR],
-            [11, Reason::NAMESPACE_SEPARATOR],
-            [12, Reason::NAMESPACE_SEPARATOR],
-            [13, Reason::NAMESPACE_SEPARATOR],
-        ];
-
-        $this->runTestsAgainstExpectation($expected, '5.3/seperator', '5.3.0');
-    }
-
     public function testAll53()
     {
         $expected = [

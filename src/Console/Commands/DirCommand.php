@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 namespace Pvra\Console\Commands;
@@ -94,7 +94,7 @@ class DirCommand extends PvraBaseCommand
         /** @var \SplFileInfo $file */
         foreach ($files as $file) {
             if ($file->isFile()) {
-                $req = $this->createFileAnalyserInstance($file->getPathname());
+                $req = $this->createFileAnalyserInstance($file->getRealPath());
                 $req->attachRequirementVisitors($this->createNodeWalkerInstances($input->getOption('libraryDataSource')));
                 $results->add($req->run());
             }
@@ -109,21 +109,7 @@ class DirCommand extends PvraBaseCommand
         }
 
         if ($file = $input->getOption('saveAsFile')) {
-            if (file_exists($file)) {
-                $output->writeln(sprintf('<error>%s already exists. Cannot override an already existing file!</error>',
-                    $file));
-            } else {
-                $output->writeln(sprintf('<info>Generating output file at %s</info>', $file));
-                switch ($input->getOption('saveFormat')) {
-                    case 'json': {
-                        file_put_contents($file, json_encode($results));
-                        break;
-                    }
-                    default: {
-                        $output->writeln('<error>Invalid save format.</error>');
-                    }
-                }
-            }
+            $this->writeToFile($file, $input->getOption('saveFormat'), $results, $output);
         }
     }
 
@@ -174,7 +160,7 @@ class DirCommand extends PvraBaseCommand
                     "\n"
                 ]));
                 /** @var $reason Reasoning */
-                foreach ($result as $reason) {
+                foreach ($result->getRequirementIterator() as $reason) {
                     $out->write("\t");
                     $out->write($reason['msg'], true);
                 }

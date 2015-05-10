@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 namespace Pvra;
@@ -29,8 +29,8 @@ use Pvra\Result\Reasoning;
 class AnalysisResult implements \IteratorAggregate, \Countable
 {
     const INITIAL_ANALYSIS_TARGET_ID = 'unknown';
-    const VERSION_CONSTRAINT_UPPER_LIMIT = 0;
-    const VERSION_CONSTRAINT_LOWER_LIMIT = 1;
+    const VERSION_LIMIT_MIN = 0;
+    const VERSION_LIMIT_MAX = 1;
 
     /**
      * The state of this instance
@@ -57,7 +57,12 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     /**
      * @var string|null
      */
-    private $cachedRequiredVersion;
+    private $cachedVersionRequirement;
+
+    /**
+     * @var string|null
+     */
+    private $cachedVersionLimit;
 
     /**
      * @var int
@@ -65,9 +70,16 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     private $cachedRequiredVersionId;
 
     /**
+     * @var int
+     */
+    private $cachedLimitedVersionId;
+
+    /**
      * Number of attached `Reasonings` instances.
      *
+     * Related to the `\Countable` interface.
      * @var int
+     * @see Pvra\AnalysisResult::count Accessable through count
      */
     private $count = 0;
 
@@ -93,6 +105,15 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         }
 
         return $this->cachedRequiredVersionId;
+    }
+
+    public function getVersionLimitId()
+    {
+        if ($this->cachedLimitedVersionId === null) {
+            $this->cachedLimitedVersionId = $this->calculateVersionIdFromString($this->getVersionLimit());
+        }
+
+        return $this->cachedLimitedVersionId;
     }
 
     /**
@@ -143,7 +164,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Retrieve the determined required version
+     * Retrieve the required version
      *
      * This method calculates the highest required version of all known requirements.
      * If no changes were made between the calls to this method the version requirement will
@@ -154,8 +175,8 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      */
     public function getRequiredVersion()
     {
-        if ($this->cachedRequiredVersion !== null) {
-            return $this->cachedRequiredVersion;
+        if ($this->cachedVersionRequirement !== null) {
+            return $this->cachedVersionRequirement;
         }
 
         $keys = array_keys($this->requirements);
@@ -165,10 +186,39 @@ class AnalysisResult implements \IteratorAggregate, \Countable
                 return version_compare($b, $a);
             });
 
-            return $this->cachedRequiredVersion = $keys[0];
+            return $this->cachedVersionRequirement = $keys[0];
         }
 
-        return '5.3.0';
+        return '5.2.0';
+    }
+
+    /**
+     * Retrieve the upper version limit
+     *
+     * This method calculates the upper version limit of all known reasonings.
+     * If no changes were made between the calls to this method the version limit will
+     * not be recalculated.
+     *
+     * @return string The version limit in the format `Major.Minor[.Patch]`
+     * @see http://php.net/manual/en/function.version-compare.php version_compare()
+     */
+    public function getVersionLimit()
+    {
+        if ($this->cachedVersionLimit !== null) {
+            return $this->cachedVersionLimit;
+        }
+
+        $keys = array_keys($this->limits);
+
+        if (!empty($keys)) {
+            usort($keys, function ($a, $b) {
+                return version_compare($a, $b);
+            });
+
+            return $this->cachedVersionLimit = $keys[0];
+        }
+
+        return '8.0.0';
     }
 
     /**
@@ -192,7 +242,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         $reason = Reason::UNKNOWN,
         array $data = []
     ) {
-        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_LOWER_LIMIT, $version, $line, $msg, $reason,
+        $this->addArbitraryVersionConstraint(self::VERSION_LIMIT_MAX, $version, $line, $msg, $reason,
             $data);
 
         return $this;
@@ -213,14 +263,14 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      */
     public function addRequirement($reason, $line = -1, $msg = null, array $data = [])
     {
-        $version = Reason::getRequiredVersionForReason($reason);
+        $version = Reason::getVersionFromReason($reason);
 
         if ($version === false) {
             throw new \LogicException(sprintf('%s::%s requires a reason a version can be associated to. Use %s::addArbitraryRequirement() to add any version with any reasoning to the result.',
                 __CLASS__, __METHOD__, __CLASS__));
         }
 
-        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_LOWER_LIMIT, $version, $line, $msg, $reason,
+        $this->addArbitraryVersionConstraint(self::VERSION_LIMIT_MAX, $version, $line, $msg, $reason,
             $data);
 
         return $this;
@@ -235,14 +285,14 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      */
     public function addLimit($reason, $line = -1, $msg = null, array $data = [])
     {
-        $version = Reason::getRequiredVersionForReason($reason);
+        $version = Reason::getVersionFromReason($reason);
 
         if ($version === false) {
             throw new \LogicException(sprintf('%s::%s requires a reason a version can be associated to. Use %s::addArbitraryLimit() to add any version with any reasoning to the result.',
                 __CLASS__, __METHOD__, __CLASS__));
         }
 
-        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_UPPER_LIMIT, $version, $line, $msg, $reason,
+        $this->addArbitraryVersionConstraint(self::VERSION_LIMIT_MIN, $version, $line, $msg, $reason,
             $data);
 
         return $this;
@@ -263,7 +313,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         $reason = Reason::UNKNOWN,
         array $data = []
     ) {
-        $this->addArbitraryVersionConstraint(self::VERSION_CONSTRAINT_UPPER_LIMIT, $version, $line, $msg, $reason,
+        $this->addArbitraryVersionConstraint(self::VERSION_LIMIT_MIN, $version, $line, $msg, $reason,
             $data);
 
         return $this;
@@ -290,11 +340,11 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         }
 
         $this->clearInstanceCaches();
+        $this->count++;
 
-        if ($type === self::VERSION_CONSTRAINT_LOWER_LIMIT) {
+        if ($type === self::VERSION_LIMIT_MAX) {
             $this->requirements[ $version ][] = new Reasoning($reason, $line, $this, $version, $msg, $data);
-            $this->count++;
-        } elseif ($type === self::VERSION_CONSTRAINT_UPPER_LIMIT) {
+        } elseif ($type === self::VERSION_LIMIT_MIN) {
             $this->limits[ $version ][] = new Reasoning($reason, $line, $this, $version, $msg, $data);
         }
     }
@@ -306,7 +356,6 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     {
         return $this->isSealed;
     }
-
 
     /**
      * @return array|\Pvra\Result\Reasoning[]
@@ -356,6 +405,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
 
     /**
      * Get the current analysis target id
+     *
      * @return string Analysis target id
      */
     public function getAnalysisTargetId()
@@ -393,9 +443,46 @@ class AnalysisResult implements \IteratorAggregate, \Countable
     public function getIterator()
     {
         $iterator = new \ArrayIterator();
-        foreach ($this->getRequirements() as $values) {
-            foreach ($values as $value) {
+        $data = [$this->getRequirements(), $this->getLimits()];
+        array_walk_recursive($data, function ($value) use ($iterator) {
+            if ($value instanceof Reasoning) {
                 $iterator->append($value);
+            }
+        });
+
+        return $iterator;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getLimitIterator()
+    {
+        $iterator = new \ArrayIterator();
+        foreach ($this->getLimits() as $version) {
+            /** @var Reasoning $item */
+            foreach ($version as $item) {
+                if ($item instanceof Reasoning) {
+                    $iterator->append($item);
+                }
+            }
+        }
+
+        return $iterator;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getRequirementIterator()
+    {
+        $iterator = new \ArrayIterator();
+        foreach ($this->getRequirements() as $version) {
+            /** @var Reasoning $item */
+            foreach ($version as $item) {
+                if ($item instanceof Reasoning) {
+                    $iterator->append($item);
+                }
             }
         }
 
@@ -417,7 +504,9 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      */
     private function clearInstanceCaches()
     {
-        $this->cachedRequiredVersion = null;
+        $this->cachedVersionRequirement = null;
         $this->cachedRequiredVersionId = null;
+        $this->cachedLimitedVersionId = null;
+        $this->cachedVersionLimit = null;
     }
 }

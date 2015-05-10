@@ -20,6 +20,9 @@
         "doctrine",
         "sebastian",
         "mockery",
+        "phpdocumentor",
+        "phpspec",
+        "yaml",
         "satooshi"
       ],
       "in": "vendor"
@@ -28,5 +31,6 @@
   "git-version": "package_version",
   "main": "bin/pvra",
   "output": "pvra.phar",
+  "compression": "GZ",
   "stub": true
 }

@@ -30,7 +30,7 @@ class ReasonTest extends \PHPUnit_Framework_TestCase
     {
         // test regeneration
         $this->assertSame(R::getReasonNames(), $names = R::getReasonNames());
-        $this->assertCount(49, $names);
+        $this->assertCount(57, $names);
         $this->assertArrayHasKey('UNKNOWN', $names);
         R::clear();
         $this->assertSame($names, R::getReasonNames());
@@ -40,18 +40,18 @@ class ReasonTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(count(array_unique($names)),  $names);
     }
 
-    public function testGetRequirementForReason()
+    public function testGetVersionFromReason()
     {
-        $this->assertStringStartsWith('5.4', R::getRequiredVersionForReason(R::ARRAY_FUNCTION_DEREFERENCING));
-        $this->assertStringStartsWith('5.6', R::getRequiredVersionForReason(R::ARGUMENT_UNPACKING));
+        $this->assertStringStartsWith('5.4', R::getVersionFromReason(R::ARRAY_FUNCTION_DEREFERENCING));
+        $this->assertStringStartsWith('5.6', R::getVersionFromReason(R::ARGUMENT_UNPACKING));
         R::clear();
         // make sure values are reinitialized
-        $this->assertTrue(is_string(R::getRequiredVersionForReason(R::CONSTANT_IMPORT_USE)));
-        $this->assertFalse(R::getRequiredVersionForReason(R::LIB_FUNCTION_ADDITION));
-        $this->assertFalse(R::getRequiredVersionForReason(R::LIB_CLASS_ADDITION));
+        $this->assertTrue(is_string(R::getVersionFromReason(R::CONSTANT_IMPORT_USE)));
+        $this->assertFalse(R::getVersionFromReason(R::LIB_FUNCTION_ADDITION));
+        $this->assertFalse(R::getVersionFromReason(R::LIB_CLASS_ADDITION));
     }
 
-    public function testGetRequirementForReasonException()
+    public function testGetVersionFromReasonException()
     {
 
         $tests = [
@@ -65,7 +65,7 @@ class ReasonTest extends \PHPUnit_Framework_TestCase
         foreach ($tests as $const => $trigger) {
             $triggered = false;
             try {
-                R::getRequiredVersionForReason($const);
+                R::getVersionFromReason($const);
             } catch (\InvalidArgumentException $ex) {
                 $triggered = true;
                 if ($trigger === false) {

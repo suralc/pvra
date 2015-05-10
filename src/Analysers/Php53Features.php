@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 
@@ -45,7 +45,6 @@ class Php53Features extends LanguageFeatureAnalyser
      * @var bool
      */
     private $inClass = false;
-    private $importedNames = [];
 
     /**
      * @inheritdoc
@@ -54,11 +53,7 @@ class Php53Features extends LanguageFeatureAnalyser
     {
         if ($this->isClassDeclarationStatement($node)) {
             $this->inClass = true;
-        } /*elseif ($node instanceof Node\Stmt\Use_) { // required in ::detectNamespaceSeperator
-            foreach ($node->uses as $use) {
-                $this->importedNames[] = $use->name->toString();
-            }
-        }*/
+        }
         $this->detectGotoKeywordAndJumpLabel($node);
         $this->detectNamespaces($node);
         $this->detectNowDoc($node);
@@ -68,7 +63,6 @@ class Php53Features extends LanguageFeatureAnalyser
         $this->detectClosures($node);
         $this->detectDynamicAccessToStatic($node);
         $this->detectLateStateBinding($node);
-        //$this->detectNamespaceSeparator($node);
     }
 
     /**
@@ -141,7 +135,7 @@ class Php53Features extends LanguageFeatureAnalyser
      */
     private function detectNowDoc(Node $node)
     {
-        if ($node->hasAttribute('isNowDoc') && $node instanceof Node\Scalar\String) {
+        if ($node->hasAttribute('isNowDoc') && $node instanceof Node\Scalar\String_) {
             $this->getResult()->addRequirement(Reason::NOWDOC_LITERAL, $node->getLine());
         }
     }
@@ -230,28 +224,6 @@ class Php53Features extends LanguageFeatureAnalyser
             && $node->class instanceof Node\Name && strcasecmp($node->class->toString(), 'static') === 0
         ) {
             $this->getResult()->addRequirement(Reason::LATE_STATE_BINDING_USING_STATIC, $node->getLine());
-        }
-    }
-
-    /**
-     * Detect namespace seperator
-     *
-     * non functional needs further investigation or rewrite of Library***Walker to not depend on
-     * NameResolver
-     *
-     * @param \PhpParser\Node $node
-     * @internal
-     * @codeCoverageIgnore
-     */
-    private function detectNamespaceSeparator(Node $node)
-    {
-        if (($node instanceof Node\Expr\StaticPropertyFetch || $node instanceof Node\Expr\StaticCall
-                || $node instanceof Node\Expr\ClassConstFetch || $node instanceof Node\Expr\New_)
-            && $node->class instanceof Node\Name
-            && count($node->class->parts) > 1
-            && !in_array($node->class->toString(), $this->importedNames)
-        ) {
-            $this->getResult()->addRequirement(Reason::NAMESPACE_SEPARATOR, $node->class->getLine());
         }
     }
 }

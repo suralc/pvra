@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 
@@ -271,7 +271,7 @@ class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInt
             foreach ($names as $name) {
                 $this->handleClassName($name);
             }
-        } elseif ($node instanceof Node\Expr\FuncCall) {
+        } elseif ($node instanceof Node\Expr\FuncCall && !($node->name instanceof Node\Expr)) {
             $this->handleFunctionName($node->name);
         } elseif ($node instanceof Node\Expr\ConstFetch) {
             $this->handleConstantName($node->name);

@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 namespace Pvra\Console\Commands;
@@ -20,7 +20,11 @@ namespace Pvra\Console\Commands;
 use Pvra\Analysers\LanguageFeatureAnalyser;
 use Pvra\FileAnalyser;
 use Pvra\InformationProvider\LibraryInformation;
+use Pvra\Result\Collection;
+use Pvra\Result\CollectionWriter;
+use Pvra\Result\Exceptions\ResultFileWriterException;
 use Pvra\Result\MessageLocator;
+use Pvra\Result\ResultFormatter\Json;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputArgument;
@@ -47,6 +51,29 @@ class PvraBaseCommand extends Command
     protected $expectedWalkers = [];
 
     /**
+     * List of analysers that are loaded if the --analyser option is not set
+     *
+     * @var array
+     */
+    private static $defaultAnalysers = [
+        'Php53Features',
+        'Php54Features',
+        'Php55Features',
+        'Php56Features',
+//        'Php70Features', // do not default-enable 7.0 yet as support is only partial
+        'LibraryChanges',
+    ];
+
+    private static $analyserAliasMap = [
+        'Php53Features' => 'php-5.3',
+        'Php54Features' => 'php-5.4',
+        'Php55Features' => 'php-5.5',
+        'Php56Features' => 'php-5.6',
+        'Php70Features' => 'php-7.0',
+        'LibraryChanges' => 'lib-php',
+    ];
+
+    /**
      * @inheritdoc
      */
     protected function configure()
@@ -55,7 +82,7 @@ class PvraBaseCommand extends Command
             ->addOption('preventNameExpansion', 'p', InputOption::VALUE_NONE,
                 'Prevent name expansion. May increase performance but breaks name based detections in namespaces.')
             ->addOption('analyser', 'a', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
-                'Analysers to run', array_values($this->getDefaultAnalysers()))
+                'Analysers to run', $this->getDefaultAnalysersAliases())
             ->addOption('libraryDataSource', 'l', InputOption::VALUE_REQUIRED, 'Source file of library data', false)
             ->addOption('messageFormatSourceFile', 'm', InputOption::VALUE_REQUIRED, 'File with message formats', false)
             ->addOption('saveFormat', null, InputOption::VALUE_REQUIRED, 'The format of the save file.', 'json')
@@ -65,21 +92,24 @@ class PvraBaseCommand extends Command
         $this->addArgument('target', InputArgument::REQUIRED, 'The target of this analysis');
     }
 
-    /**
-     * Array of default analysers and their aliases
-     *
-     * @return array
-     */
-    protected function getDefaultAnalysers()
+    private function getDefaultAnalysersAliases()
     {
-        static $analysers = [
-            'Php53Features' => 'php-5.3',
-            'Php54Features' => 'php-5.4',
-            'Php55Features' => 'php-5.5',
-            'Php56Features' => 'php-5.6',
-            'LibraryChanges' => 'lib-php',
-        ];
-        return $analysers;
+        $aliasNameMap = [];
+        foreach (self::$defaultAnalysers as $analyser) {
+            if (isset(self::$analyserAliasMap[ $analyser ])) {
+                $aliasNameMap[] = self::$analyserAliasMap[ $analyser ];
+            }
+        }
+
+        return $aliasNameMap;
+    }
+
+    private function resolveAnalyserName($name)
+    {
+        if (($resolved = array_search($name, self::$analyserAliasMap)) !== false) {
+            return $resolved;
+        }
+        return in_array($name, array_keys(self::$analyserAliasMap)) ? $name : false;
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -90,22 +120,9 @@ class PvraBaseCommand extends Command
         if (empty($analysers) || !is_array($analysers)) {
             throw new \InvalidArgumentException('The values given to the "analyser" parameter are not valid.');
         }
-        $defaultAnalysers = $this->getDefaultAnalysers();
         foreach ($analysers as $analyser) {
-            $keys = array_values(array_keys($defaultAnalysers, $analyser, true));
-            if (!empty($keys)) {
-                // @codeCoverageIgnoreStart
-                // this exception should never be triggerable and should only occur if ::getDefaultAnalysers was
-                // incorrectly overridden. There should be a test for that though.
-                if (isset($keys[1])) {
-                    // aliases should be unique. If a second index is set the alias is not unique
-                    throw new \UnexpectedValueException('An alias should be unique. ' . $keys[1] . ' is not.');
-                }
-                // @codeCoverageIgnoreEnd
-                $analyser = $keys[0];
-            }
-            if (isset($defaultAnalysers[ $analyser ])) {
-                $analyserName = self::WALKER_DEFAULT_NAMESPACE_ROOT . $analyser;
+            if (($name = $this->resolveAnalyserName($analyser)) !== false) {
+                $analyserName = self::WALKER_DEFAULT_NAMESPACE_ROOT . $name;
             } else {
                 $analyserName = $analyser;
             }
@@ -183,21 +200,18 @@ class PvraBaseCommand extends Command
         if (is_file($filePath) && is_readable($filePath)) {
             $type = pathinfo($filePath, PATHINFO_EXTENSION);
             switch ($type) {
-                case 'php': {
+                case 'php':
                     return [$type, include $filePath];
-                }
-                case 'json': {
+                case 'json':
                     if (($data = json_decode(file_get_contents($filePath), true)) === null) {
                         throw new \RuntimeException(sprintf('Json decoding of file "%s" failed with notice: "%s"',
                             $filePath,
                             version_compare(PHP_VERSION, '5.5.0', '>=') ? json_last_error_msg() : json_last_error()));
                     }
                     return [$type, $data];
-                }
-                default: {
+                default:
                     throw new \InvalidArgumentException(sprintf('The %s filetype is not supported. Only php and json files are supported for this operation.',
                         $type));
-                }
             }
         }
 
@@ -214,5 +228,30 @@ class PvraBaseCommand extends Command
         }
 
         return false;
+    }
+
+    /**
+     * @param string $target
+     * @param string $format
+     * @param \Pvra\Result\Collection $result
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function writeToFile($target, $format, Collection $result, OutputInterface $output)
+    {
+        $output->writeln('Preparing to write results to ' . $target);
+        try {
+            $fileWriter = new CollectionWriter($result);
+            switch ($format) {
+                case 'json':
+                    $formatter = new Json();
+                    break;
+                default:
+                    throw new ResultFileWriterException($format . ' is not a supported save format');
+            }
+            $fileWriter->write($target, $formatter);
+            $output->writeln(sprintf('<info>Generated output file at %s</info>', $target));
+        } catch (ResultFileWriterException $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+        }
     }
 }

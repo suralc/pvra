@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 namespace Pvra\Console\Commands;
@@ -96,18 +96,15 @@ class CheckUpdateCommand extends Command
             $out->writeln('Current remote version is: ' . $remoteVersion);
             $compared = version_compare($this->getApplication()->getVersion(), $remoteVersion);
             switch (true) {
-                case 0 < $compared: {
+                case 0 < $compared:
                     $out->writeln('Your version is newer than the latest release.');
                     break;
-                }
-                case 0 > $compared: {
+                case 0 > $compared:
                     $out->writeln('Your version is older than the latest release.');
                     break;
-                }
-                case $compared === 0: {
+                case $compared === 0:
                     $out->writeln('Your version and the latest released one are equal.');
                     break;
-                }
             }
             return 0;
         }

@@ -11,7 +11,7 @@
  * * http://opensource.org/licenses/MIT
  * * https://github.com/suralc/pvra/blob/master/LICENSE
  *
- * @author     suralc <thesurwaveing@gmail.com>
+ * @author     suralc <suralc.github@gmail.com>
  * @license    http://opensource.org/licenses/MIT  MIT
  */
 namespace Pvra\Result;
@@ -86,7 +86,7 @@ class Reasoning implements ArrayAccess, JsonSerializable
         $this->result = $result;
         $this->data = $data;
         if ($version === null) {
-            $this->version = Reason::getRequiredVersionForReason($reasonId);
+            $this->version = Reason::getVersionFromReason($reasonId);
         } else {
             $this->version = $version;
         }
@@ -103,24 +103,21 @@ class Reasoning implements ArrayAccess, JsonSerializable
     public function toArray()
     {
         return [
-            'data' => $this['data'],
-            'reason' => $this['reason'],
-            'reasonName' => $this['reasonName'],
-            'line' => $this['line'],
-            'msg' => $this['msg'],
-            'raw_msg' => $this['raw_msg'],
-            'version' => $this['version'],
-            'targetId' => $this['targetId'],
+            'data' => $this->get('data'),
+            'reason' => $this->get('reason'),
+            'reasonName' => $this->get('reasonName'),
+            'line' => $this->get('line'),
+            'msg' => $this->get('msg'),
+            'raw_msg' => $this->get('raw_msg'),
+            'version' => $this->get('version'),
+            'targetId' => $this->get('targetId'),
         ];
     }
 
     /**
-     * (PHP 5 &gt;= 5.4.0)<br/>
-     * Specify data which should be serialized to JSON
+     * Get the data this instance represents in a format understood by json_encode.
      *
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
+     * @return array Data to be encoded as json
      */
     public function jsonSerialize()
     {
@@ -179,16 +176,14 @@ class Reasoning implements ArrayAccess, JsonSerializable
                 return $this->reasonId;
             case 'reasonName':
                 return Reason::getReasonNameFromValue($this->reasonId);
-            case 'raw_msg': {
+            case 'raw_msg':
                 if ($this->msg !== null) {
                     return $this->msg;
                 }
                 return $this->getResult()->getMsgFormatter()->getLocator()->getMessage($this->reasonId);
-            }
-            case 'targetId': {
+            case 'targetId':
                 return $this->getResult()->getAnalysisTargetId();
-            }
-            case 'msg': {
+            case 'msg':
                 if ($this->msg !== null) {
                     return $this->msg;
                 }
@@ -200,7 +195,6 @@ class Reasoning implements ArrayAccess, JsonSerializable
                         MessageFormatter::FORMAT_KEY_VERSION => $this->version,
                         MessageFormatter::FORMAT_KEY_REASON_NAME => $this->offsetGet('reasonName'),
                     ]));
-            }
         }
 
         return null;

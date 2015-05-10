@@ -63,7 +63,7 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
     public function testGetRequiredVersion()
     {
         $r = new AnalysisResult();
-        $this->assertSame('5.3.0', $r->getRequiredVersion());
+        $this->assertSame('5.2.0', $r->getRequiredVersion());
         $r->addArbitraryRequirement('5.5.5');
         $r->addArbitraryRequirement('5.4.3');
         $this->assertSame('5.5.5', $r->getRequiredVersion());
@@ -71,6 +71,20 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         $this->assertSame('5.5.5', $r->getRequiredVersion());
         $r->addArbitraryRequirement('5.6.0', [__FILE__ . ':' . __LINE__], 'Some msg');
         $this->assertSame('5.6.0', $r->getRequiredVersion());
+    }
+
+    public function testGetVersionLimit()
+    {
+        $r = new AnalysisResult();
+        $this->assertSame('8.0.0', $r->getVersionLimit());
+        $r->addArbitraryLimit('5.5.5');
+        $this->assertSame('5.5.5', $r->getVersionLimit());
+        $this->assertSame('5.5.5', $r->getVersionLimit());
+        $r->addArbitraryLimit('7.0.0');
+        $this->assertSame('5.5.5', $r->getVersionLimit());
+        $r->addArbitraryLimit('4.0.0');
+        $this->assertSame('4.0.0', $r->getVersionLimit());
+        $this->assertNotEquals('4.0.0', $r->getRequiredVersion());
     }
 
     public function testGetRequiredVersionWithReasonedRequirements()
@@ -92,7 +106,7 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
     {
         $r = new AnalysisResult();
         $r->addRequirement(R::EXPR_IN_EMPTY);
-        $this->assertSame(R::getRequiredVersionForReason(R::EXPR_IN_EMPTY), $r->getRequiredVersion());
+        $this->assertSame(R::getVersionFromReason(R::EXPR_IN_EMPTY), $r->getRequiredVersion());
         $r->addArbitraryRequirement('5.5.1');
         $this->assertSame('5.5.1', $r->getRequiredVersion());
         $r->addRequirement(R::VARIADIC_ARGUMENT);
@@ -132,6 +146,16 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         $this->assertSame(PHP_VERSION_ID, $r->getRequiredVersionId());
     }
 
+    public function testGetVersionLimitId()
+    {
+        $r = new AnalysisResult();
+
+        $r->addArbitraryLimit('5.4.0');
+        $this->assertSame(50400, $r->getVersionLimitId());
+        $r->addArbitraryLimit('5.3.1');
+        $this->assertSame(50301, $r->getVersionLimitId());
+    }
+
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage A version id has to be built from two or three segments. "5" is not valid.
@@ -166,6 +190,8 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         $this->assertCount(2, $r);
         $r->addRequirement(R::VARIADIC_ARGUMENT);
         $this->assertCount(3, $r);
+        $r->addArbitraryLimit('5.6.7');
+        $this->assertCount(4, $r);
     }
 
     public function testGetIterator()
@@ -199,6 +225,52 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('reason', $item);
             $this->assertTrue($item['version'] === '5.5.0' || $item['version'] === '5.4.0');
         }
+    }
+
+    public function testGetIteratorWithLimits()
+    {
+        $r = new AnalysisResult();
+        $r->addArbitraryLimit('5.5.0');
+        $this->assertCount(1, $r->getIterator());
+        $r->addArbitraryLimit('5.5.0');
+        $this->assertCount(2, $r->getIterator());
+        $r->addArbitraryRequirement('5.5.0');
+        $this->assertCount(3, $r->getIterator());
+        /** @var \Pvra\Result\Reasoning $item */
+        foreach($r as $item) {
+            $this->assertInstanceOf('\Pvra\Result\Reasoning', $item);
+            $this->assertSame('5.5.0', $item->get('version'));
+        }
+    }
+
+    public function testGetLimitIterator()
+    {
+        $r = new AnalysisResult();
+        $it = $r->getLimitIterator();
+        $this->assertInstanceOf('\Iterator', $it);
+        $this->assertInstanceOf('\Traversable', $it);
+        $this->assertCount(0, $it);
+        $r->addArbitraryRequirement('5.6.7');
+        $this->assertCount(0, $r->getLimitIterator());
+        $r->addArbitraryLimit('5.6.7');
+        $this->assertCount(1, $r->getLimitIterator());
+        $ar = iterator_to_array($r->getLimitIterator());
+        $this->assertInstanceOf('\Pvra\Result\Reasoning', $ar[0]);
+    }
+
+    public function testGetRequirementIterator()
+    {
+        $r = new AnalysisResult();
+        $it = $r->getRequirementIterator();
+        $this->assertInstanceOf('\Iterator', $it);
+        $this->assertInstanceOf('\Traversable', $it);
+        $this->assertCount(0, $it);
+        $r->addArbitraryLimit('5.6.7');
+        $this->assertCount(0, $r->getRequirementIterator());
+        $r->addArbitraryRequirement('5.6.7');
+        $this->assertCount(1, $r->getRequirementIterator());
+        $ar = iterator_to_array($r->getRequirementIterator());
+        $this->assertInstanceOf('\Pvra\Result\Reasoning', $ar[0]);
     }
 
     public function testSetAnalysisTargetId()

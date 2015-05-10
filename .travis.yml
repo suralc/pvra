@@ -3,24 +3,41 @@ php:
   - 5.4
   - 5.5
   - 5.6
+  - 7.0
   - hhvm
   - hhvm-nightly
 matrix:
   allow_failures:
     - php: hhvm-nightly
+    - php: 7.0
   fast_finish: true
 
 before_script:
   - composer selfupdate && composer --version
-  - composer update --dev --prefer-dist
+  - composer update --prefer-dist
+  - |
+      if [[ $TRAVIS_PHP_VERSION = '5.6' || $TRAVIS_PHP_VERSION = '5.5' || $TRAVIS_PHP_VERSION = '5.4' ]]; then
+          echo "Fine to generate coverage."
+          PHPUNIT_FLAGS="--coverage-clover=coverage.xml"
+      else
+          echo "Don't generate coverage."
+          PHPUNIT_FLAGS=""
+      fi
 
 script:
-  - ./vendor/bin/phpunit --coverage-clover=clover.xml
+  - ./vendor/bin/phpunit $PHPUNIT_FLAGS
 
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover clover.xml
+  - |
+      if [[ $TRAVIS_PHP_VERSION = '5.6' || $TRAVIS_PHP_VERSION = '5.5' || $TRAVIS_PHP_VERSION = '5.4' ]]; then
+        echo "Fine to generate coverage."
+        wget https://scrutinizer-ci.com/ocular.phar
+        php ocular.phar code-coverage:upload --format=php-clover coverage.xml
+      else
+        echo "Don't generate coverage."
+      fi
 
 cache:
   directories:
     - vendor
+    - $HOME/.composer/cache

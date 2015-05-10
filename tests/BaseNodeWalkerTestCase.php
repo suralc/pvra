@@ -8,6 +8,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use Pvra\AnalyserAwareInterface;
+use Pvra\Analysers\LanguageFeatureAnalyser;
 use Pvra\AnalysisResult;
 use Pvra\Lexer\ExtendedEmulativeLexer;
 
@@ -30,7 +31,7 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    protected function buildTestInstances()
+    protected function buildTestInstances($mode)
     {
         if (is_string($this->classToTest) && class_exists($this->classToTest)) {
             $result = new AnalysisResult();
@@ -38,7 +39,7 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
             $analyserMock->shouldReceive('getResult')->andReturn($result);
 
             $className = $this->classToTest;
-            return [(new $className())->setOwningAnalyser($analyserMock), $result];
+            return [(new $className(['mode' => $mode]))->setOwningAnalyser($analyserMock), $result];
         }
 
         $this->fail(sprintf('Could not build test instance of %s',
@@ -52,24 +53,41 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
         m::close();
     }
 
-    protected function runTestsAgainstExpectation(array $expected, $file, $version = null)
-    {
-        $result = $this->runInstanceFromScratch($file);
+    /**
+     * @param array $expected
+     * @param string $file
+     * @param null|string $version
+     * @param int $mode
+     */
+    protected function runTestsAgainstExpectation(
+        array $expected,
+        $file,
+        $version = null,
+        $mode = LanguageFeatureAnalyser::MODE_ALL
+    ) {
+        $result = $this->runInstanceFromScratch($file, $mode);
 
         $this->assertCount(count($expected), $result);
 
-        if($version !== null) {
-            $this->assertSame($version, $result->getRequiredVersion());
+        if ($version !== null) {
+            if ($version{0} === '-') {
+                $this->assertSame(ltrim($version, '-'), $result->getVersionLimit());
+            } else {
+                $this->assertSame($version, $result->getRequiredVersion());
+            }
         }
 
         $resultIt = $result->getIterator();
 
         foreach ($expected as $expectation) {
-            if(!$resultIt->valid()){
+            if (!$resultIt->valid()) {
                 $this->fail('Unexpected end of iterator.');
             }
             $this->assertSame($expectation[0], $resultIt->current()['line']);
             $this->assertSame($expectation[1], $resultIt->current()['reason']);
+            if (isset($expectation[2])) {
+                $this->assertArraySubset($expectation[2], $resultIt->current()['data']);
+            }
             $resultIt->next();
         }
     }
@@ -101,12 +119,13 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $file
+     * @param string $file
+     * @param int $mode
      * @return AnalysisResult
      */
-    protected function runInstanceFromScratch($file)
+    protected function runInstanceFromScratch($file, $mode)
     {
-        list($ins, $result) = $this->buildTestInstances();
+        list($ins, $result) = $this->buildTestInstances($mode);
 
         $this->traverseInstanceOverStmts($this->getAstNodesFromFile($file), $ins);
 

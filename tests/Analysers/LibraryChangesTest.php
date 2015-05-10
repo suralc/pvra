@@ -8,7 +8,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
 use Pvra\Analysers\LibraryChanges;
 use Pvra\AnalysisResult;
 use Pvra\InformationProvider\LibraryInformation;
@@ -68,7 +70,7 @@ class LibraryChangesTest extends BaseNodeWalkerTestCase
 
     public function testMixedDetection()
     {
-        $res = $this->runInstanceFromScratch('libraryAdditions');
+        $res = $this->runInstanceFromScratch('libraryAdditions', LibraryChanges::MODE_ALL);
 
         $expected = [
             [3, Reason::LIB_FUNCTION_ADDITION],
@@ -102,7 +104,7 @@ class LibraryChangesTest extends BaseNodeWalkerTestCase
     public function testPropertyOfNonObjectOnCountNamePartsInParameterTypeHint()
     {
         // this triggered a notice before the fix in 44f16c2bd9
-        $result = $this->runInstanceFromScratch('libAdditionsPropOnNonObjInParamHint');
+        $result = $this->runInstanceFromScratch('libAdditionsPropOnNonObjInParamHint', LibraryChanges::MODE_ALL);
         $this->assertCount(0, $result);
     }
 
@@ -271,6 +273,41 @@ class LibraryChangesTest extends BaseNodeWalkerTestCase
         $this->assertCount(0, $result->getRequirements());
     }
 
+    public function testAnonClassInheritedNamesDetection()
+    {
+        $ast = new New_(new Class_(null, [
+            'implements' => [new Name('JsonSerialize')],
+            'extends' => new Name('Alpha'),
+        ]));
+        $result = new AnalysisResult();
+        $analyser = (new StringAnalyser(''))->setResultInstance($result);
+        $information = new LibraryInformation([
+            'additions' => [
+                'class' => [
+                    'JsonSerialize' => '5.4.0'
+                ],
+            ],
+            'removals' => [
+                'class' => [
+                    'Alpha' => '1.2.3'
+                ],
+            ],
+        ]);
+        $chg = new LibraryChanges(['mode' => LibraryChanges::MODE_ALL], $analyser, $information);
+        $chg->enterNode($ast);
+        $chg->enterNode($ast->class);
+        $this->assertSame('JsonSerialize', $result->getRequirements()['5.4.0'][0]['data']['className']);
+        $this->assertSame('Alpha', $result->getLimits()['1.2.3'][0]['data']['className']);
+        $this->assertCount(2, $result);
+    }
+
+    public function testNoFatalOnDynamicFunctionCall()
+    {
+        $analyser = new LibraryChanges(['mode' => LibraryChanges::MODE_ADDITION & ~LibraryChanges::MODE_ADDITION]);
+        $ast = new FuncCall(new Variable('abc'));
+        $analyser->enterNode($ast);
+    }
+
     /**
      * @return \Pvra\InformationProvider\LibraryInformation
      */
@@ -294,6 +331,7 @@ class LibraryChangesTest extends BaseNodeWalkerTestCase
                 ],
                 'class' => [
                     'Alpha' => '5.6.1',
+                    'Beta' => '1.2.3',
                 ],
                 'constant' => [
                     'CONST_1' => '5.10.2',
