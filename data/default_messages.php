@@ -72,9 +72,12 @@ return [
     R::POW_OPERATOR => 'The "pow" operator requires PHP :version:',
     R::CONSTANT_IMPORT_USE => 'Constant import via use requires PHP :version:',
     // 7.0
-    R::RESERVED_CLASS_NAME => 'The ":class:" class contains a name that has been reserved in PHP :version:',
+    R::RESERVED_CLASS_NAME => 'The ":fqn:" name is disallowed as ":class:" is reserved PHP :version:',
+    R::SOFT_RESERVED_NAME => 'The ":fqn:" name is discouraged as ":class:" is soft reserved in PHP :version:',
     R::PHP4_CONSTRUCTOR => 'The PHP 4 ctor :name: has been deprecated in PHP :version:',
     R::COALESCE_OPERATOR => 'The coalesce operator (??) has been added in PHP :version:',
     R::SPACESHIP_OPERATOR => 'The spaceship operator (<=>) has been added in PHP :version:',
-    R::RETURN_TYPE => 'Formal declarations of return types have been added in PHP :version:',
+    R::RETURN_TYPE => 'Return type declarations require PHP :version:',
+    R::YIELD_FROM => 'Generator delegation (yield from) was not available before PHP :version:',
+    R::ANON_CLASS => 'Anonymous classes require PHP :version:',
 ];

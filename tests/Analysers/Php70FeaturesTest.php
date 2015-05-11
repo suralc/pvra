@@ -77,18 +77,28 @@ class Php70FeaturesTest extends BaseNodeWalkerTestCase
             [72, R::RESERVED_CLASS_NAME],
             [76, R::RESERVED_CLASS_NAME],
             [82, R::RESERVED_CLASS_NAME],
+            [90, R::RESERVED_CLASS_NAME],
+            [94, R::RESERVED_CLASS_NAME],
+            [98, R::RESERVED_CLASS_NAME],
+            [104, R::SOFT_RESERVED_NAME],
+            [108, R::SOFT_RESERVED_NAME],
+            [112, R::SOFT_RESERVED_NAME],
+            [116, R::SOFT_RESERVED_NAME],
+            [122, R::SOFT_RESERVED_NAME, ['fqn' => '\\SoftReserve\\Bool\\Resource', 'class' => 'Resource']],
+            [133, R::SOFT_RESERVED_NAME, ['fqn' => 'Object', 'class' => 'Object']],
+            [134, R::RESERVED_CLASS_NAME, ['fqn' => 'String', 'class' => 'String']],
+            [135, R::RESERVED_CLASS_NAME, ['fqn' => 'FinallyOutOfNames\\Bool', 'class' => 'Bool']],
+            [137, R::RESERVED_CLASS_NAME, ['fqn' => 'True', 'class' => 'True']],
+            [138, R::RESERVED_CLASS_NAME, ['fqn' => 'False', 'class' => 'False']],
         ];
         $this->runTestsAgainstExpectation($expected, '7.0/reserved_names', '-7.0.0', Php70Features::MODE_ALL);
     }
 
-    /**
-     * @dataProvider nonRemovalFlagProvider
-     */
-    public function testReservedNamesAreNotMarkedWithoutRemovalFlag($mode)
+    public function testReservedNamesAreNotMarkedWithoutDeprecationOrRemovalFlag()
     {
         $expected = [];
 
-        $this->runTestsAgainstExpectation($expected, '7.0/reserved_names', null, $mode);
+        $this->runTestsAgainstExpectation($expected, '7.0/reserved_names', null, Php70Features::MODE_ADDITION);
     }
 
     public function testOperatorDetection()
@@ -114,9 +124,22 @@ class Php70FeaturesTest extends BaseNodeWalkerTestCase
             [13, R::COALESCE_OPERATOR],
             [14, R::COALESCE_OPERATOR],
             [15, R::SPACESHIP_OPERATOR],
+            [42, R::YIELD_FROM],
+            [52, R::YIELD_FROM],
         ];
 
         $this->runTestsAgainstExpectation($expected, '7.0/all70', '7.0.0', Php70Features::MODE_ADDITION);
+    }
+
+    public function testAnonClassDetectionWithoutNameCheck()
+    {
+        $expected = [
+            [3, R::ANON_CLASS],
+            [4, R::ANON_CLASS],
+            [5, R::ANON_CLASS],
+        ];
+
+        $this->runTestsAgainstExpectation($expected, '7.0/anon_class', '7.0.0', Php70Features::MODE_ADDITION);
     }
 
     public function testAll70RemovalAndDeprecation()

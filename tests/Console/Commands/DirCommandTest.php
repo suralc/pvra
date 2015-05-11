@@ -138,7 +138,7 @@ FORMAT;
         ])->getDisplay(true));
 
 
-        $this->assertTrue(stripos($out, 'Invalid save format.') !== false);
+        $this->assertTrue(stripos($out, 'non-existant is not a supported save format') !== false);
         $this->assertFileNotExists($out);
     }
 

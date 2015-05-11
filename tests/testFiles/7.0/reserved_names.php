@@ -86,4 +86,58 @@ namespace Foo3\String {
     class BazBar
     {
     }
+
+    class True
+    {
+    }
+
+    class False
+    {
+    }
+
+    class Null
+    {
+    }
+}
+
+namespace SoftReserveTests {
+    class Object
+    {
+    }
+
+    interface Resource
+    {
+    }
+
+    trait miXed
+    {
+    }
+
+    class NuMeRiC
+    {
+    }
+
+    function softy(\SoftReserveTests\NuMeRiC $num, Object $obj)
+    {
+        class_alias('SoapClient', '\\SoftReserve\\Bool\\Resource'); // should fail on Resource not bool
+    }
+}
+
+namespace FinallyOutOfNames\Bool {
+    class NotABool
+    {
+    }
+}
+
+namespace UserOfBool {
+    use A\B\C as Object;
+    use A\B\C\D\E\H as String;
+    use FinallyOutOfNames\Bool; // should fail
+    use
+        SoftReserveTests\NuMeRiC as True, // fail on true?
+        Foo3\String\BazBar as False;
+
+    new Bool\NotABool();
+    new True(); // should not trigger as php7 is also quiet here
+    new False();
 }

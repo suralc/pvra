@@ -27,4 +27,29 @@ namespace {
 
         }
     }
+
+    class YieldFrom
+    {
+        public function gen1()
+        {
+            for ($i = 0; $i < 10; $i++) {
+                yield $i;
+            }
+        }
+
+        public function gen2()
+        {
+            yield from $this->get1();
+        }
+
+        public function gen3()
+        {
+            yield "from";
+        }
+
+        public function get4()
+        {
+            yield from from();
+        }
+    }
 }

@@ -18,6 +18,7 @@ namespace Pvra\Console\Commands;
 
 
 use Pvra\AnalysisResult;
+use Pvra\Result\Collection as ResultCollection;
 use Pvra\Result\MessageFormatter;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -64,7 +65,7 @@ class FileCommand extends PvraBaseCommand
 
         $result = (new AnalysisResult())
             ->setMsgFormatter(new MessageFormatter(
-                $this->createMessageLocatorInstance($input), false
+                $this->createMessageLocatorInstance($input), false, true
             ));
 
         $req->setResultInstance($result);
@@ -86,6 +87,7 @@ class FileCommand extends PvraBaseCommand
             ->render();
 
         if ($file = $input->getOption('saveAsFile')) {
+            $this->writeToFile($file, $input->getOption('saveFormat'), (new ResultCollection())->add($result), $output);
             if (file_exists($file)) {
                 $output->writeln(sprintf('<error>%s already exists. Cannot override an already existing file!</error>',
                     $file));
