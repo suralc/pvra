@@ -1,15 +1,19 @@
 Highest required version: 5.5.0
-Required because %sall55.php uses the following features:
-	Usage of the finally keyword requires PHP 5.5.0 in %sall55.php:10
-	Usage of list in foreach ValueVar statement requires PHP 5.5.0 in %sall55.php:11
-	Usage of arbitrary expressions in empty statement requires PHP 5.5.0 in %sall55.php:12
-	Usage of generators requires PHP 5.5.0 in %sall55.php:13
-	Array and string literal dereferencing requires PHP 5.5.0 in %sall55.php:13
-	Usage of generators requires PHP 5.5.0 in %sall55.php:15
-	Array and string literal dereferencing requires PHP 5.5.0 in %sall55.php:15
-	Class name resolution via ::class requires PHP 5.5.0 in %sall55.php:21
-	Usage of arbitrary expressions in empty statement requires PHP 5.5.0 in %sall55.php:31
-	The "IntlBreakIterator" class was introduced in PHP 5.5.0 in %sall55.php:31
-	Usage of the short array syntax requires PHP 5.4.0 in %sall55.php:15
-	Static methods and properties could not be accessed dynamically before PHP 5.3.0 in %sall55.php:32
+Required because D:\dev\www\apps\pvra-clean\tests\testFiles\5.5\all55.php uses the following features:
++---------+----------------------------------------------------------------------------------+------+
+| Version | Message                                                                          | Line |
++---------+----------------------------------------------------------------------------------+------+
+| 5.3.0   | Static methods and properties could not be accessed dynamically before PHP 5.3.0 | 32   |
+| 5.4.0   | Usage of the short array syntax requires PHP 5.4.0                               | 15   |
+| 5.5.0   | Usage of the finally keyword requires PHP 5.5.0                                  | 10   |
+| 5.5.0   | Usage of list in foreach ValueVar statement requires PHP 5.5.0                   | 11   |
+| 5.5.0   | Usage of arbitrary expressions in empty statement requires PHP 5.5.0             | 12   |
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | 13   |
+| 5.5.0   | Array and string literal dereferencing requires PHP 5.5.0                        | 13   |
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | 15   |
+| 5.5.0   | Array and string literal dereferencing requires PHP 5.5.0                        | 15   |
+| 5.5.0   | Class name resolution via ::class requires PHP 5.5.0                             | 21   |
+| 5.5.0   | Usage of arbitrary expressions in empty statement requires PHP 5.5.0             | 31   |
+| 5.5.0   | The "IntlBreakIterator" class was introduced in PHP 5.5.0                        | 31   |
++---------+----------------------------------------------------------------------------------+------+
 Continue with showing remaining 2 results? [Y/n]

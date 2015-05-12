@@ -4,6 +4,7 @@ namespace Pvra\tests\Console\Commands;
 
 use Pvra\Console\Commands\DirCommand;
 use Pvra\Result\Reason;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class DirCommandTest extends PvraBaseCommandTestBase
 {
@@ -43,6 +44,7 @@ FORMAT;
     public function testDirGroupByNameWithInteractiveY()
     {
         /** @var DirCommand $command */
+        /** @var CommandTester $commandTester */
         list($commandTester, $command) = $this->getBareInstances();
         $helper = $command->getHelper('question');
         $helper->setInputStream($this->getInputStream('yes\\n'));

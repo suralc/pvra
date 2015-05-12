@@ -20,9 +20,9 @@ class FileCommandTest extends PvraBaseCommandTestBase
         ]);
 
         $out = trim($commandTester->getDisplay(true));
-        $this->assertTrue(strpos($out, 'PHP 5.6.0') !== false);
-        $this->assertTrue(strpos($out, ':5') !== false);
-        $this->assertSame(1, preg_match_all('/(^\\s+[\\w]+: [\\w\\\\s$ ]+\\d\\.\\d+\\.\\d+ in .+:\\d+$)/m', $out));
+        $this->assertTrue(strpos($out, 'Required version: 5.6.0') !== false);
+        $this->assertSame(1, substr_count($out, 'Variadic arguments'));
+        $this->assertSame(0, substr_count($out, '5.4.0'));
     }
 
     public function testSimpleExecuteWithSingleMatchingNodeWalker()
@@ -33,7 +33,8 @@ class FileCommandTest extends PvraBaseCommandTestBase
         ])->getDisplay(true));
 
         $this->assertTrue(strpos($out, 'PHP 5.6.0') === false);
-        $this->assertSame(19, preg_match_all('/(^\\s+[\\w]+: [\\w\\\\s$ ]+\\d\\.\\d+\\.\\d+ in .+:\\d+$)/m', $out));
+        $this->assertSame(41, substr_count($out, '5.4.0'));
+        $this->assertTrue(strpos($out, 'Required version: 5.4.0') !== false);
     }
 
     public function testAliasedAnalyserExecution()
@@ -72,10 +73,17 @@ class FileCommandTest extends PvraBaseCommandTestBase
         $out = trim($cmdt->getDisplay(true));
 
         $this->assertTrue(substr_count($out, '5.6.0') === 3);
-        $this->assertTrue(strpos($out, 'session_status') !== false);
-        $this->assertSame(15,
-            preg_match_all("/(^[.\\s]+.+\\\"(?P<req_name>[a-zA-Z\\_]+)\\\" (?P<type>function|class).+\\d\\.\\d+\\.\\d+ in .+\\:(?P<line_num>\\d+)$)/m",
-                $out));
+        $partialExpected = [ // one item of each type/version + first and last item if list
+            'hash_equals',
+            'session_status',
+            'Transliterator',
+            'class member access requires'
+        ];
+        foreach ($partialExpected as $item) {
+            $this->assertTrue(strpos($out, $item) !== false, "Expected item {$item} not found.");
+        }
+        $this->assertSame(3, substr_count($out, 'SessionHandlerInterface'));
+        $this->assertSame(4, substr_count($out, 'JsonSerializable'));
     }
 
     public function testWithCustomMessageSourceForNodeWalkers()
@@ -86,8 +94,8 @@ class FileCommandTest extends PvraBaseCommandTestBase
             '--messageFormatSourceFile' => TEST_FILE_ROOT . 'msg_file_cmd.json',
         ])->getDisplay(true));
 
-        $this->assertTrue(substr_count($out, 'Custom msg. Requires') === 2);
-        $this->assertTrue(substr_count($out, 'Message for reason') === 18);
+        $this->assertSame(2, substr_count($out, 'Custom msg. Requires 5.4.0'));
+        $this->assertSame(18, substr_count($out, 'Message for id'));
     }
 
     public function testNameExpansionWarning()
@@ -182,7 +190,7 @@ class FileCommandTest extends PvraBaseCommandTestBase
                 $ex->getMessage());
             return;
         } catch (\Exception $ex) {
-            $this->fail('Unexpected exception with message: ' . $ex->getMessage());
+            $this->fail('Unexpected exception of type '. get_class($ex) .' with message: ' . $ex->getMessage());
         }
         $this->fail('Expected exception was not caught.');
     }
@@ -217,7 +225,8 @@ class FileCommandTest extends PvraBaseCommandTestBase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage "Pvra\Analysers\NonImplementingNodeWalker" does not implement "Pvra\AnalyserAwareInterface"
+     * @expectedExceptionMessage "Pvra\Analysers\NonImplementingNodeWalker" does not implement
+     *     "Pvra\AnalyserAwareInterface"
      */
     public function testErrorOnNonImplementingNodeWalker()
     {
