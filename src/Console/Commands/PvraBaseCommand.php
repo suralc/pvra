@@ -51,6 +51,11 @@ class PvraBaseCommand extends Command
     protected $expectedWalkers = [];
 
     /**
+     * @var bool
+     */
+    private $preferFullPath = false;
+
+    /**
      * List of analysers that are loaded if the --analyser option is not set
      *
      * @var array
@@ -79,6 +84,7 @@ class PvraBaseCommand extends Command
     protected function configure()
     {
         $this
+            ->addOption('showFullPath', 's', InputOption::VALUE_OPTIONAL, 'Always show the full path in output.', true)
             ->addOption('preventNameExpansion', 'p', InputOption::VALUE_NONE,
                 'Prevent name expansion. May increase performance but breaks name based detections in namespaces.')
             ->addOption('analyser', 'a', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
@@ -92,6 +98,9 @@ class PvraBaseCommand extends Command
         $this->addArgument('target', InputArgument::REQUIRED, 'The target of this analysis');
     }
 
+    /**
+     * @return array
+     */
     private function getDefaultAnalysersAliases()
     {
         $aliasNameMap = [];
@@ -104,6 +113,10 @@ class PvraBaseCommand extends Command
         return $aliasNameMap;
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
     private function resolveAnalyserName($name)
     {
         if (($resolved = array_search($name, self::$analyserAliasMap)) !== false) {
@@ -112,8 +125,15 @@ class PvraBaseCommand extends Command
         return in_array($name, array_keys(self::$analyserAliasMap)) ? $name : false;
     }
 
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
+        if($input->getOption('showFullPath')) {
+            $this->preferFullPath = true;
+        }
         $style = new OutputFormatterStyle('red', 'yellow', ['bold', 'blink']);
         $output->getFormatter()->setStyle('warn', $style);
         $analysers = $input->getOption('analyser');
@@ -148,6 +168,10 @@ class PvraBaseCommand extends Command
             $input instanceof InputInterface ? $input->getOption('preventNameExpansion') !== true : (bool)$preventNameExpansion);
     }
 
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @return \Pvra\Result\MessageLocator|static
+     */
     protected function createMessageLocatorInstance(InputInterface $input)
     {
         $file = $input->getOption('messageFormatSourceFile');
@@ -217,6 +241,9 @@ class PvraBaseCommand extends Command
         throw new \InvalidArgumentException(sprintf('The file "%s" is not readable or does not exist.', $filePath));
     }
 
+    /**
+     * @return bool
+     */
     protected function hasNameDependentAnalyser()
     {
         foreach ($this->expectedWalkers as $walker) {
@@ -252,5 +279,16 @@ class PvraBaseCommand extends Command
         } catch (ResultFileWriterException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         }
+    }
+
+    /**
+     * @param string $target
+     * @return string
+     */
+    protected function formatOutputPath($target) {
+        if($this->preferFullPath) {
+            return $target;
+        }
+        return \Pvra\Console\makeRelativePath(getcwd(), $target);
     }
 }

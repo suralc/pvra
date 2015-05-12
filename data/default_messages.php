@@ -42,7 +42,7 @@ return [
     R::CONST_KEYWORD_OUTSIDE_CLASS => 'The const keyword could not be used outside classes before PHP :version:',
     R::CONST_KEYWORD_DOC_SYNTAX => 'A constant value could not be defined using the doc syntax before PHP :version:',
     R::SHORT_TERNARY => 'The short ternary syntax was not available before PHP :version:',
-    R::CLOSURE_DECLARATION => 'It was not possible before PHP :version: to declare closures or anonymous functions',
+    R::CLOSURE_DECLARATION => 'Anonymous functions require PHP :version:',
     R::DYNAMIC_ACCESS_TO_STATIC => 'Static methods and properties could not be accessed dynamically before PHP :version:',
     R::LATE_STATE_BINDING_USING_STATIC => 'Late state binding was not available before PHP :version:',
     R::DIR_MAGIC_CONSTANT => 'Usage of the __DIR__ magic constant requires PHP :version:',

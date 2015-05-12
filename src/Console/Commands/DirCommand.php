@@ -24,6 +24,7 @@ use Pvra\Result\MessageFormatter;
 use Pvra\Result\Reasoning;
 use RuntimeException;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -108,7 +109,7 @@ class DirCommand extends PvraBaseCommand
         if ($input->getOption('groupBy') === self::GROUP_BY_NAME) {
             $this->renderResultCollectionByName($results, $output, $input);
         } elseif ($input->getOption('groupBy') === self::GROUP_BY_VERSION) {
-            $this->renderResultCollectionByRequiredVersion($results, $output);
+            $this->renderResultCollectionByRequiredVersion($results, $output, $input);
         } else {
             throw new \InvalidArgumentException('The value given to the groupBy option is not supported.');
         }
@@ -187,11 +188,12 @@ class DirCommand extends PvraBaseCommand
     /**
      * @param \Pvra\Result\Collection $results
      * @param \Symfony\Component\Console\Output\OutputInterface $out
+     * @param \Symfony\Component\Console\Input\InputInterface $in
      */
     protected function renderResultCollectionByRequiredVersion(
         Collection $results,
-        OutputInterface $out
-        // InputInterface $in
+        OutputInterface $out,
+        InputInterface $in
     )
     {
         $highestRequirement = $results->getHighestDemandingResult();
@@ -202,7 +204,8 @@ class DirCommand extends PvraBaseCommand
             // @codeCoverageIgnoreEnd
         }
 
-        $out->writeln('Highest required version: ' . $highestRequirement->getRequiredVersion() . ' in ' . $highestRequirement->getAnalysisTargetId() . ($results->count() > 1 ? ' and others' : ''));
+        $out->writeln('Highest required version is PHP ' . $highestRequirement->getRequiredVersion() . ' in ' . $highestRequirement->getAnalysisTargetId() . ($results->count() > 1 ? ' and others' : ''));
+        $out->writeln('');
 
         $usedVersions = [];
         /** @var AnalysisResult $result */
@@ -217,18 +220,27 @@ class DirCommand extends PvraBaseCommand
             return version_compare($b, $a);
         });
 
-        foreach ($usedVersions as $version) {
-            $out->writeln('Reasons for ' . $version);
+        $table = new Table($out);
+        $table->setHeaders(['Version', 'Message', 'Position']);
+
+        foreach ($usedVersions as $index => $version) {
             /** @var AnalysisResult $result */
             foreach ($results as $result) {
                 $selectedResults = $result->getRequirementInfo($version);
                 if (!empty($selectedResults)) {
                     foreach ($selectedResults as $reason) {
-                        $out->write("\t");
-                        $out->writeln($reason['msg']);
+                        $table->addRow([
+                            $version,
+                            $reason['msg'],
+                            $this->formatOutputPath($reason['targetId']) . ':' . $reason['line']
+                        ]);
                     }
                 }
             }
+            if (isset($usedVersions[ $index + 1 ])) { // there is a row after this one
+                $table->addRow(new TableSeparator());
+            }
         }
+        $table->render();
     }
 }

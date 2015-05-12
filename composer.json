@@ -9,7 +9,8 @@
     "psr-4": {
       "Pvra\\": "src"
     },
-    "classmap": ["src"]
+    "classmap": ["src"],
+    "files": ["src/Console/helpers.php"]
   },
   "require": {
     "php": ">=5.4",

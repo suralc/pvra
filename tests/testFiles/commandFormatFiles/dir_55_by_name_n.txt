@@ -1,5 +1,5 @@
 Highest required version: 5.5.0
-Required because D:\dev\www\apps\pvra-clean\tests\testFiles\5.5\all55.php uses the following features:
+Required because %sall55.php uses the following features:
 +---------+----------------------------------------------------------------------------------+------+
 | Version | Message                                                                          | Line |
 +---------+----------------------------------------------------------------------------------+------+

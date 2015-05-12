@@ -129,6 +129,8 @@ class AnalysisResultTest extends PHPUnit_Framework_TestCase
         $this->assertSame(50400, $r->getRequiredVersionId());
         $r->addArbitraryRequirement('5.4.1');
         $this->assertSame(50401, $r->getRequiredVersionId());
+        $r->addArbitraryRequirement('5.4.11');
+        $this->assertSame(50411, $r->getRequiredVersionId());
 
         $r = new AnalysisResult();
         $r->addArbitraryRequirement('0.5.30');
