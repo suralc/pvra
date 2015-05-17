@@ -1,31 +1,31 @@
 Highest required version is PHP 5.5.0 in %sall55.php and others
 
-+---------+----------------------------------------------------------------------------------+------------------------------------------------------------------+
-| Version | Message                                                                          | Position                                                         |
-+---------+----------------------------------------------------------------------------------+------------------------------------------------------------------+
-| 5.5.0   | Usage of the finally keyword requires PHP 5.5.0                                  | %sall55.php:10      |
-| 5.5.0   | Usage of list in foreach ValueVar statement requires PHP 5.5.0                   | %sall55.php:11      |
-| 5.5.0   | Usage of arbitrary expressions in empty statement requires PHP 5.5.0             | %sall55.php:12      |
-| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sall55.php:13      |
-| 5.5.0   | Array and string literal dereferencing requires PHP 5.5.0                        | %sall55.php:13      |
-| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sall55.php:15      |
-| 5.5.0   | Array and string literal dereferencing requires PHP 5.5.0                        | %sall55.php:15      |
-| 5.5.0   | Class name resolution via ::class requires PHP 5.5.0                             | %sall55.php:21      |
-| 5.5.0   | Usage of arbitrary expressions in empty statement requires PHP 5.5.0             | %sall55.php:31      |
-| 5.5.0   | The "IntlBreakIterator" class was introduced in PHP 5.5.0                        | %sall55.php:31      |
-| 5.5.0   | Usage of the finally keyword requires PHP 5.5.0                                  | %sfinally.php:9     |
-| 5.5.0   | Usage of the finally keyword requires PHP 5.5.0                                  | %sfinally.php:19    |
-| 5.5.0   | Usage of the finally keyword requires PHP 5.5.0                                  | %sfinally.php:25    |
-| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:6  |
-| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:7  |
-| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:8  |
-| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:10 |
-| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:11 |
-| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:13 |
-| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:14 |
-| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:17 |
-+---------+----------------------------------------------------------------------------------+------------------------------------------------------------------+
-| 5.4.0   | Usage of the short array syntax requires PHP 5.4.0                               | %sall55.php:15      |
-+---------+----------------------------------------------------------------------------------+------------------------------------------------------------------+
-| 5.3.0   | Static methods and properties could not be accessed dynamically before PHP 5.3.0 | %sall55.php:32      |
-+---------+----------------------------------------------------------------------------------+------------------------------------------------------------------+
++%S+%S+%S+
+| Version | Message%w| Position%w|
++%S+%S+%S+
+| 5.5.0   | Usage of the finally keyword requires PHP 5.5.0                                  | %sall55.php:10%w|
+| 5.5.0   | Usage of list in foreach ValueVar statement requires PHP 5.5.0                   | %sall55.php:11%w|
+| 5.5.0   | Usage of arbitrary expressions in empty statement requires PHP 5.5.0             | %sall55.php:12%w|
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sall55.php:13%w|
+| 5.5.0   | Array and string literal dereferencing requires PHP 5.5.0                        | %sall55.php:13%w|
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sall55.php:15%w|
+| 5.5.0   | Array and string literal dereferencing requires PHP 5.5.0                        | %sall55.php:15%w|
+| 5.5.0   | Class name resolution via ::class requires PHP 5.5.0                             | %sall55.php:21%w|
+| 5.5.0   | Usage of arbitrary expressions in empty statement requires PHP 5.5.0             | %sall55.php:31%w|
+| 5.5.0   | The "IntlBreakIterator" class was introduced in PHP 5.5.0                        | %sall55.php:31%w|
+| 5.5.0   | Usage of the finally keyword requires PHP 5.5.0                                  | %sfinally.php:9%w|
+| 5.5.0   | Usage of the finally keyword requires PHP 5.5.0                                  | %sfinally.php:19%w|
+| 5.5.0   | Usage of the finally keyword requires PHP 5.5.0                                  | %sfinally.php:25%w|
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:6%w|
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:7%w|
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:8%w|
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:10%w|
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:11%w|
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:13%w|
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:14%w|
+| 5.5.0   | Usage of generators requires PHP 5.5.0                                           | %sgenerators.php:17%w|
++%S+%S+%S+
+| 5.4.0   | Usage of the short array syntax requires PHP 5.4.0                               | %sall55.php:15%w|
++%S+%S+%S+
+| 5.3.0   | Static methods and properties could not be accessed dynamically before PHP 5.3.0 | %sall55.php:32%w|
++%S+%S+%S+
