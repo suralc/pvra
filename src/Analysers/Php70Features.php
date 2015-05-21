@@ -42,7 +42,7 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         } elseif ($node instanceof Node\Stmt\ClassLike) {
             if ($node instanceof Node\Stmt\Class_) {
-                if($node->isAnonymous()) {
+                if ($node->isAnonymous()) {
                     $this->handleAnonymousClass($node);
                 }
                 $this->detectAndHandlePhp4Ctor($node);
@@ -76,13 +76,22 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
     {
         if ($this->mode & self::MODE_DEPRECATION && !$cls->isAnonymous()) {
             $name = isset($cls->namespacedName) ? $cls->namespacedName->toString() : $cls->name;
+            $possibleCtorInfo = null;
             /** @var Node\Stmt\ClassMethod $method */
             foreach ($cls->getMethods() as $method) {
-                if (strcasecmp($method->name, $name) === 0) {
-                    $this->getResult()->addLimit(Reason::PHP4_CONSTRUCTOR, $method->getLine(), null,
-                        ['name' => $method->name]);
-                    break;
+                if (strcasecmp($method->name, '__construct') === 0) {
+                    return; // This will always be treated as ctor. Drop everything else
+                } elseif (strcasecmp($method->name, ltrim($name, '\\')) === 0) {
+                    $possibleCtorInfo = [
+                        Reason::PHP4_CONSTRUCTOR,
+                        $method->getLine(),
+                        null,
+                        ['name' => $method->name]
+                    ];
                 }
+            }
+            if ($possibleCtorInfo !== null) {
+                call_user_func_array([$this->getResult(), 'addLimit'], $possibleCtorInfo);
             }
         }
     }

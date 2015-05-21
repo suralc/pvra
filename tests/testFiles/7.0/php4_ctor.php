@@ -21,8 +21,31 @@ namespace {
         {
         }
     }
+
+    class Foo4
+    {
+        function Foo4()
+        {
+        }
+
+        function __construct()
+        {
+        }
+    }
+
+    class Foo5
+    {
+        function __construct()
+        {
+        }
+
+        function Foo5()
+        {
+        }
+    }
 }
 namespace Bar {
+
     class Foo4
     {
         function foo4()
