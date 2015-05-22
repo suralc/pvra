@@ -63,6 +63,7 @@ class Php53Features extends LanguageFeatureAnalyser
         $this->detectClosures($node);
         $this->detectDynamicAccessToStatic($node);
         $this->detectLateStateBinding($node);
+        $this->detectNewByReference($node);
     }
 
     /**
@@ -224,6 +225,18 @@ class Php53Features extends LanguageFeatureAnalyser
             && $node->class instanceof Node\Name && strcasecmp($node->class->toString(), 'static') === 0
         ) {
             $this->getResult()->addRequirement(Reason::LATE_STATE_BINDING_USING_STATIC, $node->getLine());
+        }
+    }
+
+    /**
+     * @param \PhpParser\Node $node
+     */
+    private function detectNewByReference(Node $node)
+    {
+        if ($this->mode & self::MODE_DEPRECATION && $node instanceof Node\Expr\AssignRef
+            && $node->expr instanceof Node\Expr\New_
+        ) {
+            $this->getResult()->addLimit(Reason::NEW_ASSIGN_BY_REF_DEP, $node->getLine());
         }
     }
 }

@@ -157,4 +157,20 @@ class Php53FeaturesTest extends BaseNodeWalkerTestCase
         $fa = new Php53Features([], $analyser);
         $this->assertSame($analyser, $fa->getOwningAnalyser());
     }
+
+    public function testNewByRefDetectionWithoutDeprMode()
+    {
+        $this->runTestsAgainstExpectation([], '5.3/new_by_ref', null,
+            Php53Features::MODE_ALL & ~Php53Features::MODE_DEPRECATION);
+    }
+
+    public function testNewByRefDetectionWithDeprMode()
+    {
+        $expected = [
+            [3, Reason::NEW_ASSIGN_BY_REF_DEP],
+            [7, Reason::NEW_ASSIGN_BY_REF_DEP],
+        ];
+
+        $this->runTestsAgainstExpectation($expected, '5.3/new_by_ref', '-5.3.0', Php53Features::MODE_DEPRECATION);
+    }
 }
