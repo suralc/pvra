@@ -54,6 +54,8 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             $this->detectAndHandleClassAliasCallToReservedName($node);
         } elseif ($node instanceof Expr\YieldFrom) {
             $this->handleYieldFrom($node);
+        } elseif ($node instanceof Expr\AssignRef && $node->expr instanceof Expr\New_) {
+            $this->handleNewAssignmentByRef($node);
         }
         $this->detectAndHandleOperatorAdditions($node);
         return null;
@@ -149,6 +151,13 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
     {
         if ($this->mode & self::MODE_ADDITION) {
             $this->getResult()->addRequirement(Reason::ANON_CLASS, $node->getLine());
+        }
+    }
+
+    private function handleNewAssignmentByRef(Expr\AssignRef $node)
+    {
+        if ($this->mode & self::MODE_REMOVAL) {
+            $this->getResult()->addLimit(Reason::NEW_ASSIGN_BY_REF_REM, $node->getLine());
         }
     }
 

@@ -86,7 +86,8 @@ abstract class Reason
         SPACESHIP_OPERATOR = 105,
         RETURN_TYPE = 106,
         YIELD_FROM = 107,
-        ANON_CLASS = 108;
+        ANON_CLASS = 108,
+        NEW_ASSIGN_BY_REF_REM = 109;
 
     /**
      * @var array|null
@@ -240,6 +241,7 @@ abstract class Reason
             self::RETURN_TYPE => '7.0.0',
             self::YIELD_FROM => '7.0.0',
             self::ANON_CLASS => '7.0.0',
+            self::NEW_ASSIGN_BY_REF_REM => '7.0.0',
         ];
     }
 

@@ -81,4 +81,5 @@ return [
     R::RETURN_TYPE => 'Return type declarations require PHP :version:',
     R::YIELD_FROM => 'Generator delegation (yield from) was not available before PHP :version:',
     R::ANON_CLASS => 'Anonymous classes require PHP :version:',
+    R::NEW_ASSIGN_BY_REF_REM => 'New assignment by reference was removed in PHP :version:',
 ];
