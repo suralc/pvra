@@ -89,7 +89,10 @@ class SelfUpdateCommand extends Command
                         $temp);
                     rewind($temp);
                     $running = Phar::running(false);
-                    @unlink($running);
+                    if (!is_writable($running)) {
+                        throw new \RuntimeException('The current process needs to be able to delete ' . $running);
+                    }
+                    unlink($running);
                     $target = fopen($running, 'w+');
                     stream_copy_to_stream($temp, $target);
                     fclose($target);
@@ -146,7 +149,7 @@ class SelfUpdateCommand extends Command
         static $comparableVersion;
         if ($comparableVersion === null) {
             $localVersion = ltrim($this->getApplication()->getVersion(), 'v');
-            preg_match("/(?P<major>[\\d]+).(?P<minor>[\\d]+).(?P<patch>[\\d]+)-(?P<commitCount>[\\d]+)-(g)?(?P<hash>[0-9a-f]{5,40})/i",
+            preg_match('/(?P<major>[\\d]+).(?P<minor>[\\d]+).(?P<patch>[\\d]+)-(?P<commitCount>[\\d]+)-(g)?(?P<hash>[0-9a-f]{5,40})/i',
                 $localVersion, $matches);
             $comparableVersion = sprintf('%d.%d.%d', $matches['major'], $matches['minor'], $matches['patch']);
             if (isset($matches['commitCount'])) {
@@ -156,6 +159,11 @@ class SelfUpdateCommand extends Command
         return $comparableVersion;
     }
 
+    /**
+     * @param array $assets
+     * @return string
+     * @throws \Exception
+     */
     private function getPharUrlFromAssetArray(array $assets)
     {
         if (!empty($assets)) {
