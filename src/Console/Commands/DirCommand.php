@@ -140,7 +140,7 @@ class DirCommand extends PvraBaseCommand
         if ($results->count() > 1) {
             $helper = $this->getHelper('question');
             $question = new ConfirmationQuestion('Continue with showing remaining ' . ($results->count() - 1) . ' results? [Y/n] ',
-                'y');
+                true);
 
             if (!$helper->ask($in, $out, $question)) {
                 return;

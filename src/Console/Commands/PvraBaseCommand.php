@@ -104,6 +104,10 @@ class PvraBaseCommand extends Command
         return $aliasNameMap;
     }
 
+    /**
+     * @param $name
+     * @return bool|string
+     */
     private function resolveAnalyserName($name)
     {
         if (($resolved = array_search($name, self::$analyserAliasMap)) !== false) {

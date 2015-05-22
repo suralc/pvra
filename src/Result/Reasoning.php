@@ -54,7 +54,7 @@ class Reasoning implements ArrayAccess, JsonSerializable
      */
     private $data;
     /**
-     * @var string
+     * @var string|false
      */
     private $version;
 

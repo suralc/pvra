@@ -88,7 +88,7 @@ class FileFinderBuilder implements \IteratorAggregate
     }
 
     /**
-     * @param callable|string $by
+     * @param string|callable $by
      * @return $this
      */
     public function sortBy($by = self::SORT_BY_NAME)

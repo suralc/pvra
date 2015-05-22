@@ -70,6 +70,10 @@ class DumpAstCommand extends Command
 
         try {
             $stmts = $parser->parse(file_get_contents($file));
+            if ($stmts === null) {
+                $output->writeln('The passed file appears to be emtpy. Ending program.');
+                return 2;
+            }
         } catch (Error $error) {
             $output->writeln('<error>' . $error->getMessage() . ' in ' . realpath($file) . '</error>');
             return 0x2;
