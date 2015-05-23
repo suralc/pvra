@@ -58,6 +58,12 @@ class Php56FeaturesTest extends BaseNodeWalkerTestCase
         $this->runTestsAgainstExpectation($expected, '5.6/all56', '5.6.0');
     }
 
+    public function testAll56WithoutModeAddition()
+    {
+        $this->runTestsAgainstExpectation([], '5.6/all56', null,
+            Php56Features::MODE_ALL & ~Php56Features::MODE_ADDITION);
+    }
+
     public function testConstantExpressionDetection()
     {
         $expected = [

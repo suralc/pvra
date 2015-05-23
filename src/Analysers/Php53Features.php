@@ -54,16 +54,20 @@ class Php53Features extends LanguageFeatureAnalyser
         if ($this->isClassDeclarationStatement($node)) {
             $this->inClass = true;
         }
-        $this->detectGotoKeywordAndJumpLabel($node);
-        $this->detectNamespaces($node);
-        $this->detectNowDoc($node);
-        $this->detectNewMagicDefinitions($node);
-        $this->detectDocFormatConstantInitializationAndConstOutsideClass($node);
-        $this->detectShortHandTernary($node);
-        $this->detectClosures($node);
-        $this->detectDynamicAccessToStatic($node);
-        $this->detectLateStateBinding($node);
-        $this->detectNewByReference($node);
+        if($this->mode & self::MODE_ADDITION) {
+            $this->detectGotoKeywordAndJumpLabel($node);
+            $this->detectNamespaces($node);
+            $this->detectNowDoc($node);
+            $this->detectNewMagicDefinitions($node);
+            $this->detectDocFormatConstantInitializationAndConstOutsideClass($node);
+            $this->detectShortHandTernary($node);
+            $this->detectClosures($node);
+            $this->detectDynamicAccessToStatic($node);
+            $this->detectLateStateBinding($node);
+        }
+        if($this->mode & self::MODE_DEPRECATION) {
+            $this->detectNewByReference($node);
+        }
     }
 
     /**
@@ -233,9 +237,7 @@ class Php53Features extends LanguageFeatureAnalyser
      */
     private function detectNewByReference(Node $node)
     {
-        if ($this->mode & self::MODE_DEPRECATION && $node instanceof Node\Expr\AssignRef
-            && $node->expr instanceof Node\Expr\New_
-        ) {
+        if ($node instanceof Node\Expr\AssignRef && $node->expr instanceof Node\Expr\New_) {
             $this->getResult()->addLimit(Reason::NEW_ASSIGN_BY_REF_DEP, $node->getLine());
         }
     }

@@ -3,8 +3,8 @@ namespace Pvra\tests\Analysers;
 
 
 use Pvra\Analysers\Php53Features;
-use Pvra\Result\Reason as R;
 use Pvra\Result\Reason;
+use Pvra\Result\Reason as R;
 use Pvra\StringAnalyser;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
@@ -149,6 +149,12 @@ class Php53FeaturesTest extends BaseNodeWalkerTestCase
         ];
 
         $this->runTestsAgainstExpectation($expected, '5.3/all53', '5.3.0');
+    }
+
+    public function testAll53WithoutModeAddition()
+    {
+        $this->runTestsAgainstExpectation([], '5.3/all53', null,
+            Php53Features::MODE_ALL & ~Php53Features::MODE_ADDITION);
     }
 
     public function testBaseConstructorAnalyserInjection()

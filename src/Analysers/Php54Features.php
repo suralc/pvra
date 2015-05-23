@@ -53,15 +53,17 @@ class Php54Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             $this->inClosureLevel++;
         }
 
-        $this->handleTraitFeatures($node);
-        $this->handleFunctionDereferencing($node);
-        $this->handleCallableType($node);
-        $this->handleInstantClassMemberAccess($node);
-        $this->handleThisInClosure($node);
-        $this->handleBinaryNumberDeclaration($node);
-        $this->handleShortArrayDeclaration($node);
-        $this->handleStaticCallByExpressionSyntax($node);
-        $this->detectShortEchoSyntax($node);
+        if ($this->mode & self::MODE_ADDITION) {
+            $this->handleTraitFeatures($node);
+            $this->handleFunctionDereferencing($node);
+            $this->handleCallableType($node);
+            $this->handleInstantClassMemberAccess($node);
+            $this->handleThisInClosure($node);
+            $this->handleBinaryNumberDeclaration($node);
+            $this->handleShortArrayDeclaration($node);
+            $this->handleStaticCallByExpressionSyntax($node);
+            $this->detectShortEchoSyntax($node);
+        }
     }
 
     /**

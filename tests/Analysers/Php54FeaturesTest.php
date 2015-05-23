@@ -57,6 +57,12 @@ class Php54FeaturesTest extends BaseNodeWalkerTestCase
         $this->runTestsAgainstExpectation($expected, '5.4/all54', '5.4.0');
     }
 
+    public function testAll54WithoutModeAddition()
+    {
+        $this->runTestsAgainstExpectation([], '5.4/all54', null,
+            Php54Features::MODE_ALL & ~Php54Features::MODE_ADDITION);
+    }
+
     public function testShortEchoOpenDetection()
     {
         $result = $this->runInstanceFromScratch('5.4/short_echo_tags', Php54Features::MODE_ALL);

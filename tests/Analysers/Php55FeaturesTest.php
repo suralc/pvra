@@ -3,6 +3,7 @@
 namespace Pvra\tests\Analysers;
 
 
+use Pvra\Analysers\Php55Features;
 use Pvra\Result\Reason as R;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
@@ -35,6 +36,12 @@ class Php55FeaturesTest extends BaseNodeWalkerTestCase
         ];
 
         $this->runTestsAgainstExpectation($expected, '5.5/finally', '5.5.0');
+    }
+
+    public function testAll55WithoutModeAddition()
+    {
+        $this->runTestsAgainstExpectation([], '5.5/all55', null,
+            Php55Features::MODE_ALL & ~Php55Features::MODE_ADDITION);
     }
 
     public function testMixedDetection()

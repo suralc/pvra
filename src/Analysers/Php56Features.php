@@ -40,60 +40,63 @@ class Php56Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\Function_
-            || $node instanceof Node\Stmt\ClassMethod
-            || $node instanceof Node\Expr\Closure
-        ) {
-            if (!empty($node->params)) {
-                foreach ($node->params as $param) {
-                    if ($param->variadic) {
+        if ($this->mode & self::MODE_ADDITION) {
+            if ($node instanceof Node\Stmt\Function_
+                || $node instanceof Node\Stmt\ClassMethod
+                || $node instanceof Node\Expr\Closure
+            ) {
+                if (!empty($node->params)) {
+                    foreach ($node->params as $param) {
+                        if ($param->variadic) {
+                            $this->getResult()->addRequirement(
+                                Reason::VARIADIC_ARGUMENT,
+                                $param->getLine()
+                            );
+                        }
+                    }
+                }
+            } elseif ($node instanceof Node\Expr\FuncCall
+                || $node instanceof Node\Expr\MethodCall
+                || $node instanceof Node\Expr\StaticCall
+            ) {
+                if (!empty($node->args)) {
+                    foreach ($node->args as $arg) {
+                        if ($arg->unpack === true) {
+                            $this->getResult()->addRequirement(
+                                Reason::ARGUMENT_UNPACKING,
+                                $arg->getLine()
+                            );
+                        }
+                    }
+                }
+
+            } elseif ($node instanceof Node\Stmt\Const_ || $node instanceof Node\Stmt\ClassConst) {
+                foreach ($node->consts as $const) {
+                    if (!($const->value instanceof Node\Scalar)
+                        && !($const->value instanceof Node\Expr\ClassConstFetch || $const->value instanceof Node\Expr\ConstFetch)
+                    ) {
                         $this->getResult()->addRequirement(
-                            Reason::VARIADIC_ARGUMENT,
-                            $param->getLine()
+                            Reason::CONSTANT_SCALAR_EXPRESSION,
+                            $const->getLine()
                         );
                     }
                 }
-            }
-        } elseif ($node instanceof Node\Expr\FuncCall
-            || $node instanceof Node\Expr\MethodCall
-            || $node instanceof Node\Expr\StaticCall
-        ) {
-            if (!empty($node->args)) {
-                foreach ($node->args as $arg) {
-                    if ($arg->unpack === true) {
-                        $this->getResult()->addRequirement(
-                            Reason::ARGUMENT_UNPACKING,
-                            $arg->getLine()
-                        );
-                    }
+            } elseif ($node instanceof Node\Expr\AssignOp\Pow || $node instanceof Node\Expr\BinaryOp\Pow) {
+                $this->getResult()->addRequirement(
+                    Reason::POW_OPERATOR,
+                    $node->getLine()
+                );
+            } elseif ($node instanceof Node\Stmt\Use_) {
+                $cat = null;
+                if ($node->type === Node\Stmt\Use_::TYPE_CONSTANT) {
+                    $cat = Reason::CONSTANT_IMPORT_USE;
+                } elseif ($node->type === Node\Stmt\Use_::TYPE_FUNCTION) {
+                    $cat = Reason::FUNCTION_IMPORT_USE;
                 }
-            }
 
-        } elseif ($node instanceof Node\Stmt\Const_ || $node instanceof Node\Stmt\ClassConst) {
-            foreach ($node->consts as $const) {
-                if (!($const->value instanceof Node\Scalar)
-                    && !($const->value instanceof Node\Expr\ClassConstFetch || $const->value instanceof Node\Expr\ConstFetch)) {
-                    $this->getResult()->addRequirement(
-                        Reason::CONSTANT_SCALAR_EXPRESSION,
-                        $const->getLine()
-                    );
+                if ($cat !== null) {
+                    $this->getResult()->addRequirement($cat, $node->getLine());
                 }
-            }
-        } elseif ($node instanceof Node\Expr\AssignOp\Pow || $node instanceof Node\Expr\BinaryOp\Pow) {
-            $this->getResult()->addRequirement(
-                Reason::POW_OPERATOR,
-                $node->getLine()
-            );
-        } elseif ($node instanceof Node\Stmt\Use_) {
-            $cat = null;
-            if ($node->type === Node\Stmt\Use_::TYPE_CONSTANT) {
-                $cat = Reason::CONSTANT_IMPORT_USE;
-            } elseif ($node->type === Node\Stmt\Use_::TYPE_FUNCTION) {
-                $cat = Reason::FUNCTION_IMPORT_USE;
-            }
-
-            if ($cat !== null) {
-                $this->getResult()->addRequirement($cat, $node->getLine());
             }
         }
     }
