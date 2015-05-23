@@ -27,6 +27,16 @@ use Pvra\Result\Reason;
 /**
  * Class Php70Features
  *
+ * Supported detections:
+ * * Usage of reserved names (including class_alias function)
+ * * Detection of PHP4 constructors
+ * * Anon. Classes
+ * * Return type declarations
+ * * Detection of yield from <expr>
+ * * Removal of new assignment by ref ($x =& new foo)
+ * * Null coalesce operator
+ * * Spaceship/combined comparison operator
+ *
  * @package Pvra\Analysers
  */
 class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInterface
@@ -35,6 +45,9 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
     private static $reservedNames = ['string', 'int', 'float', 'bool', 'null', 'false', 'true'];
     private static $softReservedNames = ['object', 'resource', 'mixed', 'numeric'];
 
+    /**
+     * @inheritdoc
+     */
     public function enterNode(Node $node)
     {
         if ($node instanceof Node\Stmt\Use_) {

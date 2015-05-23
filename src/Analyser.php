@@ -89,6 +89,9 @@ abstract class Analyser
     /**
      * Check whether a NodeTraverser has been attached to the current Analyser
      *
+     * Will return true if any traverser has previously been set. Will also return true if the
+     * default/fallback traverser has been attached.
+     *
      * @return bool Returns true when Analyser::$nodeTraverser has been initialized.
      */
     public function hasNodeTraverserAttached()
@@ -97,7 +100,10 @@ abstract class Analyser
     }
 
     /**
-     * Initiate this instance using the default Traverser delivered by PHP-Parser
+     * Initiate this instance using a default Traverser
+     *
+     * This method will attach the NodeTraverser shipped within the PHP-Parser dependency as default traverser.
+     * Usually `PhpParser\NodeTraverser`
      */
     private function initDefaultTraverser()
     {
@@ -146,8 +152,9 @@ abstract class Analyser
      * @return $this Returns the current instance to allow chained calls.
      * @see attachRequirementVisitor() Method containing implementation
      */
-    public function attachRequirementVisitors($visitors) {
-        foreach($visitors as $visitor) {
+    public function attachRequirementVisitors(array $visitors)
+    {
+        foreach ($visitors as $visitor) {
             $this->attachRequirementVisitor($visitor);
         }
 
@@ -261,7 +268,14 @@ abstract class Analyser
     protected abstract function createAnalysisTargetId();
 
     /**
+     * Get the currently injected parser or create a default instance
+     *
+     * This method will always return a valid `Parser` instance, even if none was injected.
+     * In that case the return value of `initDefaultParser` will be returned
+     *
      * @return Parser
+     * @see setParser() Inject a custom `Parser` object
+     * @see initDefaultParser() Create and set a fallback `Parser` object
      */
     public function getParser()
     {
@@ -272,6 +286,10 @@ abstract class Analyser
     }
 
     /**
+     * Inject a custom `Parser` object
+     *
+     * Calling this method will override any previously injected parser object.
+     *
      * @param Parser $parser
      */
     protected function setParser(Parser $parser)
@@ -280,6 +298,11 @@ abstract class Analyser
     }
 
     /**
+     * Returns whether a parser was attached.
+     *
+     * Will return true if any parserhas previously been set. Will also return true if the
+     * default/fallback parser has been attached.
+     *
      * @return bool
      */
     public function hasParserAttached()
@@ -288,7 +311,10 @@ abstract class Analyser
     }
 
     /**
+     * Set a fallback parser as parser for this Analyser instance
      *
+     * The used `Parser` object will use the `ExtendedEmulativeLexer`.
+     * @see ExtendedEmulativeLexer Used lexer
      */
     private function initDefaultParser()
     {

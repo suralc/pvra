@@ -33,7 +33,11 @@ interface ResultFormatter
     public function __construct(array $options = []);
 
     /**
-     * @param \Pvra\Result\Collection $collection
+     * Generate a string representation of a `Result\Collection`
+     *
+     * Generates the textual representation of a `Result\Collection` returns it. The used
+     * collection will not be changed.
+     * @param \Pvra\Result\Collection $collection The used collection
      * @return string
      */
     public function makePrintable(ResultCollection $collection);
