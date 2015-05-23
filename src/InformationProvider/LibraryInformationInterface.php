@@ -25,31 +25,52 @@ namespace Pvra\InformationProvider;
 interface LibraryInformationInterface
 {
     /**
-     * @return array
+     * Get the array representation of the instance
+     *
+     * @return array Array representation of the data stored in this object
      */
     public function toArray();
 
     /**
+     * Merge another instance into this instance
+     *
      * @param \Pvra\InformationProvider\LibraryInformationInterface $info
      * @return $this
      */
     public function mergeWith(LibraryInformationInterface $info);
 
     /**
-     * @param string $name
-     * @return array
+     * Retrieve information about a given function
+     *
+     * @param string $name Function name
+     * @return array An array in the format:
+     * <code>
+     * ['addition' => Version|null, 'deprecation' => Version|null, 'removal' => Version|null]
+     * </code>
+     * @see getInfo() Underlying function for array generation
      */
     public function getFunctionInfo($name);
 
     /**
-     * @param string $name
-     * @return array
+     * Retrieve information about a given class
+     *
+     * @param string $name Class name
+     * @return array An array in the format:
+     * <code>
+     * ['addition' => Version|null, 'deprecation' => Version|null, 'removal' => Version|null]
+     * </code>
+     * @see getInfo() Underlying function for array generation
      */
     public function getClassInfo($name);
 
     /**
-     * @param string $name
-     * @return array
+     * Retrieve information about a given constant
+     *
+     * @param string $name Constant name
+     * @return array An array in the format:
+     * <code>
+     * ['addition' => Version|null, 'deprecation' => Version|null, 'removal' => Version|null]
+     * </code>
      */
     public function getConstantInfo($name);
 }
