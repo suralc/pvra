@@ -33,6 +33,7 @@
             <file>src/Console/Commands/PvraBaseCommand.php</file>
             <file>src/Console/Commands/FileCommand.php</file>
             <file>src/Console/Commands/DirCommand.php</file>
+            <file>src/Console/helpers.php</file>
         </whitelist>
     </filter>
 </phpunit>
