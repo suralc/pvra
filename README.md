@@ -41,16 +41,16 @@ trait Gamma
 
 __CLI:__ 
 
-`php bin/pvra analyse:file ..path/to/file.php`
+`php bin/pvra analyse:file ./data/test.php --preferRelativePaths`
 
 __OUTPUT:__
 
 ```
 Required version: 5.6.0
 Version 5.4.0
-        Reason: Usage of the trait keyword requires PHP 5.4 in .../data/test.php:3.
-        Reason: The callable typehint requires PHP 5.4 in .../data/test.php:5.
-        Reason: Function dereferencing requires PHP 5.4 in .../data/test.php:6.
+        Reason: Usage of the trait keyword requires PHP 5.4 in ./data/test.php:3.
+        Reason: The callable typehint requires PHP 5.4 in ./data/test.php:5.
+        Reason: Function dereferencing requires PHP 5.4 in ./data/test.php:6.
 Version 5.6.0
         Reason: Variadic arguments require PHP 5.6 in .../data/test.php:5.
 ```
@@ -60,7 +60,8 @@ Version 5.6.0
 | Name 	| Short  name 	| Description 	|
 |---------------------------	|-------------	|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | --preventNameExpansion 	| -p 	| Prevent the expansion of names. This may improve performance. Some detections might not work. 	|
-| --analyser 	| -a 	| Name of an analyser to attach. If this option is not set, all default analysers will be loaded. Possible values include: * php-5.4 * php-5.5 * php-5.6 * lib-php 	|
+| --preferRelativePaths   | -s  | Only show relative paths in the console output. Fall back to absolute paths if no simple relative path can be built |
+| --analyser 	| -a 	| Name of an analyser to attach. If this option is not set, all default analysers will be loaded. Possible values are: php-5.4, php-5.5, php-5.6, php-7.0, lib-php |
 | --libraryDataSource 	| -l 	| Path to a file containing library information. Defaults to the file shipped with the library/phar.	|
 | --messageFormatSourceFile 	| -m 	| Path to a file containing message templates. Defaults to the file shipped with the library/phar.	|
 | --saveFormat 	|  	| Format of the export. Only json is supported at this time. 	|
