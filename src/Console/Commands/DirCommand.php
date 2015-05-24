@@ -20,6 +20,7 @@ namespace Pvra\Console\Commands;
 use Pvra\AnalysisResult;
 use Pvra\Console\Services\FileFinderBuilder;
 use Pvra\Result\Collection;
+use Pvra\Result\MessageFormatter;
 use Pvra\Result\Reasoning;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -95,6 +96,11 @@ class DirCommand extends PvraBaseCommand
         foreach ($files as $file) {
             if ($file->isFile()) {
                 $req = $this->createFileAnalyserInstance($file->getRealPath());
+                $req->setResultInstance(
+                    (new AnalysisResult())->setMsgFormatter(
+                        new MessageFormatter($this->createMessageLocatorInstance($input), false)
+                    )
+                );
                 $req->attachRequirementVisitors($this->createNodeWalkerInstances($input->getOption('libraryDataSource')));
                 $results->add($req->run());
             }
@@ -128,9 +134,12 @@ class DirCommand extends PvraBaseCommand
 
         if ($highestRequirement->count() !== 0) {
             foreach ($highestRequirement->getRequirements() as $version => $reasons) {
+                /** @var Reasoning $reason */
                 foreach ($reasons as $reason) {
                     $out->write("\t");
-                    $out->write($reason['msg'], true);
+                    $out->write($reason['msg']);
+                    $out->write(sprintf(' in %s:%d', $this->formatOutputPath($reason->get('targetId')),
+                        $reason->get('line')), true);
                 }
             }
         } else {
@@ -153,7 +162,7 @@ class DirCommand extends PvraBaseCommand
                 }
                 $out->write(implode('', [
                     'The file "',
-                    $result->getAnalysisTargetId(),
+                    $this->formatOutputPath($result->getAnalysisTargetId()),
                     '" requires PHP ',
                     $result->getRequiredVersion(),
                     ' for the following reasons:',
@@ -162,7 +171,9 @@ class DirCommand extends PvraBaseCommand
                 /** @var $reason Reasoning */
                 foreach ($result->getRequirementIterator() as $reason) {
                     $out->write("\t");
-                    $out->write($reason['msg'], true);
+                    $out->write($reason['msg']);
+                    $out->write(sprintf(' in %s:%d', $this->formatOutputPath($reason->get('targetId')),
+                        $reason->get('line')), true);
                 }
             }
         }
@@ -209,7 +220,9 @@ class DirCommand extends PvraBaseCommand
                 if (!empty($selectedResults)) {
                     foreach ($selectedResults as $reason) {
                         $out->write("\t");
-                        $out->writeln($reason['msg']);
+                        $out->write($reason['msg']);
+                        $out->write(sprintf(' in %s:%d', $this->formatOutputPath($reason->get('targetId')),
+                            $reason->get('line')), true);
                     }
                 }
             }

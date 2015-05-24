@@ -53,7 +53,7 @@ class PvraBaseCommand extends Command
     /**
      * @var bool
      */
-    private $preferFullPath = false;
+    private $preferRelativePaths = false;
 
     /**
      * List of analysers that are loaded if the --analyser option is not set
@@ -84,7 +84,7 @@ class PvraBaseCommand extends Command
     protected function configure()
     {
         $this
-            ->addOption('showFullPath', 's', InputOption::VALUE_OPTIONAL, 'Always show the full path in output.', true)
+            ->addOption('preferRelativePaths', 's', InputOption::VALUE_NONE, 'Prefer relative paths in the output')
             ->addOption('preventNameExpansion', 'p', InputOption::VALUE_NONE,
                 'Prevent name expansion. May increase performance but breaks name based detections in namespaces.')
             ->addOption('analyser', 'a', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
@@ -131,8 +131,8 @@ class PvraBaseCommand extends Command
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        if($input->getOption('showFullPath')) {
-            $this->preferFullPath = true;
+        if ($input->getOption('preferRelativePaths')) {
+            $this->preferRelativePaths = true;
         }
         $style = new OutputFormatterStyle('red', 'yellow', ['bold', 'blink']);
         $output->getFormatter()->setStyle('warn', $style);
@@ -286,8 +286,9 @@ class PvraBaseCommand extends Command
      * @param string $target
      * @return string
      */
-    protected function formatOutputPath($target) {
-        if($this->preferFullPath) {
+    protected function formatOutputPath($target)
+    {
+        if (!$this->preferRelativePaths) {
             return $target;
         }
         return \Pvra\Console\makeRelativePath(getcwd(), $target);

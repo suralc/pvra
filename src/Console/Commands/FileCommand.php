@@ -20,6 +20,7 @@ namespace Pvra\Console\Commands;
 use Pvra\AnalysisResult;
 use Pvra\Result\Collection as ResultCollection;
 use Pvra\Result\MessageFormatter;
+use Pvra\Result\Reasoning;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -50,7 +51,7 @@ class FileCommand extends PvraBaseCommand
                 $file));
         }
 
-        $output->writeln(sprintf('<info>Running analysis for "%s"</info>', realpath($file)));
+        $output->writeln(sprintf('<info>Running analysis for "%s"</info>', $this->formatOutputPath(realpath($file))));
 
 
         if ($input->getOption('preventNameExpansion') && $this->hasNameDependentAnalyser()) {
@@ -64,7 +65,7 @@ class FileCommand extends PvraBaseCommand
 
         $result = (new AnalysisResult())
             ->setMsgFormatter(new MessageFormatter(
-                $this->createMessageLocatorInstance($input)
+                $this->createMessageLocatorInstance($input), false
             ));
 
         $req->setResultInstance($result);
@@ -75,10 +76,13 @@ class FileCommand extends PvraBaseCommand
 
         foreach (array_reverse($result->getRequirements()) as $version => $reasons) {
             $output->writeln('Version ' . $version);
+            /** @var Reasoning $reason */
             foreach ($reasons as $reason) {
                 $output->write("\t");
                 $output->write('Reason: ');
-                $output->write($reason['msg'], true);
+                $output->write($reason['msg']);
+                $output->write(sprintf(' in %s:%d', $this->formatOutputPath($reason->get('targetId')),
+                    $reason->get('line')), true);
             }
         }
         if ($file = $input->getOption('saveAsFile')) {
