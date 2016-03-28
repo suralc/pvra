@@ -65,7 +65,7 @@ class PvraBaseCommand extends Command
         'Php54Features',
         'Php55Features',
         'Php56Features',
-//        'Php70Features', // do not default-enable 7.0 yet as support is only partial
+        'Php70Features',
         'LibraryChanges',
     ];
 
