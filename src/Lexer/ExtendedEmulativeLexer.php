@@ -18,7 +18,7 @@ namespace Pvra\Lexer;
 
 
 use PhpParser\Lexer\Emulative;
-use PhpParser\Parser;
+use PhpParser\Parser\Tokens;
 
 /**
  * Class ExtendedEmulativeLexer
@@ -62,19 +62,19 @@ class ExtendedEmulativeLexer extends Emulative
     {
         $tokenId = parent::getNextToken($value, $startAttributes, $endAttributes);
 
-        if ($tokenId === Parser::T_LNUMBER || $tokenId === Parser::T_DNUMBER) {
+        if ($tokenId === Tokens::T_LNUMBER || $tokenId === Tokens::T_DNUMBER) {
             // could also use $startAttributes, doesn't really matter here
             $endAttributes['originalValue'] = $value;
-        } elseif ($tokenId === Parser::T_START_HEREDOC) {
+        } elseif ($tokenId === Tokens::T_START_HEREDOC) {
             $startAttributes['isDocSyntax'] = true;
             if (substr($this->code, $startAttributes['startFilePos'] + 3, 1) === '\'') {
                 $startAttributes['isNowDoc'] = true;
             } else {
                 $startAttributes['isHereDoc'] = true;
             }
-        } elseif ($tokenId === Parser::T_ARRAY) {
+        } elseif ($tokenId === Tokens::T_ARRAY) {
             $startAttributes['traditionalArray'] = true;
-        } elseif ($tokenId === Parser::T_ECHO) {
+        } elseif ($tokenId === Tokens::T_ECHO) {
             if (substr($this->code, $startAttributes['startFilePos'], 3) === '<?=') {
                 $startAttributes['isShortEchoTag'] = true;
             }

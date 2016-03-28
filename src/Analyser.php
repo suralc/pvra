@@ -21,6 +21,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
 use PhpParser\Parser;
+use PhpParser\ParserFactory;
 use Pvra\Lexer\ExtendedEmulativeLexer;
 
 /**
@@ -318,6 +319,8 @@ abstract class Analyser
      */
     private function initDefaultParser()
     {
-        $this->setParser(new Parser(ExtendedEmulativeLexer::createDefaultInstance()));
+        $this->setParser((new ParserFactory())
+            ->create(ParserFactory::PREFER_PHP7, ExtendedEmulativeLexer::createDefaultInstance())
+        );
     }
 }

@@ -86,7 +86,7 @@ class Php56FeaturesTest extends BaseNodeWalkerTestCase
         $analyser = new Php56Features();
         $analyser->setOwningAnalyser($analyserMock);
         $analyser->enterNode(new ClassConst([
-            new Node\Const_('STR', new LNumber()),
+            new Node\Const_('STR', new LNumber(0)),
             new Node\Const_('DEF', new ConstFetch(new Name('abc'))),
             new Node\Const_('CONSTANTS', new ClassConstFetch(new Name('abc'), 'myConst'))
         ]));

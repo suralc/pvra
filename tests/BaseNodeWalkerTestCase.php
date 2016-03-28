@@ -7,6 +7,7 @@ use Mockery as m;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
+use PhpParser\ParserFactory;
 use Pvra\AnalyserAwareInterface;
 use Pvra\Analysers\LanguageFeatureAnalyser;
 use Pvra\AnalysisResult;
@@ -100,7 +101,7 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
     {
         $file = TEST_FILE_ROOT . '/' . $file . '.php';
 
-        $parser = new Parser(ExtendedEmulativeLexer::createDefaultInstance());
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7, ExtendedEmulativeLexer::createDefaultInstance());
 
         $stmts = $parser->parse(file_get_contents($file));
 
