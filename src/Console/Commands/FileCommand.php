@@ -94,10 +94,7 @@ class FileCommand extends PvraBaseCommand
                     $file));
             } else {
                 $output->writeln(sprintf('<info>Generating output file at %s</info>', $file));
-                $outData = [];
-                foreach ($result->getIterator() as $r) {
-                    $outData[] = $r;
-                }
+                $outData = iterator_to_array($result);
                 switch ($input->getOption('saveFormat')) {
                     case 'json':
                         file_put_contents($file, json_encode($outData));

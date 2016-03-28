@@ -86,19 +86,19 @@ class DirCommand extends PvraBaseCommand
             $output->writeln($files->count() . ' files to process.');
             /** @var \SplFileInfo $file */
             foreach ($files as $file) {
-                $output->writeln($file->getRealPath());
+                $output->writeln($this->formatOutputPath($file->getRealPath()));
             }
             return;
         }
 
 
         $results = new Collection();
-        $msgLocator = new MessageFormatter($this->createMessageLocatorInstance($input), false);
+        $messageFormatter = new MessageFormatter($this->createMessageLocatorInstance($input), false);
 
         /** @var \SplFileInfo $file */
         foreach ($files as $file) {
             if ($file->isFile()) {
-                $result = (new AnalysisResult())->setMsgFormatter($msgLocator);
+                $result = (new AnalysisResult())->setMsgFormatter($messageFormatter);
                 $req = $this->createFileAnalyserInstance($file->getPathname());
                 $req->setResultInstance($result);
                 $req->attachRequirementVisitors($this->createNodeWalkerInstances($input->getOption('libraryDataSource')));
