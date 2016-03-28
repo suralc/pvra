@@ -27,6 +27,16 @@ use Pvra\Result\Reason;
 /**
  * Class Php70Features
  *
+ * Supported detections:
+ * * Usage of reserved names (including class_alias function)
+ * * Detection of PHP4 constructors
+ * * Anon. Classes
+ * * Return type declarations
+ * * Detection of yield from <expr>
+ * * Removal of new assignment by ref ($x =& new foo)
+ * * Null coalesce operator
+ * * Spaceship/combined comparison operator
+ *
  * @package Pvra\Analysers
  */
 class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInterface
@@ -35,6 +45,9 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
     private static $reservedNames = ['string', 'int', 'float', 'bool', 'null', 'false', 'true'];
     private static $softReservedNames = ['object', 'resource', 'mixed', 'numeric'];
 
+    /**
+     * @inheritdoc
+     */
     public function enterNode(Node $node)
     {
         if ($node instanceof Node\Stmt\Use_) {
@@ -42,7 +55,7 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         } elseif ($node instanceof Node\Stmt\ClassLike) {
             if ($node instanceof Node\Stmt\Class_) {
-                if($node->isAnonymous()) {
+                if ($node->isAnonymous()) {
                     $this->handleAnonymousClass($node);
                 }
                 $this->detectAndHandlePhp4Ctor($node);
@@ -54,6 +67,8 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             $this->detectAndHandleClassAliasCallToReservedName($node);
         } elseif ($node instanceof Expr\YieldFrom) {
             $this->handleYieldFrom($node);
+        } elseif ($node instanceof Expr\AssignRef && $node->expr instanceof Expr\New_) {
+            $this->handleNewAssignmentByRef($node);
         }
         $this->detectAndHandleOperatorAdditions($node);
         return null;
@@ -76,13 +91,22 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
     {
         if ($this->mode & self::MODE_DEPRECATION && !$cls->isAnonymous()) {
             $name = isset($cls->namespacedName) ? $cls->namespacedName->toString() : $cls->name;
+            $possibleCtorInfo = null;
             /** @var Node\Stmt\ClassMethod $method */
             foreach ($cls->getMethods() as $method) {
-                if (strcasecmp($method->name, $name) === 0) {
-                    $this->getResult()->addLimit(Reason::PHP4_CONSTRUCTOR, $method->getLine(), null,
-                        ['name' => $method->name]);
-                    break;
+                if (strcasecmp($method->name, '__construct') === 0) {
+                    return; // This will always be treated as ctor. Drop everything else
+                } elseif (strcasecmp($method->name, ltrim($name, '\\')) === 0) {
+                    $possibleCtorInfo = [
+                        Reason::PHP4_CONSTRUCTOR,
+                        $method->getLine(),
+                        null,
+                        ['name' => $method->name]
+                    ];
                 }
+            }
+            if ($possibleCtorInfo !== null) {
+                call_user_func_array([$this->getResult(), 'addLimit'], $possibleCtorInfo);
             }
         }
     }
@@ -140,6 +164,13 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
     {
         if ($this->mode & self::MODE_ADDITION) {
             $this->getResult()->addRequirement(Reason::ANON_CLASS, $node->getLine());
+        }
+    }
+
+    private function handleNewAssignmentByRef(Expr\AssignRef $node)
+    {
+        if ($this->mode & self::MODE_REMOVAL) {
+            $this->getResult()->addLimit(Reason::NEW_ASSIGN_BY_REF_REM, $node->getLine());
         }
     }
 

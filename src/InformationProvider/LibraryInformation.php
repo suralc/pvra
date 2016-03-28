@@ -56,6 +56,7 @@ class LibraryInformation implements LibraryInformationInterface
      *
      * The filepath given to this method has to represent a php file returning
      * an array with a valid structure.
+     *
      * @param string $source Valid path to data source
      * @return static
      */
@@ -71,6 +72,8 @@ class LibraryInformation implements LibraryInformationInterface
 
 
     /**
+     * Create a new instance using the supplied data
+     *
      * @param array $data Array representation of data to represent
      */
     public function __construct(array $data = [])
@@ -92,8 +95,7 @@ class LibraryInformation implements LibraryInformationInterface
     }
 
     /**
-     * Get the array representation of the instance
-     * @return array Array representation of the data stored in this object
+     * @inheritdoc
      */
     public function toArray()
     {
@@ -105,9 +107,7 @@ class LibraryInformation implements LibraryInformationInterface
     }
 
     /**
-     * Merge another instance into this instance
-     * @param \Pvra\InformationProvider\LibraryInformationInterface $info
-     * @return $this
+     * @inheritdoc
      */
     public function mergeWith(LibraryInformationInterface $info)
     {
@@ -119,44 +119,44 @@ class LibraryInformation implements LibraryInformationInterface
     }
 
     /**
-     * @param string $name Function name
-     * @return array
+     * @inheritdoc
      */
     public function getFunctionInfo($name)
     {
-        $name = ltrim($name, '\\');
-        return [
-            'addition' => isset($this->additions['function'][ $name ]) ? $this->additions['function'][ $name ] : null,
-            'deprecation' => isset($this->deprecations['function'][ $name ]) ? $this->deprecations['function'][ $name ] : null,
-            'removal' => isset($this->removals['function'][ $name ]) ? $this->removals['function'][ $name ] : null,
-        ];
+        return $this->getInfo($name, 'function');
     }
 
     /**
-     * @param string $name Class name
-     * @return array
+     * @inheritdoc
      */
     public function getClassInfo($name)
     {
-        $name = ltrim($name, '\\');
-        return [
-            'addition' => isset($this->additions['class'][ $name ]) ? $this->additions['class'][ $name ] : null,
-            'deprecation' => isset($this->deprecations['class'][ $name ]) ? $this->deprecations['class'][ $name ] : null,
-            'removal' => isset($this->removals['class'][ $name ]) ? $this->removals['class'][ $name ] : null,
-        ];
+        return $this->getInfo($name, 'class');
     }
 
     /**
-     * @param string $name Constant name
-     * @return array
+     * @inheritdoc
      */
     public function getConstantInfo($name)
     {
+        return $this->getInfo($name, 'constant');
+    }
+
+    /**
+     * @param string $name Name of the item
+     * @param string $type Type of the item (function, class or constant
+     * @return array An array in the format:
+     * <code>
+     * ['addition' => Version|null, 'deprecation' => Version|null, 'removal' => Version|null]
+     * </code>
+     */
+    private function getInfo($name, $type)
+    {
         $name = ltrim($name, '\\');
         return [
-            'addition' => isset($this->additions['constant'][ $name ]) ? $this->additions['constant'][ $name ] : null,
-            'deprecation' => isset($this->deprecations['constant'][ $name ]) ? $this->deprecations['constant'][ $name ] : null,
-            'removal' => isset($this->removals['constant'][ $name ]) ? $this->removals['constant'][ $name ] : null,
+            'addition' => isset($this->additions[ $type ][ $name ]) ? $this->additions[ $type ][ $name ] : null,
+            'deprecation' => isset($this->deprecations[ $type ][ $name ]) ? $this->deprecations[ $type ][ $name ] : null,
+            'removal' => isset($this->removals[ $type ][ $name ]) ? $this->removals[ $type ][ $name ] : null,
         ];
     }
 }

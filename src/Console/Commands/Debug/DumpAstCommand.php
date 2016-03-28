@@ -36,6 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DumpAstCommand extends Command
 {
+    const DEFAULT_XDEBUG_DEPTH = -1;
     /**
      * @inheritdoc
      */
@@ -51,7 +52,7 @@ class DumpAstCommand extends Command
             ->addOption('preventNameExpansion', 'p', InputOption::VALUE_NONE,
                 'Prevent name expansion. May increase performance but sacrifices some functionality')
             ->addOption('xdebugMaxExtensiveDepth', 'd', InputOption::VALUE_REQUIRED,
-                'Rendering depth of extensive output. Only used if xdebug is loaded', 150);
+                'Rendering depth of extensive output. Only used if xdebug is loaded', self::DEFAULT_XDEBUG_DEPTH);
     }
 
     /**
@@ -70,6 +71,10 @@ class DumpAstCommand extends Command
 
         try {
             $stmts = $parser->parse(file_get_contents($file));
+            if ($stmts === null) {
+                $output->writeln('The passed file appears to be emtpy. Ending program.');
+                return 2;
+            }
         } catch (Error $error) {
             $output->writeln('<error>' . $error->getMessage() . ' in ' . realpath($file) . '</error>');
             return 0x2;
@@ -82,6 +87,7 @@ class DumpAstCommand extends Command
         }
 
         if ($input->getOption('extensive')) {
+            $depth = self::DEFAULT_XDEBUG_DEPTH;
             if ($hasXdebug = extension_loaded('xdebug')) {
                 $depth = ini_get('xdebug.var_display_max_depth');
                 ini_set('xdebug.var_display_max_depth', intval($input->getOption('xdebugMaxExtensiveDepth')));

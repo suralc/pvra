@@ -37,6 +37,19 @@ class FileCommandTest extends PvraBaseCommandTestBase
         $this->assertTrue(strpos($out, 'Required version: 5.4.0') !== false);
     }
 
+    public function testSimpleExecuteWithSingleMatchingNodeWalkerAndPreferredRelativePath()
+    {
+        $out = trim($this->execute([
+            'target' => TEST_FILE_ROOT . '5.4/all54.php',
+            '--analyser' => ['Php54Features'],
+            // output format should not differ
+            '--preferRelativePaths' => true,
+        ])->getDisplay(true));
+
+        $this->assertTrue(strpos($out, 'PHP 5.6.0') === false);
+        $this->assertSame(19, preg_match_all('/(^\\s+[\\w]+: [\\w\\\\s$ ]+\\d\\.\\d+\\.\\d+ in .+:\\d+$)/m', $out));
+    }
+
     public function testAliasedAnalyserExecution()
     {
         $out = trim($this->execute([

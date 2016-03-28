@@ -21,6 +21,7 @@ use Pvra\AnalysisResult;
 use Pvra\Result\Collection as ResultCollection;
 use Pvra\Result\MessageFormatter;
 use Symfony\Component\Console\Helper\Table;
+use Pvra\Result\Reasoning;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -51,7 +52,7 @@ class FileCommand extends PvraBaseCommand
                 $file));
         }
 
-        $output->writeln(sprintf('<info>Running analysis for "%s"</info>', realpath($file)));
+        $output->writeln(sprintf('<info>Running analysis for "%s"</info>', $this->formatOutputPath(realpath($file))));
 
 
         if ($input->getOption('preventNameExpansion') && $this->hasNameDependentAnalyser()) {

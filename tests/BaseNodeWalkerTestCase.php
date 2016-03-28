@@ -7,10 +7,12 @@ use Mockery as m;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
+use PhpParser\ParserFactory;
 use Pvra\AnalyserAwareInterface;
 use Pvra\Analysers\LanguageFeatureAnalyser;
 use Pvra\AnalysisResult;
 use Pvra\Lexer\ExtendedEmulativeLexer;
+use Pvra\Result\Reason;
 
 /**
  * Class BaseNodeWalkerTestCase
@@ -84,7 +86,10 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
                 $this->fail('Unexpected end of iterator.');
             }
             $this->assertSame($expectation[0], $resultIt->current()['line']);
-            $this->assertSame($expectation[1], $resultIt->current()['reason']);
+            $this->assertSame($expectation[1], $resultIt->current()['reason'],
+                sprintf('Expected reason %d(%s) got %d(%s)', $expectation[1],
+                    Reason::getReasonNameFromValue($expectation[1]), $resultIt->current()['reason'],
+                    Reason::getReasonNameFromValue($resultIt->current()['reason'])));
             if (isset($expectation[2])) {
                 $this->assertArraySubset($expectation[2], $resultIt->current()['data']);
             }
@@ -96,7 +101,7 @@ class BaseNodeWalkerTestCase extends \PHPUnit_Framework_TestCase
     {
         $file = TEST_FILE_ROOT . '/' . $file . '.php';
 
-        $parser = new Parser(ExtendedEmulativeLexer::createDefaultInstance());
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7, ExtendedEmulativeLexer::createDefaultInstance());
 
         $stmts = $parser->parse(file_get_contents($file));
 

@@ -42,45 +42,47 @@ class Php55Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof Node\Expr\Yield_) {
-            $this->getResult()->addRequirement(
-                Reason::GENERATOR_DEFINITION,
-                $node->getLine()
-            );
-        } elseif ($node instanceof Node\Stmt\TryCatch && $node->finallyStmts !== null) {
-            $this->getResult()->addRequirement(
-                Reason::TRY_CATCH_FINALLY,
-                $node->getLine()
-            );
-        } elseif ($node instanceof Node\Stmt\Foreach_ && $node->valueVar instanceof Node\Expr\List_) {
-            $this->getResult()->addRequirement(
-                Reason::LIST_IN_FOREACH,
-                $node->getLine()
-            );
-        } elseif ($node instanceof Node\Expr\Empty_
-            && !($node->expr instanceof Node\Expr\Variable
-                || $node->expr instanceof Node\Expr\PropertyFetch
-                || $node->expr instanceof Node\Expr\StaticPropertyFetch
-                || $node->expr instanceof Node\Expr\ArrayDimFetch)
-        ) {
-            $this->getResult()->addRequirement(
-                Reason::EXPR_IN_EMPTY,
-                $node->getLine()
-            );
-        } elseif ($node instanceof Node\Expr\ArrayDimFetch
-            && ($node->var instanceof Node\Expr\Array_
-                || $node->var instanceof Node\Scalar\String_
-            )
-        ) {
-            $this->getResult()->addRequirement(
-                Reason::ARRAY_OR_STRING_DEREFERENCING,
-                $node->getLine()
-            );
-        } elseif ($node instanceof Node\Expr\ClassConstFetch && strcasecmp($node->name, 'class') === 0) {
-            $this->getResult()->addRequirement(
-                Reason::CLASS_NAME_RESOLUTION,
-                $node->getLine()
-            );
+        if ($this->mode & self::MODE_ADDITION) {
+            if ($node instanceof Node\Expr\Yield_) {
+                $this->getResult()->addRequirement(
+                    Reason::GENERATOR_DEFINITION,
+                    $node->getLine()
+                );
+            } elseif ($node instanceof Node\Stmt\TryCatch && $node->finallyStmts !== null) {
+                $this->getResult()->addRequirement(
+                    Reason::TRY_CATCH_FINALLY,
+                    $node->getLine()
+                );
+            } elseif ($node instanceof Node\Stmt\Foreach_ && $node->valueVar instanceof Node\Expr\List_) {
+                $this->getResult()->addRequirement(
+                    Reason::LIST_IN_FOREACH,
+                    $node->getLine()
+                );
+            } elseif ($node instanceof Node\Expr\Empty_
+                && !($node->expr instanceof Node\Expr\Variable
+                    || $node->expr instanceof Node\Expr\PropertyFetch
+                    || $node->expr instanceof Node\Expr\StaticPropertyFetch
+                    || $node->expr instanceof Node\Expr\ArrayDimFetch)
+            ) {
+                $this->getResult()->addRequirement(
+                    Reason::EXPR_IN_EMPTY,
+                    $node->getLine()
+                );
+            } elseif ($node instanceof Node\Expr\ArrayDimFetch
+                && ($node->var instanceof Node\Expr\Array_
+                    || $node->var instanceof Node\Scalar\String_
+                )
+            ) {
+                $this->getResult()->addRequirement(
+                    Reason::ARRAY_OR_STRING_DEREFERENCING,
+                    $node->getLine()
+                );
+            } elseif ($node instanceof Node\Expr\ClassConstFetch && strcasecmp($node->name, 'class') === 0) {
+                $this->getResult()->addRequirement(
+                    Reason::CLASS_NAME_RESOLUTION,
+                    $node->getLine()
+                );
+            }
         }
     }
 }

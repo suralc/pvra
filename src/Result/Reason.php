@@ -51,6 +51,7 @@ abstract class Reason
         LATE_STATE_BINDING_USING_STATIC = 83,
         NAMESPACE_SEPARATOR = 84,
         DIR_MAGIC_CONSTANT = 85,
+        NEW_ASSIGN_BY_REF_DEP = 86,
         // 5.4
         TRAIT_DEFINITION = 10,
         TRAIT_USE = 11,
@@ -85,7 +86,8 @@ abstract class Reason
         SPACESHIP_OPERATOR = 105,
         RETURN_TYPE = 106,
         YIELD_FROM = 107,
-        ANON_CLASS = 108;
+        ANON_CLASS = 108,
+        NEW_ASSIGN_BY_REF_REM = 109;
 
     /**
      * @var array|null
@@ -203,6 +205,7 @@ abstract class Reason
             self::DYNAMIC_ACCESS_TO_STATIC => '5.3.0',
             self::LATE_STATE_BINDING_USING_STATIC => '5.3.0',
             self::DIR_MAGIC_CONSTANT => '5.3.0',
+            self::NEW_ASSIGN_BY_REF_DEP => '5.3.0',
             // 5.4
             self::TRAIT_DEFINITION => '5.4.0',
             self::TRAIT_USE => '5.4.0',
@@ -238,6 +241,7 @@ abstract class Reason
             self::RETURN_TYPE => '7.0.0',
             self::YIELD_FROM => '7.0.0',
             self::ANON_CLASS => '7.0.0',
+            self::NEW_ASSIGN_BY_REF_REM => '7.0.0',
         ];
     }
 

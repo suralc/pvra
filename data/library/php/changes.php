@@ -44,6 +44,9 @@ return [
             'IntlRuleBasedBreakIterator' => '5.5.0',
             'IntlCodePointBreakIterator' => '5.5.0',
             // 5.6
+            // 7.0
+            'ReflectionGenerator' => '7.0.0',
+            'IntlChar' => '7.0.0',
         ],
         'function' => [
             // 5.3
@@ -150,6 +153,15 @@ return [
             'pg_socket' => '5.6.0',
             'session_abort' => '5.6.0',
             'session_reset' => '5.6.0',
+            // 7.0
+            'gmp_random_seed' => '7.0.0',
+            'preg_replace_callback_array' => '7.0.0',
+            'intdiv' => '7.0.0',
+            'error_clear_last' => '7.0.0',
+            'deflate_init' => '7.0.0',
+            'deflate_add' => '7.0.0',
+            'inflate_init' => '7.0.0',
+            'inflate_add' => '7.0.0',
         ],
         'constant' => [
             // 5.3
@@ -230,6 +242,14 @@ return [
             'SIG_UNBLOCK' => '5.3.0',
             'TRAP_BRKPT' => '5.3.0',
             'TRAP_TRACE' => '5.3.0',
+            // 7.0
+            'PHP_INT_MIN' => '7.0.0',
+            'ZLIB_NO_FLUSH' => '7.0.0',
+            'ZLIB_PARTIAL_FLUSH' => '7.0.0',
+            'ZLIB_SYNC_FLUSH' => '7.0.0',
+            'ZLIB_FULL_FLUSH' => '7.0.0',
+            'ZLIB_BLOCK' => '7.0.0',
+            'ZLIB_FINISH' => '7.0.0',
         ]
     ],
     'removals' => [
@@ -245,6 +265,83 @@ return [
             'php_egg_logo_guid' => '5.5.0',
             'php_real_logo_guid' => '5.5.0',
             'zend_logo_guid' => '5.5.0',
+            // <editor-fold desc="7.0">
+            'set_magic_quotes_runtime' => '7.0.0',
+            'magic_quotes_runtime' => '7.0.0',
+            'set_socket_blocking' => '7.0.0',
+            // <editor-fold desc="ext-ereg">
+            'ereg_replace' => '7.0.0',
+            'ereg' => '7.0.0',
+            'eregi_replace' => '7.0.0',
+            'eregi' => '7.0.0',
+            'split' => '7.0.0',
+            'spliti' => '7.0.0',
+            'sql_regcase' => '7.0.0',
+            // </editor-fold>
+            // <editor-fold desc="ext-mysql">
+            'mysql_affected_rows' => '7.0.0',
+            'mysql_client_encoding' => '7.0.0',
+            'mysql_close' => '7.0.0',
+            'mysql_connect' => '7.0.0',
+            'mysql_create_db' => '7.0.0',
+            'mysql_data_seek' => '7.0.0',
+            'mysql_db_name' => '7.0.0',
+            'mysql_db_query' => '7.0.0',
+            'mysql_drop_db' => '7.0.0',
+            'mysql_errno' => '7.0.0',
+            'mysql_error' => '7.0.0',
+            'mysql_escape_string' => '7.0.0',
+            'mysql_fetch_array' => '7.0.0',
+            'mysql_fetch_assoc' => '7.0.0',
+            'mysql_fetch_field' => '7.0.0',
+            'mysql_fetch_lengths' => '7.0.0',
+            'mysql_fetch_object' => '7.0.0',
+            'mysql_fetch_row' => '7.0.0',
+            'mysql_field_flags' => '7.0.0',
+            'mysql_field_len' => '7.0.0',
+            'mysql_field_name' => '7.0.0',
+            'mysql_field_seek' => '7.0.0',
+            'mysql_field_type' => '7.0.0',
+            'mysql_free_result' => '7.0.0',
+            'mysql_get_client_info' => '7.0.0',
+            'mysql_get_host_info' => '7.0.0',
+            'mysql_get_proto_info' => '7.0.0',
+            'mysql_get_server_info' => '7.0.0',
+            'mysql_info' => '7.0.0',
+            'mysql_insert_id' => '7.0.0',
+            'mysql_list_dbs' => '7.0.0',
+            'mysql_list_fields' => '7.0.0',
+            'mysql_list_processes' => '7.0.0',
+            'mysql_list_tables' => '7.0.0',
+            'mysql_num_fields' => '7.0.0',
+            'mysql_num_rows' => '7.0.0',
+            'mysql_pconnect' => '7.0.0',
+            'mysql_ping' => '7.0.0',
+            'mysql_query' => '7.0.0',
+            'mysql_real_escape_string' => '7.0.0',
+            'mysql_result' => '7.0.0',
+            'mysql_select_db' => '7.0.0',
+            'mysql_set_charset' => '7.0.0',
+            'mysql_stat' => '7.0.0',
+            'mysql_tablename' => '7.0.0',
+            'mysql_thread_id' => '7.0.0',
+            'mysql_unbuffered_query' => '7.0.0',
+            // </editor-fold>
+            // </editor-fold>
         ]
+    ],
+    'deprecations' => [
+        'function' => [
+            // 5.3
+            'ereg_replace' => '5.3.0',
+            'ereg' => '5.3.0',
+            'eregi_replace' => '5.3.0',
+            'eregi' => '5.3.0',
+            'split' => '5.3.0',
+            'spliti' => '5.3.0',
+            'sql_regcase' => '5.3.0',
+            // 5.5
+            'mysql_connect' => '5.5.0'
+        ],
     ],
 ];

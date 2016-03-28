@@ -17,7 +17,7 @@ if ((!$loader = includeIfExists(__DIR__ . '/../vendor/autoload.php'))
 
 
 use Pvra\Console\Application;
-use Pvra\Console\Commands\CheckUpdateCommand;
+use Pvra\Console\Commands\SelfUpdateCommand;
 use Pvra\Console\Commands\Debug\DumpAstCommand;
 use Pvra\Console\Commands\Debug\DumpTokenListCommand;
 use Pvra\Console\Commands\DirCommand;
@@ -26,7 +26,7 @@ use Pvra\Console\Commands\FileCommand;
 $application = new Application('Php Version Requirement Analyser', '@package_version@');
 $application->add(new FileCommand());
 $application->add(new DirCommand());
-$application->add(new CheckUpdateCommand());
+$application->add(new SelfUpdateCommand());
 $application->add(new DumpAstCommand());
 $application->add(new DumpTokenListCommand());
 $application->run();

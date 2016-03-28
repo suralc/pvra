@@ -3,8 +3,8 @@ namespace Pvra\tests\Analysers;
 
 
 use Pvra\Analysers\Php53Features;
-use Pvra\Result\Reason as R;
 use Pvra\Result\Reason;
+use Pvra\Result\Reason as R;
 use Pvra\StringAnalyser;
 use Pvra\tests\BaseNodeWalkerTestCase;
 
@@ -151,10 +151,32 @@ class Php53FeaturesTest extends BaseNodeWalkerTestCase
         $this->runTestsAgainstExpectation($expected, '5.3/all53', '5.3.0');
     }
 
+    public function testAll53WithoutModeAddition()
+    {
+        $this->runTestsAgainstExpectation([], '5.3/all53', null,
+            Php53Features::MODE_ALL & ~Php53Features::MODE_ADDITION);
+    }
+
     public function testBaseConstructorAnalyserInjection()
     {
         $analyser = new StringAnalyser('<?php echo "hello world";');
         $fa = new Php53Features([], $analyser);
         $this->assertSame($analyser, $fa->getOwningAnalyser());
+    }
+
+    public function testNewByRefDetectionWithoutDeprMode()
+    {
+        $this->runTestsAgainstExpectation([], '5.3/new_by_ref', null,
+            Php53Features::MODE_ALL & ~Php53Features::MODE_DEPRECATION);
+    }
+
+    public function testNewByRefDetectionWithDeprMode()
+    {
+        $expected = [
+            [3, Reason::NEW_ASSIGN_BY_REF_DEP],
+            [7, Reason::NEW_ASSIGN_BY_REF_DEP],
+        ];
+
+        $this->runTestsAgainstExpectation($expected, '5.3/new_by_ref', '-5.3.0', Php53Features::MODE_DEPRECATION);
     }
 }

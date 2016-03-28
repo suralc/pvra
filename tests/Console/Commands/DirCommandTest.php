@@ -57,6 +57,23 @@ FORMAT;
         $this->assertStringMatchesFormatFile(COMMAND_FORMAT_FILE_ROOT . 'dir_55_by_name.txt', $out);
     }
 
+    public function testDirGroupByNameWithInteractiveYAndRelativePaths()
+    {
+        /** @var DirCommand $command */
+        list($commandTester, $command) = $this->getBareInstances();
+        $helper = $command->getHelper('question');
+        $helper->setInputStream($this->getInputStream('yes\\n'));
+        $commandTester->execute([
+            'target' => TEST_FILE_ROOT . '/5.5',
+            '--groupBy' => DirCommand::GROUP_BY_NAME,
+            // outputformat should not differ
+            '--preferRelativePaths' => true,
+        ]);
+        $out = trim($commandTester->getDisplay(true));
+
+        $this->assertStringMatchesFormatFile(COMMAND_FORMAT_FILE_ROOT . 'dir_55_by_name.txt', $out);
+    }
+
     public function testDirGroupByNameWithInteractiveN()
     {
         /** @var DirCommand $command */

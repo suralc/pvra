@@ -152,7 +152,7 @@ class DirCommand extends PvraBaseCommand
         if ($results->count() > 1) {
             $helper = $this->getHelper('question');
             $question = new ConfirmationQuestion('Continue with showing remaining ' . ($results->count() - 1) . ' results? [Y/n] ',
-                'y');
+                true);
 
             if (!$helper->ask($in, $out, $question)) {
                 return;
@@ -165,7 +165,7 @@ class DirCommand extends PvraBaseCommand
                 }
                 $out->write(implode('', [
                     'The file "',
-                    $result->getAnalysisTargetId(),
+                    $this->formatOutputPath($result->getAnalysisTargetId()),
                     '" requires PHP ',
                     $result->getRequiredVersion(),
                     ' for the following reasons:',

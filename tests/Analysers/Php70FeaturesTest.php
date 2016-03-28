@@ -142,6 +142,22 @@ class Php70FeaturesTest extends BaseNodeWalkerTestCase
         $this->runTestsAgainstExpectation($expected, '7.0/anon_class', '7.0.0', Php70Features::MODE_ADDITION);
     }
 
+    public function testNewAssignmentRemovalWithoutRemovalMode()
+    {
+        $this->runTestsAgainstExpectation([], '5.3/new_by_ref', null,
+            Php70Features::MODE_ALL & ~Php70Features::MODE_REMOVAL);
+    }
+
+    public function testNewAssignmentRemoval()
+    {
+        $expected = [
+            [3, R::NEW_ASSIGN_BY_REF_REM],
+            [7, R::NEW_ASSIGN_BY_REF_REM],
+        ];
+
+        $this->runTestsAgainstExpectation($expected, '5.3/new_by_ref', '-7.0.0');
+    }
+
     public function testAll70RemovalAndDeprecation()
     {
         $expected = [
