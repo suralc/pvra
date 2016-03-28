@@ -56,6 +56,6 @@ class StringAnalyser extends Analyser
      */
     protected function createAnalysisTargetId()
     {
-        return md5($this->string);
+        return '<string>';
     }
 }

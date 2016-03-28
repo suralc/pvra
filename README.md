@@ -41,18 +41,21 @@ trait Gamma
 
 __CLI:__ 
 
-`php bin/pvra analyse:file ./data/test.php --preferRelativePaths`
+`php pvra.phar analyse:file ./tests/readme_example.php --preferRelativePaths`
 
 __OUTPUT:__
 
 ```
+Running analysis for "./tests/readme_example.php"
 Required version: 5.6.0
-Version 5.4.0
-        Reason: Usage of the trait keyword requires PHP 5.4 in ./data/test.php:3.
-        Reason: The callable typehint requires PHP 5.4 in ./data/test.php:5.
-        Reason: Function dereferencing requires PHP 5.4 in ./data/test.php:6.
-Version 5.6.0
-        Reason: Variadic arguments require PHP 5.6 in .../data/test.php:5.
++---------+-----------------------------------------------+------+
+| Version | Message                                       | Line |
++---------+-----------------------------------------------+------+
+| 5.6.0   | Variadic arguments require PHP 5.6.0          | 5    |
+| 5.4.0   | Usage of the trait keyword requires PHP 5.4.0 | 3    |
+| 5.4.0   | The callable typehint requires PHP 5.4.0      | 5    |
+| 5.4.0   | Function dereferencing requires PHP 5.4.0     | 6    |
++---------+-----------------------------------------------+------+
 ```
 
 #### CLI - Options
@@ -94,7 +97,7 @@ $result = $analyser->run();
 echo $result->getRequiredVersion(), PHP_EOL; // 5.4.0
 
 foreach($result as $r) {
-    echo $r['msg'], 'on line ', $r['line'], PHP_EOL; 
+    echo $r['msg'], PHP_EOL; // Outputs: Usage of the trait keyword requires PHP 5.4.0 in <string>:1
 }
 ```
 

@@ -76,7 +76,7 @@ class StringAnalyserTest extends \PHPUnit_Framework_TestCase
         $a = new StringAnalyser(self::DEFAULT_PLACEHOLDER_INPUT);
         $a->setResultInstance($result);
         $this->assertFalse($a->isAnalyserRun());
-        $this->assertSame(md5(self::DEFAULT_PLACEHOLDER_INPUT), $result->getAnalysisTargetId());
+        $this->assertSame('<string>', $result->getAnalysisTargetId());
         $this->assertSame($result, $a->getResult());
         $result->seal();
         $this->assertTrue($a->isAnalyserRun());
