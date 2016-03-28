@@ -46,8 +46,10 @@ class FileCommandTest extends PvraBaseCommandTestBase
             '--preferRelativePaths' => true,
         ])->getDisplay(true));
 
-        $this->assertTrue(strpos($out, 'PHP 5.6.0') === false);
-        $this->assertSame(19, preg_match_all('/(^\\s+[\\w]+: [\\w\\\\s$ ]+\\d\\.\\d+\\.\\d+ in .+:\\d+$)/m', $out));
+        $this->assertTrue(strpos($out, 'PHP 5.6') === false);
+        $this->assertTrue(strpos($out, 'PHP 5.3') === false);
+        $this->assertTrue(stripos($out, 'Running analysis for "./tests/testFiles/5.4/all54.php"') !== false);
+        $this->assertSame(20, preg_match_all('/^(\\|\\s*5\\.4\\.0\\s*\\|[\\s\\w$:{}()]*5\\.4\\.0\\s*\\|\\s\\d+\\s*\\|)$/m', $out));
     }
 
     public function testAliasedAnalyserExecution()
