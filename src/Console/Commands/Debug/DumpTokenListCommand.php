@@ -18,6 +18,7 @@
 namespace Pvra\Console\Commands\Debug;
 
 
+use PhpParser\Parser\Tokens;
 use Pvra\Lexer\ExtendedEmulativeLexer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -84,7 +85,7 @@ class DumpTokenListCommand extends Command
     {
         static $resolved;
         if ($resolved === null) {
-            $refl = new \ReflectionClass('\PhpParser\Parser');
+            $refl = new \ReflectionClass(Tokens::class);
             $consts = $refl->getConstants();
             $resolved = array_flip($consts);
         }

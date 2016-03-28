@@ -17,9 +17,11 @@
 namespace Pvra\Console\Commands;
 
 
+use Pvra\AnalyserAwareInterface;
 use Pvra\Analysers\LanguageFeatureAnalyser;
 use Pvra\FileAnalyser;
 use Pvra\InformationProvider\LibraryInformation;
+use Pvra\InformationProvider\LibraryInformationAwareInterface;
 use Pvra\Result\Collection;
 use Pvra\Result\CollectionWriter;
 use Pvra\Result\Exceptions\ResultFileWriterException;
@@ -145,9 +147,9 @@ class PvraBaseCommand extends Command
             }
             if (!class_exists($analyserName)) {
                 throw new \InvalidArgumentException(sprintf('"%s" is not a class.', $analyser));
-            } elseif (!in_array('Pvra\\AnalyserAwareInterface', class_implements($analyserName))) {
+            } elseif (!in_array(AnalyserAwareInterface::class, class_implements($analyserName))) {
                 throw new \InvalidArgumentException(sprintf('"%s" does not implement "%s"', $analyserName,
-                    'Pvra\\AnalyserAwareInterface'));
+                    AnalyserAwareInterface::class));
             }
             $this->expectedWalkers[] = $analyserName;
         }
@@ -196,7 +198,7 @@ class PvraBaseCommand extends Command
     ) {
         $analysers = [];
         foreach ($this->expectedWalkers as $walker) {
-            if (in_array('Pvra\InformationProvider\LibraryInformationAwareInterface', class_implements($walker))) {
+            if (in_array(LibraryInformationAwareInterface::class, class_implements($walker))) {
                 if (is_string($librarySourceOption)) {
                     $info = new LibraryInformation($this->getArrayFromFile($librarySourceOption)[1]);
                 } else {
@@ -244,7 +246,7 @@ class PvraBaseCommand extends Command
     protected function hasNameDependentAnalyser()
     {
         foreach ($this->expectedWalkers as $walker) {
-            if (in_array('Pvra\InformationProvider\LibraryInformationAwareInterface',
+            if (in_array(LibraryInformationAwareInterface::class,
                 class_implements($walker))) {
                 return true;
             }
