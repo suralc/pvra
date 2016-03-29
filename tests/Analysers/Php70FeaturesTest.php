@@ -170,13 +170,31 @@ class Php70FeaturesTest extends BaseNodeWalkerTestCase
             Php70Features::MODE_REMOVAL | Php70Features::MODE_DEPRECATION);
     }
 
+    public function testDeclareStrictTypesWarning()
+    {
+        $expected = [
+            [7, R::STRICT_TYPE_DECLARE],
+            [8, R::STRICT_TYPE_DECLARE],
+            [9, R::STRICT_TYPE_DECLARE],
+            [10, R::STRICT_TYPE_DECLARE],
+        ];
+
+        $this->runTestsAgainstExpectation($expected, '7.0/declare_types', '7.0.0', Php70Features::MODE_ADDITION);
+    }
+
+    public function testDeclareStrictTyoesWithoutAdditionFlag()
+    {
+        $this->runTestsAgainstExpectation([], '7.0/declare_types', '5.2.0',
+            Php70Features::MODE_ALL & ~Php70Features::MODE_ADDITION);
+    }
+
     public function nonDeprecationFlagProvider()
     {
         return [
             [Php70Features::MODE_ADDITION],
             [Php70Features::MODE_REMOVAL],
             [Php70Features::MODE_ALL & ~Php70Features::MODE_DEPRECATION],
-            [Php70Features::MODE_REMOVAL | Php70Features::MODE_ADDITION]
+            [Php70Features::MODE_REMOVAL | Php70Features::MODE_ADDITION],
         ];
     }
 
@@ -186,7 +204,7 @@ class Php70FeaturesTest extends BaseNodeWalkerTestCase
             [Php70Features::MODE_ADDITION],
             [Php70Features::MODE_DEPRECATION],
             [Php70Features::MODE_ALL & ~Php70Features::MODE_REMOVAL],
-            [Php70Features::MODE_DEPRECATION | Php70Features::MODE_ADDITION]
+            [Php70Features::MODE_DEPRECATION | Php70Features::MODE_ADDITION],
         ];
     }
 }

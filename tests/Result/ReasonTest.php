@@ -30,14 +30,14 @@ class ReasonTest extends \PHPUnit_Framework_TestCase
     {
         // test regeneration
         $this->assertSame(R::getReasonNames(), $names = R::getReasonNames());
-        $this->assertCount(59, $names);
+        $this->assertCount(60, $names);
         $this->assertArrayHasKey('UNKNOWN', $names);
         R::clear();
         $this->assertSame($names, R::getReasonNames());
         $this->assertSame(R::UNKNOWN, $names['UNKNOWN']);
         $this->assertSame(R::TRAIT_USE, $names['TRAIT_USE']);
         // ensure that each constant value is unique
-        $this->assertCount(count(array_unique($names)),  $names);
+        $this->assertCount(count(array_unique($names)), $names);
     }
 
     public function testGetVersionFromReason()

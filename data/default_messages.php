@@ -82,4 +82,5 @@ return [
     R::YIELD_FROM => 'Generator delegation (yield from) was not available before PHP :version:',
     R::ANON_CLASS => 'Anonymous classes require PHP :version:',
     R::NEW_ASSIGN_BY_REF_REM => 'New assignment by reference was removed in PHP :version:',
+    R::STRICT_TYPE_DECLARE => '\'strict_types\' declaration will trigger a warning before PHP :version:',
 ];

@@ -87,7 +87,8 @@ abstract class Reason
         RETURN_TYPE = 106,
         YIELD_FROM = 107,
         ANON_CLASS = 108,
-        NEW_ASSIGN_BY_REF_REM = 109;
+        NEW_ASSIGN_BY_REF_REM = 109,
+        STRICT_TYPE_DECLARE = 110;
 
     /**
      * @var array|null
@@ -242,6 +243,7 @@ abstract class Reason
             self::YIELD_FROM => '7.0.0',
             self::ANON_CLASS => '7.0.0',
             self::NEW_ASSIGN_BY_REF_REM => '7.0.0',
+            self::STRICT_TYPE_DECLARE => '7.0.0',
         ];
     }
 

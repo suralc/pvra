@@ -70,6 +70,8 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             $this->handleYieldFrom($node);
         } elseif ($node instanceof Expr\AssignRef && $node->expr instanceof Expr\New_) {
             $this->handleNewAssignmentByRef($node);
+        } elseif ($node instanceof Node\Stmt\Declare_) {
+            $this->handleDeclare($node);
         }
         $this->detectAndHandleOperatorAdditions($node);
 
@@ -200,5 +202,16 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
     {
         return in_array(strtolower(basename(str_replace('\\', '/', $name))),
             array_map('strtolower', self::$reservedNames));
+    }
+
+    private function handleDeclare(Node\Stmt\Declare_ $node)
+    {
+        if ($this->mode & self::MODE_ADDITION) {
+            foreach ($node->declares as $declare) {
+                if ($declare->key === 'strict_types') {
+                    $this->getResult()->addRequirement(Reason::STRICT_TYPE_DECLARE, $declare->getLine());
+                }
+            }
+        }
     }
 }
