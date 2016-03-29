@@ -163,14 +163,14 @@ class DirCommand extends PvraBaseCommand
                 if ($result->getAnalysisTargetId() === $highestRequirement->getAnalysisTargetId()) {
                     continue;
                 }
-                $out->write(implode('', [
+                $out->write([
                     'The file "',
                     $this->formatOutputPath($result->getAnalysisTargetId()),
                     '" requires PHP ',
                     $result->getRequiredVersion(),
                     ' for the following reasons:',
-                    "\n"
-                ]));
+                    PHP_EOL,
+                ]);
                 $tableData = [];
                 /** @var $reason Reasoning */
                 foreach ($result->getRequirementIterator() as $reason) {
@@ -194,8 +194,7 @@ class DirCommand extends PvraBaseCommand
         Collection $results,
         OutputInterface $out,
         InputInterface $in
-    )
-    {
+    ) {
         $highestRequirement = $results->getHighestDemandingResult();
 
         if ($highestRequirement === null) {
@@ -204,7 +203,14 @@ class DirCommand extends PvraBaseCommand
             // @codeCoverageIgnoreEnd
         }
 
-        $out->writeln('Highest required version is PHP ' . $highestRequirement->getRequiredVersion() . ' in ' . $highestRequirement->getAnalysisTargetId() . ($results->count() > 1 ? ' and others' : ''));
+        $out->write([
+            'Highest required version is PHP ',
+            $highestRequirement->getRequiredVersion(),
+            ' in ',
+            $highestRequirement->getAnalysisTargetId(),
+            $results->count() > 1 ? ' and others' : '',
+            PHP_EOL,
+        ]);
         $out->writeln('');
 
         $usedVersions = [];
@@ -232,7 +238,7 @@ class DirCommand extends PvraBaseCommand
                         $table->addRow([
                             $version,
                             $reason['msg'],
-                            $this->formatOutputPath($reason['targetId']) . ':' . $reason['line']
+                            $this->formatOutputPath($reason['targetId']) . ':' . $reason['line'],
                         ]);
                     }
                 }

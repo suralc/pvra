@@ -54,7 +54,7 @@ class Php53Features extends LanguageFeatureAnalyser
         if ($this->isClassDeclarationStatement($node)) {
             $this->inClass = true;
         }
-        if($this->mode & self::MODE_ADDITION) {
+        if ($this->mode & self::MODE_ADDITION) {
             $this->detectGotoKeywordAndJumpLabel($node);
             $this->detectNamespaces($node);
             $this->detectNowDoc($node);
@@ -65,7 +65,7 @@ class Php53Features extends LanguageFeatureAnalyser
             $this->detectDynamicAccessToStatic($node);
             $this->detectLateStateBinding($node);
         }
-        if($this->mode & self::MODE_DEPRECATION) {
+        if ($this->mode & self::MODE_DEPRECATION) {
             $this->detectNewByReference($node);
         }
     }

@@ -52,6 +52,7 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
     {
         if ($node instanceof Node\Stmt\Use_) {
             $this->detectAndHandleReservedNamesInUse($node);
+
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         } elseif ($node instanceof Node\Stmt\ClassLike) {
             if ($node instanceof Node\Stmt\Class_) {
@@ -71,6 +72,7 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
             $this->handleNewAssignmentByRef($node);
         }
         $this->detectAndHandleOperatorAdditions($node);
+
         return null;
     }
 
@@ -101,7 +103,7 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
                         Reason::PHP4_CONSTRUCTOR,
                         $method->getLine(),
                         null,
-                        ['name' => $method->name]
+                        ['name' => $method->name],
                     ];
                 }
             }
@@ -177,7 +179,7 @@ class Php70Features extends LanguageFeatureAnalyser implements AnalyserAwareInte
     private function handleClassName($name, $line = -1)
     {
         if ($name !== null) {
-            $baseName = baseName(str_replace('\\', '/', $name));
+            $baseName = basename(str_replace('\\', '/', $name));
             if ($this->mode & self::MODE_DEPRECATION && $this->isNameSoftReserved($name)) {
                 $this->getResult()->addLimit(Reason::SOFT_RESERVED_NAME, $line, null,
                     ['fqn' => $name, 'class' => $baseName]);

@@ -87,6 +87,7 @@ class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInt
             }
             $this->information = LibraryInformation::createWithDefaults();
         }
+
         return $this->information;
     }
 
@@ -98,6 +99,7 @@ class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInt
      * will be used as second element.
      * If the first parameter is not an instance of `PhpParser\Node\Name` it will be casted to string and returned alongside
      * with the value given for the second parameter as line
+     *
      * @param \PhpParser\Node\Name|string $name
      * @param int $line Only used if the $name parameter is not an instance of `PhpParser\Node\Name`
      * @return array
@@ -242,12 +244,9 @@ class LibraryChanges extends LanguageFeatureAnalyser implements AnalyserAwareInt
             if ($node instanceof Node\Expr\ClassConstFetch) {
                 $this->handleConstantName($node->name, $node->getLine());
             }
-        } elseif ($node instanceof Node\Stmt\Function_
-            || $node instanceof Node\Stmt\ClassMethod
-            || $node instanceof Node\Expr\Closure
-        ) {
-            if (!empty($node->params)) {
-                foreach ($node->params as $param) {
+        } elseif ($node instanceof Node\FunctionLike) {
+            if (!empty($node->getParams())) {
+                foreach ($node->getParams() as $param) {
                     if (isset($param->type) && !is_string($param->type)) {
                         $this->handleClassName($param->type);
                     }

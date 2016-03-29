@@ -283,6 +283,7 @@ abstract class Analyser
         if (!$this->hasParserAttached()) {
             $this->initDefaultParser();
         }
+
         return $this->parser;
     }
 
@@ -315,6 +316,7 @@ abstract class Analyser
      * Set a fallback parser as parser for this Analyser instance
      *
      * The used `Parser` object will use the `ExtendedEmulativeLexer`.
+     *
      * @see ExtendedEmulativeLexer Used lexer
      */
     private function initDefaultParser()

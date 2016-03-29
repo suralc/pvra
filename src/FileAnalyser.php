@@ -34,6 +34,7 @@ class FileAnalyser extends Analyser
      * FileAnalyser constructor
      *
      * Validates the given file path and calls the parent's constructor.     *
+     *
      * @param string $file The code to analyse
      * @param bool $registerNameResolver If set to true `PhpParser\NodeVisitor\NameResolver` will be added as the first
      *     visitor. This may negatively affect performance, some Visitors depend on resolved names, however.

@@ -78,6 +78,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
      * Number of attached `Reasonings` instances.
      *
      * Related to the `\Countable` interface.
+     *
      * @var int
      * @see Pvra\AnalysisResult::count Accessable through count
      */

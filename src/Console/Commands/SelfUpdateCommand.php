@@ -76,7 +76,8 @@ class SelfUpdateCommand extends Command
         unset($ghReleases);
         if (!empty($ghReleasesContent)) {
             $remoteVersion = substr($ghReleasesContent[0]['tag_name'], 1);
-            $out->writeln('Your version: ' . $this->getApplication()->getVersion() . '(' . $this->getComparableVersion() . ')');
+            $out->writeln('Your version: ' . $this->getApplication()->getVersion()
+                . '(' . $this->getComparableVersion() . ')');
             $out->writeln('Current remote version is: ' . $remoteVersion);
             $compared = version_compare($this->getComparableVersion(), $remoteVersion);
             if ($compared < 0) {
@@ -118,7 +119,7 @@ class SelfUpdateCommand extends Command
             'http' => [
                 'header' => "User-Agent: Php-Version-Requirement-Analyser(pvra) by @suralc V{$version}\r\n" .
                     "Accept: application/vnd.github.v3+json\r\n",
-            ]
+            ],
         ]);
     }
 

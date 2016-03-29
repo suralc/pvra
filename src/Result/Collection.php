@@ -91,7 +91,9 @@ class Collection implements \Countable, \IteratorAggregate, \JsonSerializable
         }
 
         $needRecalc = false;
-        if ($this->highestDemand !== null && $result->getAnalysisTargetId() === $this->getHighestDemandingResult()->getAnalysisTargetId()) {
+        if ($this->highestDemand !== null
+            && $result->getAnalysisTargetId() === $this->getHighestDemandingResult()->getAnalysisTargetId()
+        ) {
             $needRecalc = true;
         }
 

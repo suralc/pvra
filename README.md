@@ -26,6 +26,10 @@ The packed `pvra.phar` file is available as a download on the [release page](htt
 from the root of the repository. Make sure all dependencies are available (not required if you run from phar), this 
 requires you to be able to run `<php> composer install --prefer-dist --no-dev` on your machine.
 
+Pvra can be installed globally using the `composer global require suralc/pvra:dev-master` command. Be sure to add the
+`$COMPOSER_HOME/vendor/bin` directory to your `$PATH`. [Read more about composer global](https://getcomposer.org/doc/03-cli.md#global)
+
+
 ### Example
 
 ```php

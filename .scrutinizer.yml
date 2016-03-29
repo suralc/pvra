@@ -12,12 +12,13 @@ tools:
     external_code_coverage:
         timeout: 1000 # travis.org may have long queues to work until coverage is sent
         runs: 2
+    php_code_sniffer:
+      config:
+        standard: "PSR2" # Other Values: PSR2, PEAR, Zend, WordPress, Drupal, TYPO3CMS
 coding_style:
     php:
         spaces:
             around_operators:
                 concatenation: true
-            within:
-                brackets: true
             other:
                 after_type_cast: false
