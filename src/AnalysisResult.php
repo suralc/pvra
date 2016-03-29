@@ -183,11 +183,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         $keys = array_keys($this->requirements);
 
         if (!empty($keys)) {
-            usort($keys, function ($a, $b) {
-                return version_compare($b, $a);
-            });
-
-            return $this->cachedVersionRequirement = $keys[0];
+            return $this->cachedVersionRequirement = \Pvra\Console\get_array_max_value($keys, 'version_compare');
         }
 
         return '5.2.0';
@@ -212,11 +208,7 @@ class AnalysisResult implements \IteratorAggregate, \Countable
         $keys = array_keys($this->limits);
 
         if (!empty($keys)) {
-            usort($keys, function ($a, $b) {
-                return version_compare($a, $b);
-            });
-
-            return $this->cachedVersionLimit = $keys[0];
+            return $this->cachedVersionLimit = \Pvra\Console\get_array_min_value($keys, 'version_compare');
         }
 
         return '8.0.0';
