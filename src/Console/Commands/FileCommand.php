@@ -76,7 +76,7 @@ class FileCommand extends PvraBaseCommand
         $output->writeln(sprintf('<info>Required version: %s</info>', $result->getRequiredVersion()));
 
         $tableData = [];
-        foreach (array_reverse($result->getRequirements()) as $version => $reasons) {
+        foreach (array_reverse($result->getRequirements()) as $reasons) {
             foreach ($reasons as $reason) {
                 $tableData[] = [$reason['version'], $reason['msg'], $reason['line']];
             }
